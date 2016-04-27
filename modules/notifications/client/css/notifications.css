@@ -1,0 +1,15 @@
+.notifications-message {
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.notifications-message:not(:first-child) {
+  border-top: 1px solid #e7e7e7;
+}
+.notifications-message-details {
+  margin-left: 10px;
+}
+.notifications-profile-image {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+}

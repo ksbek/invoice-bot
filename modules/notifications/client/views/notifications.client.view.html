@@ -1,0 +1,41 @@
+<!-- The notifications view -->
+<section class="container">
+  <div class="page-header">
+    <h1>Notifications</h1>
+  </div>
+  <ul class="list-unstyled" style="height:650px; overflow-y: auto">
+    <!-- List all messages -->
+    <li class="col-xs-8 col-md-offset-1 col-md-8 notifications-message" ng-repeat="message in vm.messages">
+      <div class="row">
+        <small class="pull-right text-muted" ng-bind="message.created | date:'mediumTime'"></small>
+        <img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="pull-left notifications-profile-image" />
+        <div class="pull-left notifications-message-details">
+          <strong <span ng-bind="vm.authentication.user.displayName"></span> <b class="caret"></b>></strong>
+          <br>
+          <span ng-bind="message.text"></span>
+        </div>
+      </div>
+      <br>
+      <div  class="row" ng-if="message.responseText && message.responseText != ''">
+        <img ng-src="{{vm.authentication.user.profileImageURL}}" alt="Bot" class="pull-left notifications-profile-image" />
+        <div class="pull-left notifications-message-details">
+          <strong>Bot</strong>
+          <br>
+          <span ng-bind="message.responseText"></span>
+        </div>
+      </div>
+    </li>
+  </ul>  
+  <!-- The message form -->
+  <form class="col-xs-8 col-md-offset-1  col-md-8" ng-submit="vm.sendMessage();">
+    <fieldset class="row">
+      <div class="input-group">
+        <input type="text" id="messageText" name="messageText" class="form-control" ng-model="vm.messageText" placeholder="Enter new message">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-primary" ng-disabled="!vm.messageText.length">Submit</button>
+        </span>
+      </div>
+    </fieldset>
+    <!--<span ng-hide="vm.isAnswered">Bot is currently typing...</span>-->
+  </form>
+</section>
