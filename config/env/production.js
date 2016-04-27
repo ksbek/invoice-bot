@@ -10,10 +10,10 @@ module.exports = {
   // Binding to 127.0.0.1 is safer in production.
   host: process.env.HOST || '0.0.0.0',
   db: {
-    uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
+    uri: 'mongodb://genrich:!QAZ2wsx@candidate.62.mongolayer.com:10801,candidate.52.mongolayer.com:10916/app49743472',
     options: {
-      user: '',
-      pass: ''
+      user: 'genrich',
+      pass: '!QAZ2wsx'
     },
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
