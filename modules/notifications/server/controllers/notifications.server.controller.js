@@ -41,13 +41,13 @@ exports.sendMessage = function (req, res) {
   });
   */
 
-  var webhookUri = "https://hooks.slack.com/services/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";
-
+  var webhookUri = req.user.providerData.tokenSecret.incoming_webhook.url;
+  var channel = req.user.providerData.tokenSecret.incoming_webhook.channel;
   var slack = new Slack();
   slack.setWebhook(webhookUri);
 
   slack.webhook({
-    channel: "#general",
+    channel: channel,
     username: "webhookbot",
     text: req.body.text
   }, function(err, response) {

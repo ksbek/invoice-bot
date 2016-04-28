@@ -171,7 +171,10 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
             });
           });
         } else {
-          return done(err, user);
+          user.providerData = providerUserProfile.providerData;
+          user.save(function (err) {
+            return done(err, user, '/settings/profile');
+          });
         }
       }
     });
