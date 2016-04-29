@@ -5,15 +5,15 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'menuService'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus'];
 
-  function HeaderController($scope, $state, Authentication, menuService) {
+  function HeaderController($scope, $state, Authentication, Menus) {
     var vm = this;
 
-    vm.accountMenu = menuService.getMenu('account').items[0];
+    vm.accountMenu = Menus.getMenu('account').items[0];
     vm.authentication = Authentication;
     vm.isCollapsed = false;
-    vm.menu = menuService.getMenu('topbar');
+    vm.menu = Menus.getMenu('topbar');
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
 

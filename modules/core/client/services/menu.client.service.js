@@ -3,9 +3,9 @@
 
   angular
     .module('core')
-    .factory('menuService', menuService);
+    .factory('Menus', Menus);
 
-  function menuService() {
+  function Menus() {
     var shouldRender;
     var service = {
       addMenu: addMenu,

@@ -5,36 +5,36 @@
     .module('core')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
-    menuService.addMenu('account', {
+  function menuConfig(Menus) {
+    Menus.addMenu('account', {
       roles: ['user']
     });
 
-    menuService.addMenuItem('account', {
+    Menus.addMenuItem('account', {
       title: '',
       state: 'settings',
       type: 'dropdown',
       roles: ['user']
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Edit Profile',
       state: 'settings.profile'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Edit Profile Picture',
       state: 'settings.picture'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Change Password',
       state: 'settings.password'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Manage Social Accounts',
       state: 'settings.accounts'
     });

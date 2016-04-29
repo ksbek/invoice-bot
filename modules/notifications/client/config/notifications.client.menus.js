@@ -5,13 +5,14 @@
     .module('notifications')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
+  function menuConfig(Menus) {
     // Set top bar menu items
-    menuService.addMenuItem('topbar', {
+    Menus.addMenuItem('topbar', {
       title: 'Notifications',
-      state: 'notifications'
+      state: 'notifications',
+      position: 1
     });
   }
 }());

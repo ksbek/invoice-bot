@@ -70,9 +70,9 @@
 (function (app) {
   'use strict';
 
-  app.registerModule('articles', ['core']);// The core module is required for special route handling; see /core/client/config/core.client.routes
-  app.registerModule('articles.services');
-  app.registerModule('articles.routes', ['ui.router', 'core.routes', 'articles.services']);
+  app.registerModule('clients', ['core']);// The core module is required for special route handling; see /core/client/config/core.client.routes
+  app.registerModule('clients.services');
+  app.registerModule('clients.routes', ['ui.router', 'core.routes', 'clients.services']);
 }(ApplicationConfiguration));
 
 (function (app) {
@@ -82,6 +82,12 @@
   app.registerModule('core.routes', ['ui.router']);
   app.registerModule('core.admin', ['core']);
   app.registerModule('core.admin.routes', ['ui.router']);
+}(ApplicationConfiguration));
+
+(function (app) {
+  'use strict';
+
+  app.registerModule('invoices');
 }(ApplicationConfiguration));
 
 (function (app) {
@@ -106,29 +112,32 @@
   'use strict';
 
   angular
-    .module('articles')
+    .module('clients')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
-    menuService.addMenuItem('topbar', {
-      title: 'Articles',
-      state: 'articles',
+  function menuConfig(Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Clients',
+      state: 'clients',
       type: 'dropdown',
-      roles: ['*']
+      roles: ['user'],
+      position: 3
     });
 
     // Add the dropdown list item
-    menuService.addSubMenuItem('topbar', 'articles', {
-      title: 'List Articles',
-      state: 'articles.list'
+    Menus.addSubMenuItem('topbar', 'clients', {
+      title: 'List Clients',
+      state: 'clients.list',
+      roles: ['user']
     });
 
     // Add the dropdown create item
-    menuService.addSubMenuItem('topbar', 'articles', {
-      title: 'Create Article',
-      state: 'articles.create',
+    Menus.addSubMenuItem('topbar', 'clients', {
+      title: 'Create Client',
+      state: 'clients.create',
       roles: ['user']
     });
   }
@@ -138,125 +147,128 @@
   'use strict';
 
   angular
-    .module('articles.routes')
+    .module('clients')
     .config(routeConfig);
 
   routeConfig.$inject = ['$stateProvider'];
 
   function routeConfig($stateProvider) {
     $stateProvider
-      .state('articles', {
+      .state('clients', {
         abstract: true,
-        url: '/articles',
+        url: '/clients',
         template: '<ui-view/>'
       })
-      .state('articles.list', {
+      .state('clients.list', {
         url: '',
-        templateUrl: 'modules/articles/client/views/list-articles.client.view.html',
-        controller: 'ArticlesListController',
+        templateUrl: 'modules/clients/client/views/list-clients.client.view.html',
+        controller: 'ClientsListController',
         controllerAs: 'vm',
         data: {
-          pageTitle: 'Articles List'
+          roles: ['user', 'admin'],
+          pageTitle: 'Clients List'
         }
       })
-      .state('articles.create', {
+      .state('clients.create', {
         url: '/create',
-        templateUrl: 'modules/articles/client/views/form-article.client.view.html',
-        controller: 'ArticlesController',
+        templateUrl: 'modules/clients/client/views/form-client.client.view.html',
+        controller: 'ClientsController',
         controllerAs: 'vm',
         resolve: {
-          articleResolve: newArticle
+          clientResolve: newClient
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Articles Create'
+          pageTitle: 'Clients Create'
         }
       })
-      .state('articles.edit', {
-        url: '/:articleId/edit',
-        templateUrl: 'modules/articles/client/views/form-article.client.view.html',
-        controller: 'ArticlesController',
+      .state('clients.edit', {
+        url: '/:clientId/edit',
+        templateUrl: 'modules/clients/client/views/form-client.client.view.html',
+        controller: 'ClientsController',
         controllerAs: 'vm',
         resolve: {
-          articleResolve: getArticle
+          clientResolve: getClient
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Edit Article {{ articleResolve.title }}'
+          pageTitle: 'Edit Client {{ clientResolve.name }}'
         }
       })
-      .state('articles.view', {
-        url: '/:articleId',
-        templateUrl: 'modules/articles/client/views/view-article.client.view.html',
-        controller: 'ArticlesController',
+      .state('clients.view', {
+        url: '/:clientId',
+        templateUrl: 'modules/clients/client/views/view-client.client.view.html',
+        controller: 'ClientsController',
         controllerAs: 'vm',
         resolve: {
-          articleResolve: getArticle
+          clientResolve: getClient
         },
         data: {
-          pageTitle: 'Article {{ articleResolve.title }}'
+          roles: ['user', 'admin'],
+          pageTitle: 'Client {{ articleResolve.name }}'
         }
       });
   }
 
-  getArticle.$inject = ['$stateParams', 'ArticlesService'];
+  getClient.$inject = ['$stateParams', 'ClientsService'];
 
-  function getArticle($stateParams, ArticlesService) {
-    return ArticlesService.get({
-      articleId: $stateParams.articleId
+  function getClient($stateParams, ClientsService) {
+    return ClientsService.get({
+      clientId: $stateParams.clientId
     }).$promise;
   }
 
-  newArticle.$inject = ['ArticlesService'];
+  newClient.$inject = ['ClientsService'];
 
-  function newArticle(ArticlesService) {
-    return new ArticlesService();
+  function newClient(ClientsService) {
+    return new ClientsService();
   }
 }());
 
 (function () {
   'use strict';
 
+  // Clients controller
   angular
-    .module('articles')
-    .controller('ArticlesController', ArticlesController);
+    .module('clients')
+    .controller('ClientsController', ClientsController);
 
-  ArticlesController.$inject = ['$scope', '$state', 'articleResolve', '$window', 'Authentication'];
+  ClientsController.$inject = ['$scope', '$state', 'Authentication', 'clientResolve'];
 
-  function ArticlesController($scope, $state, article, $window, Authentication) {
+  function ClientsController ($scope, $state, Authentication, client) {
     var vm = this;
 
-    vm.article = article;
     vm.authentication = Authentication;
+    vm.client = client;
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
 
-    // Remove existing Article
+    // Remove existing Client
     function remove() {
-      if ($window.confirm('Are you sure you want to delete?')) {
-        vm.article.$remove($state.go('articles.list'));
+      if (confirm('Are you sure you want to delete?')) {
+        vm.client.$remove($state.go('clients.list'));
       }
     }
 
-    // Save Article
+    // Save Client
     function save(isValid) {
       if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.articleForm');
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.clientForm');
         return false;
       }
 
       // TODO: move create/update logic to service
-      if (vm.article._id) {
-        vm.article.$update(successCallback, errorCallback);
+      if (vm.client._id) {
+        vm.client.$update(successCallback, errorCallback);
       } else {
-        vm.article.$save(successCallback, errorCallback);
+        vm.client.$save(successCallback, errorCallback);
       }
 
       function successCallback(res) {
-        $state.go('articles.view', {
-          articleId: res._id
+        $state.go('clients.view', {
+          clientId: res._id
         });
       }
 
@@ -271,30 +283,31 @@
   'use strict';
 
   angular
-    .module('articles')
-    .controller('ArticlesListController', ArticlesListController);
+    .module('clients')
+    .controller('ClientsListController', ClientsListController);
 
-  ArticlesListController.$inject = ['ArticlesService'];
+  ClientsListController.$inject = ['ClientsService'];
 
-  function ArticlesListController(ArticlesService) {
+  function ClientsListController(ClientsService) {
     var vm = this;
 
-    vm.articles = ArticlesService.query();
+    vm.clients = ClientsService.query();
   }
 }());
 
+// Clients service used to communicate Clients REST endpoints
 (function () {
   'use strict';
 
   angular
-    .module('articles.services')
-    .factory('ArticlesService', ArticlesService);
+    .module('clients')
+    .factory('ClientsService', ClientsService);
 
-  ArticlesService.$inject = ['$resource'];
+  ClientsService.$inject = ['$resource'];
 
-  function ArticlesService($resource) {
-    return $resource('api/articles/:articleId', {
-      articleId: '@_id'
+  function ClientsService($resource) {
+    return $resource('api/clients/:clientId', {
+      clientId: '@_id'
     }, {
       update: {
         method: 'PUT'
@@ -310,10 +323,10 @@
     .module('core.admin')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
-    menuService.addMenuItem('topbar', {
+  function menuConfig(Menus) {
+    Menus.addMenuItem('topbar', {
       title: 'Admin',
       state: 'admin',
       type: 'dropdown',
@@ -351,36 +364,36 @@
     .module('core')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
-    menuService.addMenu('account', {
+  function menuConfig(Menus) {
+    Menus.addMenu('account', {
       roles: ['user']
     });
 
-    menuService.addMenuItem('account', {
+    Menus.addMenuItem('account', {
       title: '',
       state: 'settings',
       type: 'dropdown',
       roles: ['user']
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Edit Profile',
       state: 'settings.profile'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Edit Profile Picture',
       state: 'settings.picture'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Change Password',
       state: 'settings.password'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
+    Menus.addSubMenuItem('account', 'settings', {
       title: 'Manage Social Accounts',
       state: 'settings.accounts'
     });
@@ -522,15 +535,15 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'menuService'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus'];
 
-  function HeaderController($scope, $state, Authentication, menuService) {
+  function HeaderController($scope, $state, Authentication, Menus) {
     var vm = this;
 
-    vm.accountMenu = menuService.getMenu('account').items[0];
+    vm.accountMenu = Menus.getMenu('account').items[0];
     vm.authentication = Authentication;
     vm.isCollapsed = false;
-    vm.menu = menuService.getMenu('topbar');
+    vm.menu = Menus.getMenu('topbar');
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
 
@@ -728,9 +741,9 @@
 
   angular
     .module('core')
-    .factory('menuService', menuService);
+    .factory('Menus', Menus);
 
-  function menuService() {
+  function Menus() {
     var shouldRender;
     var service = {
       addMenu: addMenu,
@@ -981,16 +994,223 @@
   'use strict';
 
   angular
+    .module('invoices')
+    .run(menuConfig);
+
+  menuConfig.$inject = ['Menus'];
+
+  function menuConfig(Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Invoices',
+      state: 'invoices',
+      type: 'dropdown',
+      roles: ['user'],
+      position: 2
+    });
+
+    // Add the dropdown list item
+    Menus.addSubMenuItem('topbar', 'invoices', {
+      title: 'List Invoices',
+      state: 'invoices.list',
+      roles: ['user']
+    });
+
+    // Add the dropdown create item
+    Menus.addSubMenuItem('topbar', 'invoices', {
+      title: 'Create Invoice',
+      state: 'invoices.create',
+      roles: ['user']
+    });
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('invoices')
+    .config(routeConfig);
+
+  routeConfig.$inject = ['$stateProvider'];
+
+  function routeConfig($stateProvider) {
+    $stateProvider
+      .state('invoices', {
+        abstract: true,
+        url: '/invoices',
+        template: '<ui-view/>'
+      })
+      .state('invoices.list', {
+        url: '',
+        templateUrl: 'modules/invoices/client/views/list-invoices.client.view.html',
+        controller: 'InvoicesListController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Invoices List'
+        }
+      })
+      .state('invoices.create', {
+        url: '/create',
+        templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
+        controller: 'InvoicesController',
+        controllerAs: 'vm',
+        resolve: {
+          invoiceResolve: newInvoice
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Invoices Create'
+        }
+      })
+      .state('invoices.edit', {
+        url: '/:invoiceId/edit',
+        templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
+        controller: 'InvoicesController',
+        controllerAs: 'vm',
+        resolve: {
+          invoiceResolve: getInvoice
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Invoice {{ invoiceResolve.name }}'
+        }
+      })
+      .state('invoices.view', {
+        url: '/:invoiceId',
+        templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
+        controller: 'InvoicesController',
+        controllerAs: 'vm',
+        resolve: {
+          invoiceResolve: getInvoice
+        },
+        data: {
+          pageTitle: 'Invoice {{ articleResolve.name }}'
+        }
+      });
+  }
+
+  getInvoice.$inject = ['$stateParams', 'InvoicesService'];
+
+  function getInvoice($stateParams, InvoicesService) {
+    return InvoicesService.get({
+      invoiceId: $stateParams.invoiceId
+    }).$promise;
+  }
+
+  newInvoice.$inject = ['InvoicesService'];
+
+  function newInvoice(InvoicesService) {
+    return new InvoicesService();
+  }
+}());
+
+(function () {
+  'use strict';
+
+  // Invoices controller
+  angular
+    .module('invoices')
+    .controller('InvoicesController', InvoicesController);
+
+  InvoicesController.$inject = ['$scope', '$state', 'Authentication', 'invoiceResolve'];
+
+  function InvoicesController ($scope, $state, Authentication, invoice) {
+    var vm = this;
+
+    vm.authentication = Authentication;
+    vm.invoice = invoice;
+    vm.error = null;
+    vm.form = {};
+    vm.remove = remove;
+    vm.save = save;
+
+    // Remove existing Invoice
+    function remove() {
+      if (confirm('Are you sure you want to delete?')) {
+        vm.invoice.$remove($state.go('invoices.list'));
+      }
+    }
+
+    // Save Invoice
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.invoiceForm');
+        return false;
+      }
+
+      // TODO: move create/update logic to service
+      if (vm.invoice._id) {
+        vm.invoice.$update(successCallback, errorCallback);
+      } else {
+        vm.invoice.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        $state.go('invoices.view', {
+          invoiceId: res._id
+        });
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('invoices')
+    .controller('InvoicesListController', InvoicesListController);
+
+  InvoicesListController.$inject = ['InvoicesService'];
+
+  function InvoicesListController(InvoicesService) {
+    var vm = this;
+
+    vm.invoices = InvoicesService.query();
+  }
+}());
+
+// Invoices service used to communicate Invoices REST endpoints
+(function () {
+  'use strict';
+
+  angular
+    .module('invoices')
+    .factory('InvoicesService', InvoicesService);
+
+  InvoicesService.$inject = ['$resource'];
+
+  function InvoicesService($resource) {
+    return $resource('api/invoices/:invoiceId', {
+      invoiceId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
     .module('notifications')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
-  function menuConfig(menuService) {
+  function menuConfig(Menus) {
     // Set top bar menu items
-    menuService.addMenuItem('topbar', {
+    Menus.addMenuItem('topbar', {
       title: 'Notifications',
-      state: 'notifications'
+      state: 'notifications',
+      position: 1
     });
   }
 }());
@@ -1079,11 +1299,11 @@
     .module('users.admin')
     .run(menuConfig);
 
-  menuConfig.$inject = ['menuService'];
+  menuConfig.$inject = ['Menus'];
 
   // Configuring the Users module
-  function menuConfig(menuService) {
-    menuService.addSubMenuItem('topbar', 'admin', {
+  function menuConfig(Menus) {
+    Menus.addSubMenuItem('topbar', 'admin', {
       title: 'Manage Users',
       state: 'admin.users'
     });
