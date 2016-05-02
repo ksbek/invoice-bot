@@ -467,7 +467,7 @@ header h4 {
 	color: #333333;
 	text-align: center;
 	display: inline-block;
-	background: #FFFFFF url(../img/i-slack.png) no-repeat 9px center;
+	background: #FFFFFF url(/modules/core/client/img/i-slack.png) no-repeat 9px center;
 	background-size: 22px auto;
 }
 
