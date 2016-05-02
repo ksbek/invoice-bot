@@ -1,9 +1,19 @@
-<section>
-  <div class="jumbotron text-center">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
-        <a href="#"><img ng-click="vm.callOauthProvider('/api/auth/slack')" alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="text-center">
+	<div class="divider-item"></div>
+	<h2>Invoice in the moment</h2>
+	<div class="divider-item divider-md divider-blue"></div>
+	<div class="divider-item divider-blue"></div>
+	<a href="#" ng-click="vm.callOauthProvider('/api/auth/slack')" class="btn-slack">Add to <strong>Slack</strong></a>
+	<div class="divider-item divider-brown"></div>
+
+	<footer>
+		<div class="container text-center">
+			<div class="footer-nav">
+				<a href="privacy.html">Privacy</a>
+				<span>•</span>
+				<a href="javascript:void(0);">Contact</a>
+			</div>
+			<h6>&copy; 2016 nowdue.ai</h6>
+		</div><!-- END of .container -->
+	</footer><!-- END of footer -->
+</div>

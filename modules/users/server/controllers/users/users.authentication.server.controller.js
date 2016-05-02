@@ -4,9 +4,11 @@
  * Module dependencies
  */
 var path = require('path'),
+  _ = require('lodash'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   passport = require('passport'),
+  request = require('request'),
   User = mongoose.model('User');
 
 // URLs for which user can't be redirected on signin
@@ -23,9 +25,13 @@ exports.signup = function (req, res) {
   delete req.body.roles;
 
   // Init user and add missing fields
-  var user = new User(req.body);
-  user.provider = 'local';
-  user.displayName = user.firstName + ' ' + user.lastName;
+  user = req.body;
+  var user = _.extend(user, req.body);
+  user.updated = Date.now();
+
+  if (user.provider === undefined) {
+    user.provider = 'local';
+  }
 
   // Then save the user
   user.save(function (err) {
@@ -105,6 +111,10 @@ exports.oauthCallback = function (strategy) {
     delete req.session.redirect_to;
 
     passport.authenticate(strategy, function (err, user, redirectURL) {
+      // request('https://bots.api.ai/api/integration/cc19d83e-c6cb-4825-b292-69889e7ad781/start?code=' + req.query.code + '&state=' + req.query.state, function (error, response, body) {
+        // console.log(body);
+      // });
+      // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
       if (err) {
         return res.redirect('/authentication/signin?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
       }
@@ -115,9 +125,7 @@ exports.oauthCallback = function (strategy) {
         if (err) {
           return res.redirect('/authentication/signin');
         }
-
-        return res.redirect("/settings/profile");
-        // return res.redirect(typeof redirectURL == 'string' ? redirectURL : sessionRedirectURL || '/');
+        return res.redirect(typeof redirectURL == 'string' ? redirectURL : sessionRedirectURL || '/');
       });
     })(req, res, next);
   };

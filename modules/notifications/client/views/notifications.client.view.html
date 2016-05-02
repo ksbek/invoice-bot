@@ -1,41 +1,49 @@
-<!-- The notifications view -->
-<section class="container">
-  <div class="page-header">
-    <h1>Notifications</h1>
-  </div>
-  <ul class="list-unstyled" style="height:650px; overflow-y: auto">
-    <!-- List all messages -->
-    <li class="col-xs-8 col-md-offset-1 col-md-8 notifications-message" ng-repeat="message in vm.messages">
-      <div class="row">
-        <small class="pull-right text-muted" ng-bind="message.created | date:'mediumTime'"></small>
-        <img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="pull-left notifications-profile-image" />
-        <div class="pull-left notifications-message-details">
-          <strong <span ng-bind="vm.authentication.user.displayName"></span> <b class="caret"></b>></strong>
-          <br>
-          <span ng-bind="message.text"></span>
-        </div>
+<div class="notifications-wr">
+  <div class="notifications-group">
+    <div class="img-wr">
+      <img src="/modules/core/client/img/i-info.png" alt="">
+    </div>
+    <h5>Info</h5>
+    <div class="info-box">
+      <p>While you're on a free account you can create unlimited invoices forever. If you want to automate sending, scheduled reminders or gain revenue insights please <a href="settings-plan.html">upgrade</a> your plan.</p>
+    </div><!-- END of .info-box -->
+  </div><!-- END of .notifications-group -->
+  <div class="notifications-group">
+    <div class="img-wr">
+      <img src="/modules/core/client/img/data/i-user-1.jpg" alt="">
+    </div>
+    <h5>Dot</h5>
+    <div class="notifications-item">
+      <div class="notifications-item-text">
+        <p>I sent <a href="invoices.html">Golden Eye</a> a friendly <a href="clients.html">reminder</a> that they have an <a href="clients.html">invoice</a> that is 3 days overdue</p>
       </div>
-      <br>
-      <div  class="row" ng-if="message.responseText && message.responseText != ''">
-        <img ng-src="{{vm.authentication.user.profileImageURL}}" alt="Bot" class="pull-left notifications-profile-image" />
-        <div class="pull-left notifications-message-details">
-          <strong>Bot</strong>
-          <br>
-          <span ng-bind="message.responseText"></span>
-        </div>
+      <h6>11:18am</h6>
+    </div>
+    <div class="notifications-item">
+      <div class="notifications-item-text">
+        <p>Sent <a href="clients.html">invoice</a> to <a href="invoices.html">Motion Authors</a></p>
       </div>
-    </li>
-  </ul>  
-  <!-- The message form -->
-  <form class="col-xs-8 col-md-offset-1  col-md-8" ng-submit="vm.sendMessage();">
-    <fieldset class="row">
-      <div class="input-group">
-        <input type="text" id="messageText" name="messageText" class="form-control" ng-model="vm.messageText" placeholder="Enter new message">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary" ng-disabled="!vm.messageText.length">Submit</button>
-        </span>
+      <h6>2:47pm</h6>
+    </div>
+  </div><!-- END of .notifications-group -->
+  <div class="notifications-group">
+    <div class="img-wr">
+      <img src="/modules/core/client/img/data/i-user-2.jpg" alt="">
+    </div>
+    <h5>Me</h5>
+    <div class="notifications-item">
+      <div class="notifications-item-text">
+        <p>Assigned an <a href="clients.html">invoice</a> for <a href="invoices.html">Fireart Studio</a> $7,824.00</p>
       </div>
-    </fieldset>
-    <!--<span ng-hide="vm.isAnswered">Bot is currently typing...</span>-->
-  </form>
-</section>
+      <h6>2:51pm</h6>
+    </div>
+  </div><!-- END of .notifications-group -->
+</div><!-- END of .notifications-wr -->
+<div class="fixed-btm-wr notifications-form-wr">
+  <div class="container">
+    <form action="action">
+      <input type="text" placeholder="Make a request or ask a question" required>
+      <input type="submit" value="Send">
+    </form>
+  </div><!-- END of .container -->
+</div><!-- END of .fixed-btm-wr -->

@@ -10,7 +10,15 @@ exports.renderIndex = function (req, res) {
   var safeUserObject = null;
   if (req.user) {
     safeUserObject = {
-      displayName: req.user.displayName,
+      companyName: req.user.companyName,
+      businessNumber: req.user.businessNumber,
+      clientsName: req.user.clientsName,
+      address: req.user.address,
+      website: req.user.website,
+      conversationSettings: req.user.conversationSettings,
+      invoiceSettings: req.user.invoiceSettings,
+      plan: req.user.plan,
+      integrations: req.user.integrations,
       provider: req.user.provider,
       username: validator.escape(req.user.username),
       created: req.user.created.toString(),

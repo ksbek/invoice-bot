@@ -1,46 +1,40 @@
-<section>
-  <div class="page-header">
-    <h1>Invoices</h1>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>CLIENT</th>
-        <th>INVOICE</th>
-        <th>DATE ISSUED</th>
-        <th>DATE DUE</th>
-        <th>AMOUNT DUE</th>
-        <th>RECEIVED</th>
-        <th>STATUS</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-ng-repeat="invoice in vm.invoices">
-        <td scope="row">
-          <a data-ui-sref="clients.edit({ clientId: invoice.client })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.invoice"></span>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.dateIssued"></span>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.dateDue"></span>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.amountDue"></span>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.received"></span>
-        </td>
-        <td>
-          <span data-ng-bind="invoice.status"></span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="alert alert-warning text-center" data-ng-if="vm.invoices.$resolved && !vm.invoices.length">
-    No Invoices yet, why don't you <a data-ui-sref="invoices.create">create one</a>?
-  </div>
-</section>
+<table class="table-wr">
+  <tr>
+    <th>CLIENT</th>
+    <th>INVOICE</th>
+    <th>DATE ISSUED</th>
+    <th>DATE  DUE</th>
+    <th>AMOUNT DUE</th>
+    <th>RECEIVED</th>
+    <th>STATUS</th>
+    <th> </th>
+  </tr>
+  <tr>
+    <td><a data-ui-sref="clients.edit({ clientId: invoice.client })" data-ng-bind="invoice.client.companyName || invoice.client.name">Desire Studios</a></td>
+    <td><a data-ng-bind="invoice.invoice"></a></td>
+    <td>
+      <span data-ng-bind="invoice.dateIssued"></span>
+    </td>
+    <td>
+      <span data-ng-bind="invoice.dateDue"></span>
+    </td>
+    <td>
+      <span data-ng-bind="invoice.amountDue"></span>
+    </td>
+    <td>
+      <span data-ng-bind="invoice.received"></span>
+    </td>
+    <td>
+      <span data-ng-bind="invoice.status"></span>
+    </td>
+    <td><a href="invoice.html"><img src="/modules/core/client/img/i-file.png" alt=""></a></td>
+  </tr>
+</table>
+<div class="fixed-btm-wr">
+  <div class="container">
+    <div class="info-box">
+      <i><img src="/modules/core/client/img/i-info.png" alt=""></i>
+      <p>While you're on a free account you can create unlimited invoices forever. If you want to automate sending, scheduled reminders or gain revenue insights please <a href="settings-plan.html">upgrade</a> your plan.</p>
+    </div><!-- END of .info-box -->
+  </div><!-- END of .container -->
+</div><!-- END of .fixed-btm-wr -->

@@ -121,24 +121,9 @@
     // Set top bar menu items
     Menus.addMenuItem('topbar', {
       title: 'Clients',
-      state: 'clients',
-      type: 'dropdown',
+      state: 'clients.list',
       roles: ['user'],
       position: 3
-    });
-
-    // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'clients', {
-      title: 'List Clients',
-      state: 'clients.list',
-      roles: ['user']
-    });
-
-    // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'clients', {
-      title: 'Create Client',
-      state: 'clients.create',
-      roles: ['user']
     });
   }
 }());
@@ -1003,24 +988,9 @@
     // Set top bar menu items
     Menus.addMenuItem('topbar', {
       title: 'Invoices',
-      state: 'invoices',
-      type: 'dropdown',
+      state: 'invoices.list',
       roles: ['user'],
       position: 2
-    });
-
-    // Add the dropdown list item
-    Menus.addSubMenuItem('topbar', 'invoices', {
-      title: 'List Invoices',
-      state: 'invoices.list',
-      roles: ['user']
-    });
-
-    // Add the dropdown create item
-    Menus.addSubMenuItem('topbar', 'invoices', {
-      title: 'Create Invoice',
-      state: 'invoices.create',
-      roles: ['user']
     });
   }
 }());
@@ -1398,6 +1368,33 @@
           pageTitle: 'Settings'
         }
       })
+      .state('settings.conversation', {
+        url: '/conversation-settings',
+        templateUrl: 'modules/users/client/views/settings/conversation-settings.client.view.html',
+        controller: 'ConversationSettingsController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Settings conversation'
+        }
+      })
+      .state('settings.invoice', {
+        url: '/invoice-settings',
+        templateUrl: 'modules/users/client/views/settings/invoice-settings.client.view.html',
+        controller: 'InvoiceSettingsController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Settings invoice'
+        }
+      })
+      .state('settings.plans', {
+        url: '/plans',
+        templateUrl: 'modules/users/client/views/settings/plans.client.view.html',
+        controller: 'PlansController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Settings plans'
+        }
+      })
       .state('settings.password', {
         url: '/password',
         templateUrl: 'modules/users/client/views/settings/change-password.client.view.html',
@@ -1407,13 +1404,13 @@
           pageTitle: 'Settings password'
         }
       })
-      .state('settings.accounts', {
-        url: '/accounts',
-        templateUrl: 'modules/users/client/views/settings/manage-social-accounts.client.view.html',
-        controller: 'SocialAccountsController',
+      .state('settings.integrations', {
+        url: '/integrations',
+        templateUrl: 'modules/users/client/views/settings/manage-integrations.client.view.html',
+        controller: 'ManageIntegrationsController',
         controllerAs: 'vm',
         data: {
-          pageTitle: 'Settings accounts'
+          pageTitle: 'Settings integrations'
         }
       })
       .state('settings.picture', {
@@ -1432,13 +1429,13 @@
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
-      .state('authentication.signup', {
-        url: '/signup',
+      .state('authentication.accountSetup', {
+        url: '/account-setup',
         templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
-          pageTitle: 'Signup'
+          pageTitle: 'Account Setup'
         }
       })
       .state('authentication.signin', {
@@ -1606,6 +1603,13 @@
     vm.signup = signup;
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
+    vm.credentials = {};
+
+    vm.credentials.slackUserName = $location.search().slackUserName;
+    vm.credentials.companyName = $location.search().companyName;
+    vm.credentials.provider = "slack";
+    vm.credentials.currency = $location.search().currency || "usd";
+    vm.credentials._id = $location.search().id;
 
     // Get an eventual error defined in the URL query string:
     vm.error = $location.search().err;
@@ -1867,6 +1871,38 @@
 
   angular
     .module('users')
+    .controller('ConversationSettingsController', ConversationSettingsController);
+
+  ConversationSettingsController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication'];
+
+  function ConversationSettingsController($scope, $state, $http, $location, Users, Authentication) {
+    var vm = this;
+
+    vm.user = Authentication.user;
+    vm.update = update;
+
+    // Update a user profile
+    function update() {
+      vm.success = vm.error = null;
+      var user = new Users(vm.user);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'vm.userForm');
+
+        vm.success = true;
+        vm.user = Authentication.user = response;
+      }, function (response) {
+        vm.error = response.data.message;
+      });
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('users')
     .controller('EditProfileController', EditProfileController);
 
   EditProfileController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication'];
@@ -1893,8 +1929,7 @@
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 
         vm.success = true;
-        Authentication.user = response;
-        $state.go('home');
+        vm.user = Authentication.user = response;
       }, function (response) {
         vm.error = response.data.message;
       });
@@ -1907,17 +1942,50 @@
 
   angular
     .module('users')
-    .controller('SocialAccountsController', SocialAccountsController);
+    .controller('InvoiceSettingsController', InvoiceSettingsController);
 
-  SocialAccountsController.$inject = ['$scope', '$http', 'Authentication'];
+  InvoiceSettingsController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication'];
 
-  function SocialAccountsController($scope, $http, Authentication) {
+  function InvoiceSettingsController($scope, $state, $http, $location, Users, Authentication) {
+    var vm = this;
+
+    vm.user = Authentication.user;
+    vm.update = update;
+
+    // Update a user profile
+    function update() {
+      vm.success = vm.error = null;
+      var user = new Users(vm.user);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'vm.userForm');
+
+        vm.success = true;
+        vm.user = Authentication.user = response;
+      }, function (response) {
+        vm.error = response.data.message;
+      });
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('users')
+    .controller('ManageIntegrationsController', ManageIntegrationsController);
+
+  ManageIntegrationsController.$inject = ['$scope', '$http', 'Authentication', 'Users'];
+
+  function ManageIntegrationsController($scope, $http, Authentication, Users) {
     var vm = this;
 
     vm.user = Authentication.user;
     vm.hasConnectedAdditionalSocialAccounts = hasConnectedAdditionalSocialAccounts;
     vm.isConnectedSocialAccount = isConnectedSocialAccount;
     vm.removeUserSocialAccount = removeUserSocialAccount;
+    vm.update = update;
 
     // Check if there are additional accounts
     function hasConnectedAdditionalSocialAccounts() {
@@ -1943,6 +2011,52 @@
         vm.user = Authentication.user = response;
       }).error(function (response) {
         vm.error = response.message;
+      });
+    }
+
+    function update() {
+      vm.success = vm.error = null;
+      var user = new Users(vm.user);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'vm.userForm');
+
+        vm.success = true;
+        vm.user = Authentication.user = response;
+      }, function (response) {
+        vm.error = response.data.message;
+      });
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('users')
+    .controller('PlansController', PlansController);
+
+  PlansController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication'];
+
+  function PlansController($scope, $state, $http, $location, Users, Authentication) {
+    var vm = this;
+
+    vm.user = Authentication.user;
+    vm.update = update;
+
+    // Update a user profile
+    function update() {
+      vm.success = vm.error = null;
+      var user = new Users(vm.user);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'vm.userForm');
+
+        vm.success = true;
+        vm.user = Authentication.user = response;
+      }, function (response) {
+        vm.error = response.data.message;
       });
     }
   }

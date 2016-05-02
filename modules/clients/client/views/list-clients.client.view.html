@@ -1,45 +1,26 @@
-<section>
-  <div class="page-header">
-    <h1>Clients</h1>
-  </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>CLIENT</th>
-        <th>CONTACT</th>
-        <th>EMAIL</th>
-        <th>INVOICES</th>
-        <th>NOW DUE</th>
-        <th>PAID</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-ng-repeat="client in vm.clients">
-        <td scope="row">
-          <a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a>
-        </td>
-        <td>
-          <span data-ng-bind="client.companyName"></span>
-        </td>
-        <td>
-          <span data-ng-bind="client.companyName"></span>
-        </td>
-        <td>
-          <span data-ng-bind="client.email"></span>
-        </td>
-        <td>
-          <span data-ng-bind="client.invoices"></span>
-        </td>
-        <td>
-          <span data-ng-bind="client.nowDue"></span>
-        </td>
-        <td>
-          <span data-ng-bind="client.paid"></span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="alert alert-warning text-center" data-ng-if="vm.clients.$resolved && !vm.clients.length">
-    No Clients yet, why don't you <a data-ui-sref="clients.create">create one</a>?
-  </div>
-</section>
+<table class="table-wr">
+  <tr>
+    <th>CLIENT</th>
+    <th>CONTACT</th>
+    <th>EMAIL</th>
+    <th>INVOICES</th>
+    <th>NOW DUE</th>
+    <th>PAID</th>
+  </tr>
+  <tr data-ng-repeat="client in vm.clients">
+    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a></td>
+    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.name"></a></td>
+    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.email"></a></td>
+    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.invoices"></a></td>
+    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.nowDue"></a></td>
+    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.nowDue"></a></td>
+  </tr>
+</table>
+<div class="fixed-btm-wr">
+  <div class="container">
+    <div class="info-box">
+      <i><img src="/modules/core/client/img/i-info.png" alt=""></i>
+      <p>While you're on a free account you can create unlimited invoices forever. If you want to automate sending, scheduled reminders or gain revenue insights please <a href="settings-plan.html">upgrade</a> your plan.</p>
+    </div><!-- END of .info-box -->
+  </div><!-- END of .container -->
+</div><!-- END of .fixed-btm-wr -->

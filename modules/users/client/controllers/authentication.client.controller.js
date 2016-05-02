@@ -15,6 +15,13 @@
     vm.signup = signup;
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
+    vm.credentials = {};
+
+    vm.credentials.slackUserName = $location.search().slackUserName;
+    vm.credentials.companyName = $location.search().companyName;
+    vm.credentials.provider = "slack";
+    vm.credentials.currency = $location.search().currency || "usd";
+    vm.credentials._id = $location.search().id;
 
     // Get an eventual error defined in the URL query string:
     vm.error = $location.search().err;

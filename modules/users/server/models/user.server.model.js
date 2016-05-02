@@ -28,19 +28,17 @@ var validateLocalStrategyEmail = function (email) {
  * User Schema
  */
 var UserSchema = new Schema({
-  firstName: {
+  companyName: {
     type: String,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyProperty, 'Please fill in your first name']
+    default: ''
   },
-  lastName: {
+  businessNumber: {
     type: String,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyProperty, 'Please fill in your last name']
+    default: ''
   },
-  displayName: {
+  clientsName: {
     type: String,
     trim: true
   },
@@ -49,8 +47,7 @@ var UserSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+    default: ''
   },
   username: {
     type: String,
@@ -58,6 +55,48 @@ var UserSchema = new Schema({
     required: 'Please fill in a username',
     lowercase: true,
     trim: true
+  },
+  address: {
+    type: String,
+    trim: true
+  },
+  website: {
+    type: String,
+    trim: true
+  },
+  conversationSettings: {
+  },
+  invoiceSettings: {
+    includeTaxesOnInvoice: {
+      type: Boolean,
+      trim: true
+    }
+  },
+  plan: {
+    type: String,
+    trim: true
+  },
+  integrations: {
+    xero: {
+      type: Boolean,
+      trim: true
+    },
+    stripe: {
+      type: Boolean,
+      trim: true
+    },
+    paypal: {
+      type: Boolean,
+      trim: true
+    },
+    slack: {
+      type: Boolean,
+      trim: true
+    },
+    fMessenger: {
+      type: Boolean,
+      trim: true
+    }
   },
   password: {
     type: String,
