@@ -486,6 +486,14 @@
         controller: 'HomeController',
         controllerAs: 'vm'
       })
+      .state('privacy', {
+        url: '/privacy',
+        templateUrl: 'modules/core/client/views/privacy.client.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Privacy'
+        }
+      })
       .state('not-found', {
         url: '/not-found',
         templateUrl: 'modules/core/client/views/404.client.view.html',
