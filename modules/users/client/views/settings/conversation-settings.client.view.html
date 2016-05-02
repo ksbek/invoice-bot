@@ -1,0 +1,36 @@
+<div class="form-wr">
+	<form action="action" name="vm.userForm" class="signin" novalidate autocomplete="off">
+		<div class="form-row">
+			<div class="row">
+				<div class="col-xs-9">
+					<p>Ask me if an invoice should be recurring</p>
+				</div>
+				<div class="col-xs-3 text-left">
+					<label class="check-wr">
+						<input type="checkbox" ng-model="vm.user.conversationSettings.askInvocieRecurring" ng-change="vm.update()">
+						<span>
+							<span class="ch-disabled-text">Disabled</span>
+							<span class="ch-checked-text">Active</span>
+						</span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="row">
+				<div class="col-xs-9">
+					<p>Ask me if an invoice needs to be itemised</p>
+				</div>
+				<div class="col-xs-3 text-left">
+					<label class="check-wr">
+						<input type="checkbox" ng-model="vm.user.conversationSettings.askInvoiceNeedItemised" ng-change="vm.update()">
+						<span>
+							<span class="ch-disabled-text">Disabled</span>
+							<span class="ch-checked-text">Active</span>
+						</span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</form>
+</div><!-- END of .form-wr -->

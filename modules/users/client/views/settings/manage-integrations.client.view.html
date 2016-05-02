@@ -1,0 +1,129 @@
+<div class="form-wr">
+  <form action="action" name="vm.userForm" class="signin" novalidate autocomplete="off">
+    <div class="form-row">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="img-wr">
+                <img src="/modules/core/client/img/data/app-img-1.png" alt="">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <p>Sync created invoices directly to xero</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 text-left">
+          <label class="check-wr color-blue">
+            <input type="checkbox"ng-model="vm.user.integrations.xero" ng-change="vm.update()">
+            <span>
+              <span class="ch-disabled-text">Connect</span>
+              <span class="ch-checked-text">Active</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="img-wr">
+                <img src="/modules/core/client/img/data/app-img-2.png" alt="">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <p>Accept payments with Stripe</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 text-left">
+          <label class="check-wr color-blue">
+            <input type="checkbox"ng-model="vm.user.integrations.stripe" ng-change="vm.update()">
+            <span>
+              <span class="ch-disabled-text">Connect</span>
+              <span class="ch-checked-text">Active</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="img-wr">
+                <img src="/modules/core/client/img/data/app-img-3.png" alt="">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <p>Accept payments with Paypal</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 text-left">
+          <label class="check-wr color-blue">
+            <input type="checkbox"ng-model="vm.user.integrations.paypal" ng-change="vm.update()">
+            <span>
+              <span class="ch-disabled-text">Connect</span>
+              <span class="ch-checked-text">Active</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="img-wr">
+                <img src="/modules/core/client/img/data/app-img-4.png" alt="">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <p>Make requests directly from Slack</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 text-left">
+          <label class="check-wr color-blue">
+            <input type="checkbox"ng-model="vm.user.integrations.slack" ng-change="vm.update()">
+            <span>
+              <span class="ch-disabled-text">Connect</span>
+              <span class="ch-checked-text">Active</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row disabled-wr">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="img-wr">
+                <img src="/modules/core/client/img/data/app-img-5.png" alt="">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <p>Make requests directly from Facebook Messenger</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 text-left">
+          <label class="check-wr color-blue">
+            <input type="checkbox" ng-model="vm.user.integrations.fMessenger" ng-change="vm.update()" disabled>
+            <span>
+              <span class="ch-disabled-text">Coming</span>
+              <span class="ch-checked-text">Active</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div><!-- END of .form-wr -->

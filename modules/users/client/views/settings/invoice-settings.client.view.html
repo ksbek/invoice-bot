@@ -1,0 +1,20 @@
+<div class="form-wr">
+	<form action="action" name="vm.userForm" class="signin" novalidate autocomplete="off">
+		<div class="form-row">
+			<div class="row">
+				<div class="col-xs-9">
+					<p>Include taxes on invoice</p>
+				</div>
+				<div class="col-xs-3 text-left">
+					<label class="check-wr">
+						<input type="checkbox" ng-model="vm.user.invoiceSettings.includeTaxesOnInvoice" ng-click="vm.update()">
+						<span>
+							<span class="ch-disabled-text">Disabled</span>
+							<span class="ch-checked-text">Active</span>
+						</span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</form>
+</div><!-- END of .form-wr -->
