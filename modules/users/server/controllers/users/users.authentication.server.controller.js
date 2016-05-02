@@ -5,6 +5,7 @@
  */
 var path = require('path'),
   _ = require('lodash'),
+  config = require(path.resolve('./config/config')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   passport = require('passport'),
@@ -115,6 +116,12 @@ exports.oauthCallback = function (strategy) {
         // console.log(body);
       // });
       // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
+
+      var token = user.providerData.tokenSecret.bot.bot_access_token;
+      if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
+        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
+      }
+
       if (err) {
         return res.redirect('/authentication/signin?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
       }

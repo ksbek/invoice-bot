@@ -136,6 +136,14 @@ var UserSchema = new Schema({
   },
   resetPasswordExpires: {
     type: Date
+  },
+  runningStatus: {
+    token: {
+      type: String
+    },
+    isRunning: {
+      type: Boolean
+    }
   }
 });
 

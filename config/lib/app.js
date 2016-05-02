@@ -54,6 +54,20 @@ module.exports.start = function start(callback) {
       console.log('--');
 
       if (callback) callback(app, db, config);
+
+      var User = require('mongoose').model('User');
+      User.find({ "provider": "slack" }, function (err, users) {
+        users.forEach(function (user) {
+          if (user.providerData.tokenSecret.bot) {
+            var token = user.providerData.tokenSecret.bot.bot_access_token;
+            require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
+            user.runningStatus = {};
+            user.runningStatus.token = token;
+            user.runningStatus.isRunning = true;
+            user.save();
+          }
+        });
+      });
     });
 
   });

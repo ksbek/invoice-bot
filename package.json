@@ -20,6 +20,7 @@
     "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
+    "@slack/client": "^3.1.0",
     "acl": "~0.4.9",
     "apiai": "~2.0.1",
     "async": "~1.5.2",

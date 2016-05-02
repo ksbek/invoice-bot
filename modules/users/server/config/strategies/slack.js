@@ -9,9 +9,9 @@ var passport = require('passport'),
 
 module.exports = function (config) {
   passport.use('slack', new SlackStrategy({
-    "clientID": "36622746837.37185968785",
-    "clientSecret": "f0e2f39e649fa97106d53e695561bdc1",
-    "scope": "incoming-webhook,commands,bot"
+    clientID: config.slack.clientID,
+    clientSecret: config.slack.clientSecret,
+    scope: config.slack.scope
   },
   function (req, token, tokenSecret, profile, done) {
     // Set the provider data and include tokens

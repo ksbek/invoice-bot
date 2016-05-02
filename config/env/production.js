@@ -37,6 +37,15 @@ module.exports = {
       }
     }
   },
+  slack: {
+    clientID: process.env.SLACK_ID || '36622746837.37185968785',
+    clientSecret: process.env.SLACK_SECRET || 'f0e2f39e649fa97106d53e695561bdc1',
+    callbackURL: '/api/auth/slack/callback',
+    "scope": "bot"
+  },
+  apiai: {
+    clientAccessToken: process.env.APIAI_ACCESS_TOKEN || '33f92d3d56ec46a18047faecf0e23555'
+  },
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'APP_ID',
     clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
