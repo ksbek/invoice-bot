@@ -5,15 +5,15 @@
         <li>
           <a href="javascript:void(0);"><img src="/modules/core/client/img/i-plus.png" alt=""></a>
           <ul>
-            <li><a href="https://slack.com/" target="_blank">Add client</a></li>
-            <li><a href="https://slack.com/" target="_blank">Create invoice</a></li>
-            <li><a href="https://slack.com/" target="_blank">Ask something</a></li>
+            <li><a ui-sref="clients.create" target="_blank">Add client</a></li>
+            <li><a href={{'https://'+vm.authentication.user.providerData.team+'.slack.com/'}} target="_blank">Create invoice</a></li>
+            <li><a href={{'https://'+vm.authentication.user.providerData.team+'.slack.com/'}} target="_blank">Ask something</a></li>
           </ul>
         </li>
         <li><a ui-sref="settings.profile"><img src="/modules/core/client/img/i-settings.png" alt=""></a></li>
       </ul>
     </div>
-    <h4>Focus Lab</h4>
+    <h4 ng-bind="vm.authentication.user.companyName"></h4>
     <nav class="nav-wr" uib-collapse="!vm.isCollapsed" role="navigation">
       <ul ng-if="vm.menu.shouldRender(vm.authentication.user);">
         <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" class="{{item.class}}">

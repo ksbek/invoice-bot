@@ -252,9 +252,7 @@
       }
 
       function successCallback(res) {
-        $state.go('clients.view', {
-          clientId: res._id
-        });
+        $state.go('clients.list');
       }
 
       function errorCallback(res) {

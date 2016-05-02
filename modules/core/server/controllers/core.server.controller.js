@@ -25,8 +25,7 @@ exports.renderIndex = function (req, res) {
       roles: req.user.roles,
       profileImageURL: req.user.profileImageURL,
       email: req.user.email,
-      lastName: req.user.lastName,
-      firstName: req.user.firstName,
+      providerData: req.user.providerData,
       additionalProvidersData: req.user.additionalProvidersData
     };
   }
