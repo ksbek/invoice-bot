@@ -9,8 +9,8 @@
     <th>STATUS</th>
     <th> </th>
   </tr>
-  <tr>
-    <td><a data-ui-sref="clients.edit({ clientId: invoice.client })" data-ng-bind="invoice.client.companyName || invoice.client.name">Desire Studios</a></td>
+  <tr data-ng-repeat="invoice in vm.invoices">
+    <td><a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
     <td><a data-ng-bind="invoice.invoice"></a></td>
     <td>
       <span data-ng-bind="invoice.dateIssued"></span>
@@ -19,7 +19,8 @@
       <span data-ng-bind="invoice.dateDue"></span>
     </td>
     <td>
-      <span data-ng-bind="invoice.amountDue"></span>
+      <span>{{invoice.amountDue.amount}}</span>
+      <span>{{invoice.amountDue.currency}}</span>
     </td>
     <td>
       <span data-ng-bind="invoice.received"></span>

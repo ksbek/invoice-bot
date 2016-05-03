@@ -42,16 +42,20 @@ exports.sendMessage = function (req, res) {
   });
   */
 
-  var webhookUri = req.user.providerData.tokenSecret.incoming_webhook.url;
-  var channel = req.user.providerData.tokenSecret.incoming_webhook.channel;
-  var slack = new Slack();
-  slack.setWebhook(webhookUri);
+  if (req.user.providerData.tokenSecret.incoming_webhook) {
+    var webhookUri = req.user.providerData.tokenSecret.incoming_webhook.url;
+    var channel = req.user.providerData.tokenSecret.incoming_webhook.channel;
+    var slack = new Slack();
+    slack.setWebhook(webhookUri);
 
-  slack.webhook({
-    channel: channel,
-    username: "webhookbot",
-    text: req.body.text
-  }, function(err, response) {
-    res.json(response);
-  });
+    slack.webhook({
+      channel: channel,
+      username: "webhookbot",
+      text: req.body.text
+    }, function(err, response) {
+      res.json(response);
+    });
+  } else {
+    res.json({ message: "No webhook url" });
+  }
 };

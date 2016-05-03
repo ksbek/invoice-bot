@@ -2,14 +2,16 @@
 
 // Create the notifications configuration
 module.exports = function (token, config) {
-  var app = require('apiai')(config.apiai.clientAccessToken);
+  var apiai = require('apiai')(config.apiai.clientAccessToken);
+
+  var mongoose = require('mongoose');
+  var User = mongoose.model('User');
+  var Client = mongoose.model('Client');
+  var Invoice = mongoose.model('Invoice');
 
   var RtmClient = require('@slack/client').RtmClient;
-
   var MemoryDataStore = require('@slack/client').MemoryDataStore;
-
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
-
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
   var rtm = new RtmClient(token, {
@@ -40,19 +42,51 @@ module.exports = function (token, config) {
     var user = rtm.dataStore.getUserById(message.user);
 
     var dm = rtm.dataStore.getDMByName(user.name);
+    if (dm) {
+      rtm.sendTyping(dm.id);
 
-    var request = app.textRequest(message.text);
+      var request = apiai.textRequest(message.text);
 
-    rtm.sendTyping(dm.id);
-    request.on('response', function(response) {
-      rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-    });
+      request.on('response', function(response) {
+        console.log(response);
+        if (response.result.action === 'invoiceclient') {
+          User.findUserBySlackId(message.user, function(user) {
+            if (user) {
+              console.log(user.id);
+              if (response.result.parameters.name !== '') {
+                Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                  if (client) {
+                    console.log(client.id);
+                    if (response.result.parameters.amount !== '') {
+                      Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        console.log(invoice);
+                      });
+                    } else {
+                      rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                    }
+                  } else {
+                    rtm.sendMessage("Sorry, we have not such client for you", dm.id);
+                  }
+                });
+              } else {
+                rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+              }
+            } else {
+              rtm.sendMessage("Sorry, you are not correct", dm.id);
+            }
+          });
+        } else {
+          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+        }
+      });
 
-    request.on('error', function(error) {
-      rtm.sendMessage('Oops', dm.id);
-    });
+      request.on('error', function(error) {
+        rtm.sendMessage('Oops! Something went wrong', dm.id);
+      });
 
-    request.end();
+      request.end();
+    }
     console.log(message);
   });
 };

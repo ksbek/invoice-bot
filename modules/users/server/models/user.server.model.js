@@ -250,4 +250,26 @@ UserSchema.statics.generateRandomPassphrase = function () {
   });
 };
 
+/**
+ * Find by slack id
+ */
+UserSchema.statics.findUserBySlackId = function (slack_id, callback) {
+  var query = {};
+  query.provider = 'slack';
+  query.user_id = slack_id;
+
+  this.findOne({ 'provider': 'slack', 'providerData.user_id': slack_id }, function (err, user) {
+    if (!err) {
+      if (!user) {
+        callback(null);
+      } else {
+        callback(user);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
+
+
 mongoose.model('User', UserSchema);

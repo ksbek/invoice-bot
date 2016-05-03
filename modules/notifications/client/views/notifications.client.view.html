@@ -41,9 +41,9 @@
 </div><!-- END of .notifications-wr -->
 <div class="fixed-btm-wr notifications-form-wr">
   <div class="container">
-    <form action="action">
-      <input type="text" placeholder="Make a request or ask a question" required>
-      <input type="submit" value="Send">
+    <form ng-submit="vm.sendMessage();">
+      <input type="text" id="messageText" name="messageText" ng-model="vm.messageText" placeholder="Make a request or ask a question" required>
+      <input type="submit" value="Send" ng-disabled="!vm.messageText.length">
     </form>
   </div><!-- END of .container -->
 </div><!-- END of .fixed-btm-wr -->

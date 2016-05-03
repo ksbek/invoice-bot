@@ -112,15 +112,12 @@ exports.oauthCallback = function (strategy) {
     delete req.session.redirect_to;
 
     passport.authenticate(strategy, function (err, user, redirectURL) {
-      // request('https://bots.api.ai/api/integration/cc19d83e-c6cb-4825-b292-69889e7ad781/start?code=' + req.query.code + '&state=' + req.query.state, function (error, response, body) {
-        // console.log(body);
-      // });
-      // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
-
       var token = user.providerData.tokenSecret.bot.bot_access_token;
       if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
         require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
       }
+
+      // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
 
       if (err) {
         return res.redirect('/authentication/signin?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
@@ -132,7 +129,7 @@ exports.oauthCallback = function (strategy) {
         if (err) {
           return res.redirect('/authentication/signin');
         }
-        return res.redirect(typeof redirectURL == 'string' ? redirectURL : sessionRedirectURL || '/');
+        return res.redirect('/');
       });
     })(req, res, next);
   };

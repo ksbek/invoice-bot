@@ -29,6 +29,7 @@
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 
         vm.success = true;
+        response.password = null;
         vm.user = Authentication.user = response;
       }, function (response) {
         vm.error = response.data.message;

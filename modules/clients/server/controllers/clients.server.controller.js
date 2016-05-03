@@ -81,7 +81,7 @@ exports.delete = function(req, res) {
  * List of Clients
  */
 exports.list = function(req, res) {
-  Client.find().sort('-created').populate('user', 'displayName').exec(function(err, clients) {
+  Client.find({ user: req.user._id }).sort('-created').populate('user', 'displayName').exec(function(err, clients) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -115,3 +115,4 @@ exports.clientByID = function(req, res, next, id) {
     next();
   });
 };
+

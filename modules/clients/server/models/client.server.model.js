@@ -41,19 +41,16 @@ var ClientSchema = new Schema({
   phoneNumber: {
     type: String,
     default: '',
-    required: 'Please fill Phone Number',
     trim: true
   },
   address: {
     type: String,
     default: '',
-    required: 'Please fill Client address',
     trim: true
   },
   businessNumber: {
     type: String,
     default: '',
-    required: 'Please fill Client business number',
     trim: true
   },
   website: {
@@ -69,7 +66,31 @@ var ClientSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  invoices: [{
+    type: Schema.ObjectId,
+    ref: 'Client'
+  }]
 });
+
+/**
+ * Return client_id By name
+ */
+ClientSchema.statics.findClientByName = function (name, user_id, callback) {
+  this.findOne({
+    name: name,
+    user: user_id
+  }, function (err, client) {
+    if (!err) {
+      if (!client) {
+        callback(null);
+      } else {
+        callback(client);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
 
 mongoose.model('Client', ClientSchema);
