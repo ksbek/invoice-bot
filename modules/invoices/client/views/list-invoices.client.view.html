@@ -13,10 +13,10 @@
     <td><a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
     <td><a data-ng-bind="invoice.invoice"></a></td>
     <td>
-      <span data-ng-bind="invoice.dateIssued"></span>
+      <span data-ng-bind="invoice.dateIssued | date:'dd.MM.yy'"></span>
     </td>
     <td>
-      <span data-ng-bind="invoice.dateDue"></span>
+      <span data-ng-bind="invoice.dateDue | date:'dd.MM.yy'"></span>
     </td>
     <td>
       <span>{{invoice.amountDue.amount}}</span>
@@ -26,7 +26,11 @@
       <span data-ng-bind="invoice.received"></span>
     </td>
     <td>
-      <span data-ng-bind="invoice.status"></span>
+      <select data-ng-model="invoice.status">
+        <option value="due">Due</option>
+        <option value="paid">Paid</option>
+        <option value="overdue">OverDue</option>
+      </select>
     </td>
     <td><a href="invoice.html"><img src="/modules/core/client/img/i-file.png" alt=""></a></td>
   </tr>
