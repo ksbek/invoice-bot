@@ -60,7 +60,8 @@ var calcDate = function (dateString) {
   var days = dateString.match(/\d/g);
   var date = new Date();
   if (dateString.indexOf("day") > -1) {
-    return date.setDate(date.getDate() + days);
+    var res = date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    return new Date(res);
   } else {
     return Date.now;
   }
