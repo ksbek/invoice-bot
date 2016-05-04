@@ -104,5 +104,7 @@ module.exports = function (app, db) {
     });
   });
 
+  GLOBAL.io = io;
+
   return server;
 };

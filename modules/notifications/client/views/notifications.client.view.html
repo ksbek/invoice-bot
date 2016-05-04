@@ -26,14 +26,14 @@
       <h6>2:47pm</h6>
     </div>
   </div><!-- END of .notifications-group -->
-  <div class="notifications-group">
+  <div class="notifications-group" data-ng-repeat="message in vm.messages">
     <div class="img-wr">
-      <img src="/modules/core/client/img/data/i-user-2.jpg" alt="">
+      <img ng-src="vm.message.profileImgUrl" alt="">
     </div>
     <h5>Me</h5>
     <div class="notifications-item">
       <div class="notifications-item-text">
-        <p>Assigned an <a href="clients.html">invoice</a> for <a href="invoices.html">Fireart Studio</a> $7,824.00</p>
+        <p>Assigned an <a data-ui-sref="invoices.list">invoice</a> for <a data-ui-sref="clients.list">{{message.client_name}}</a>&nbsp;{{message.amount | currency}}</p>
       </div>
       <h6>2:51pm</h6>
     </div>

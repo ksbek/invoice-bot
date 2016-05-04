@@ -14,6 +14,8 @@ module.exports = function (token, config) {
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
+  var io = GLOBAL.io;
+
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
     logLevel: 'error',
@@ -61,6 +63,17 @@ module.exports = function (token, config) {
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
                         rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                         console.log(invoice);
+
+                        io.emit('invoiceclient', {
+                          type: 'invoiceclient',
+                          profileImageURL: user.profileImageURL,
+                          username: user.username,
+                          user_id: user.id,
+                          client_name: client.name,
+                          amount: invoice.amountDue.amount,
+                          currenty: invoice.amountDue.currency
+                        });
+
                       });
                     } else {
                       rtm.sendMessage(response.result.fulfillment.speech, dm.id);

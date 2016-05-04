@@ -1240,8 +1240,39 @@
       if (!Authentication.user) {
         $state.go('home');
       }
+
+      // Make sure the Socket is connected
+      if (!Socket.socket) {
+        Socket.connect();
+      }
+
+      // Add an event listener to the 'notificiationMessage' event
+      Socket.on('invoiceclient', function (message) {
+        vm.messages.unshift(message);
+      });
+
+      // Remove the event listener when the controller instance is destroyed
+      $scope.$on('$destroy', function () {
+        Socket.removeListener('invoiceclient');
+      });
     }
 
+    // Create a controller method for sending messages
+    function sendMessage() {
+      // Create a new message object
+      var message = {
+        text: vm.messageText,
+        created: Date.now()
+      };
+
+      // Emit a 'chatMessage' message event
+      Socket.emit('notificiationMessage', message);
+
+      // Clear the message text
+      vm.messageText = '';
+    }
+
+    /*
     // Create a controller method for sending messages
     function sendMessage() {
       // Create a new message object
@@ -1265,6 +1296,7 @@
 
       vm.messageText = '';
     }
+    */
   }
 }());
 
