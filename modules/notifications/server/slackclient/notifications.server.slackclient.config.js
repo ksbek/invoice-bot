@@ -53,7 +53,7 @@ module.exports = function (token, config) {
       request.on('response', function(response) {
         console.log(response);
         if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Yes Confirm') {
-          User.findUserBySlackId(message.user, function(user) {
+          User.findUserBySlackId(message.user, '', function(user) {
             if (user) {
               console.log(user.id);
               if (response.result.parameters.name !== '') {

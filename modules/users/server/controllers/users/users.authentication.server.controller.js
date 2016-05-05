@@ -112,11 +112,6 @@ exports.oauthCallback = function (strategy) {
     delete req.session.redirect_to;
 
     passport.authenticate(strategy, function (err, user, redirectURL) {
-      var token = user.providerData.tokenSecret.bot.bot_access_token;
-      if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
-      }
-
       // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
 
       if (err) {
@@ -125,6 +120,12 @@ exports.oauthCallback = function (strategy) {
       if (!user) {
         return res.redirect('/authentication/signin');
       }
+
+      var token = user.providerData.tokenSecret.bot.bot_access_token;
+      if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
+        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
+      }
+
       req.login(user, function (err) {
         if (err) {
           return res.redirect('/authentication/signin');
@@ -177,9 +178,16 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
               providerData: providerUserProfile.providerData
             });
 
-            // And save the user
-            user.save(function (err) {
-              return done(err, user);
+            User.findUserBySlackId('', providerUserProfile.providerData.team_id, function (existing_user) {
+              if (existing_user) {
+                user.runningStatus = {};
+                user.runningStatus.isRunning = true;
+                user.runningStatus.token = user.providerData.tokenSecret.bot.bot_access_token;
+              }
+              // And save the user
+              user.save(function (err) {
+                return done(err, user);
+              });
             });
           });
         } else {

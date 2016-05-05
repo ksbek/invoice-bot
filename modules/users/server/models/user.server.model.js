@@ -44,10 +44,10 @@ var UserSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
     lowercase: true,
     trim: true,
-    default: ''
+    default: '',
+    validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
   },
   username: {
     type: String,
@@ -253,12 +253,8 @@ UserSchema.statics.generateRandomPassphrase = function () {
 /**
  * Find by slack id
  */
-UserSchema.statics.findUserBySlackId = function (slack_id, callback) {
-  var query = {};
-  query.provider = 'slack';
-  query.user_id = slack_id;
-
-  this.findOne({ 'provider': 'slack', 'providerData.user_id': slack_id }, function (err, user) {
+UserSchema.statics.findUserBySlackId = function (user_id, team_id, callback) {
+  this.findOne({ 'provider': 'slack', $or: [{ 'providerData.user_id': user_id }, { 'providerData.team_id': team_id }] }, function (err, user) {
     if (!err) {
       if (!user) {
         callback(null);

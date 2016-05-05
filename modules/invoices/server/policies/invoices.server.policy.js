@@ -44,6 +44,11 @@ exports.isAllowed = function (req, res, next) {
     return next();
   }
 
+  // If an Invoice is being processed and the current user's team created it then allow any manipulation
+  if (req.invoice && req.user && req.invoice.user && req.invoice.user.provider === 'slack' && req.user.provider === 'slack' && req.invoice.user.providerData.team_id === req.user.providerData.team_id) {
+    return next();
+  }
+
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
     if (err) {
