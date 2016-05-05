@@ -41,6 +41,7 @@ module.exports = function (token, config) {
   });
 
   rtm.on(RTM_EVENTS.MESSAGE, function (message) {
+    console.log(message);
     var user = rtm.dataStore.getUserById(message.user);
 
     var dm = rtm.dataStore.getDMByName(user.name);
@@ -51,7 +52,7 @@ module.exports = function (token, config) {
 
       request.on('response', function(response) {
         console.log(response);
-        if (response.result.action === 'invoiceclient') {
+        if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Yes Confirm') {
           User.findUserBySlackId(message.user, function(user) {
             if (user) {
               console.log(user.id);
@@ -100,6 +101,5 @@ module.exports = function (token, config) {
 
       request.end();
     }
-    console.log(message);
   });
 };
