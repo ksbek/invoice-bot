@@ -70,7 +70,7 @@ var calcDate = function (dateString) {
 /**
  * Find possible not used username
  */
-var findUniqueInvoiceNumber = function (number, callback) {
+InvoiceSchema.statics.findUniqueInvoiceNumber = function (number, callback) {
   var _this = this;
   var possibleNumber = number;
 
@@ -81,7 +81,7 @@ var findUniqueInvoiceNumber = function (number, callback) {
       if (!user) {
         callback(possibleNumber);
       } else {
-        return findUniqueInvoiceNumber(Math.floor(Math.random() * 100000) + 100000, callback);
+        return _this.findUniqueInvoiceNumber(Math.floor(Math.random() * 100000) + 100000, callback);
       }
     } else {
       callback(null);
@@ -95,7 +95,7 @@ var findUniqueInvoiceNumber = function (number, callback) {
 InvoiceSchema.statics.createInvoiceFromSlackBot = function (user_id, client_id, params, callback) {
   var _this = this;
   var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
-  findUniqueInvoiceNumber(possibleNumber, function (number) {
+  _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
     _this.create({
       user: user_id,
       client: client_id,
