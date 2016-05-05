@@ -56,11 +56,15 @@ module.exports.start = function start(callback) {
       if (callback) callback(app, db, config);
 
       var User = require('mongoose').model('User');
+      var tokens = new Array();
       User.find({ "provider": "slack" }, function (err, users) {
         users.forEach(function (user) {
           if (user.providerData.tokenSecret.bot) {
             var token = user.providerData.tokenSecret.bot.bot_access_token;
-            require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
+            if (tokens.indexOf(token) === -1) {
+              require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
+              tokens.push(token);
+            }
             user.runningStatus = {};
             user.runningStatus.token = token;
             user.runningStatus.isRunning = true;
