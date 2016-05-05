@@ -78,7 +78,7 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user_id, client_id, 
     client: client_id,
     name: params.name,
     amountDue: params.amount,
-    dateDue: calcDate(params.date),
+    dateDue: calcDate(params.duedate),
     description: params.description
   }, function (err, invoice) {
     if (!err) {
