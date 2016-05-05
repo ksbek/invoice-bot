@@ -67,29 +67,54 @@ var calcDate = function (dateString) {
   }
 };
 
+/**
+ * Find possible not used username
+ */
+var findUniqueInvoiceNumber = function (number, callback) {
+  var _this = this;
+  var possibleNumber = number;
+
+  _this.findOne({
+    invoice: possibleNumber
+  }, function (err, user) {
+    if (!err) {
+      if (!user) {
+        callback(possibleNumber);
+      } else {
+        return findUniqueInvoiceNumber(Math.floor(Math.random() * 100000) + 100000, callback);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
 
 /**
  * Create instance method
  */
 InvoiceSchema.statics.createInvoiceFromSlackBot = function (user_id, client_id, params, callback) {
   var _this = this;
-  _this.create({
-    user: user_id,
-    client: client_id,
-    name: params.name,
-    amountDue: params.amount,
-    dateDue: calcDate(params.duedate),
-    description: params.description
-  }, function (err, invoice) {
-    if (!err) {
-      if (!invoice) {
-        callback(null);
+  var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
+  findUniqueInvoiceNumber(possibleNumber, function (number) {
+    _this.create({
+      user: user_id,
+      client: client_id,
+      name: params.name,
+      amountDue: params.amount,
+      dateDue: calcDate(params.duedate),
+      description: params.description,
+      invoice: number
+    }, function (err, invoice) {
+      if (!err) {
+        if (!invoice) {
+          callback(null);
+        } else {
+          callback(invoice);
+        }
       } else {
-        callback(invoice);
+        callback(null);
       }
-    } else {
-      callback(null);
-    }
+    });
   });
 };
 
