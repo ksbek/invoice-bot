@@ -18,6 +18,11 @@
     vm.remove = remove;
     vm.save = save;
 
+    var dateDue = new Date(vm.invoice.dateDue);
+    var today = new Date();
+    var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
+    vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
     // Remove existing Invoice
     function remove() {
       if (confirm('Are you sure you want to delete?')) {
