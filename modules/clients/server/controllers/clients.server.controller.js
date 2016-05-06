@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Client = mongoose.model('Client'),
+  Invoice = mongoose.model('Invoice'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -81,13 +82,32 @@ exports.delete = function(req, res) {
  * List of Clients
  */
 exports.list = function(req, res) {
+  var arrClients = [];
   Client.find({ user: req.user._id }).sort('-created').populate('user', 'displayName').exec(function(err, clients) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.jsonp(clients);
+      var completed = 0;
+      var complete = function() {
+        completed++;
+        if (completed === clients.length) {
+          res.jsonp(arrClients);
+        }
+      };
+
+      var processing = function(client) {
+        Invoice.find({ client: client.id }, function (err, invoices) {
+          client.invoices = invoices;
+          arrClients.push(client);
+          complete();
+        });
+      };
+      for (var i = 0; i < clients.length; i++) {
+        var client = clients[i];
+        processing(client);
+      }
     }
   });
 };

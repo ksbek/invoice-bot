@@ -56,7 +56,6 @@ var ClientSchema = new Schema({
   website: {
     type: String,
     default: '',
-    required: 'Please fill Client website',
     trim: true
   },
   created: {
@@ -69,7 +68,7 @@ var ClientSchema = new Schema({
   },
   invoices: [{
     type: Schema.ObjectId,
-    ref: 'Client'
+    ref: 'Invoice'
   }]
 });
 

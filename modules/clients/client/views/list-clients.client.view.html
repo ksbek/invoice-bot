@@ -11,9 +11,9 @@
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a></td>
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.name"></a></td>
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.email"></a></td>
-    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.invoices"></a></td>
-    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.nowDue"></a></td>
-    <td><a data-ui-sref="invoices.edit({ invocieId: client.invocie_id })" data-ng-bind="client.nowDue"></a></td>
+    <td><a data-ui-sref="invoices.list" data-ng-bind="client.invoices.length"></a></td>
+    <td><a data-ui-sref="invoices.list" data-ng-bind="client.invoices.length"></a></td>
+    <td><a data-ui-sref="invoices.list" data-ng-bind="(client.invoices | filter:{status:'paid'}).length"></a></td>
   </tr>
 </table>
 <div class="fixed-btm-wr">

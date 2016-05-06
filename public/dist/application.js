@@ -1,7 +1,7 @@
 (function (window) {
   'use strict';
 
-  var applicationModuleName = 'mean';
+  var applicationModuleName = 'nowdue';
 
   var service = {
     applicationModuleName: applicationModuleName,
@@ -253,6 +253,7 @@
 
       function successCallback(res) {
         $state.go('clients.list');
+        $scope.close();
       }
 
       function errorCallback(res) {
@@ -526,21 +527,41 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal'];
 
-  function HeaderController($scope, $state, Authentication, Menus) {
+  function HeaderController($scope, $state, Authentication, Menus, $uibModal) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
     vm.authentication = Authentication;
     vm.isCollapsed = false;
     vm.menu = Menus.getMenu('topbar');
+    vm.createClient = createClient;
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
 
     function stateChangeSuccess() {
       // Collapsing the menu after navigation
       vm.isCollapsed = false;
+    }
+
+    function createClient() {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'modules/clients/client/views/new-client.client.view.html',
+        size: 'lg',
+        windowClass: 'client-modal',
+        controller: 'ClientsController',
+        controllerAs: 'vm',
+        resolve: {
+          clientResolve: newClient
+        }
+      });
+    }
+
+    newClient.$inject = ['ClientsService'];
+
+    function newClient(ClientsService) {
+      return new ClientsService();
     }
   }
 }());
@@ -1139,15 +1160,37 @@
   'use strict';
 
   angular
-    .module('invoices')
-    .controller('InvoicesListController', InvoicesListController);
+  .module('invoices')
+  .controller('InvoicesListController', InvoicesListController);
 
-  InvoicesListController.$inject = ['InvoicesService'];
+  InvoicesListController.$inject = ['InvoicesService', '$uibModal'];
 
-  function InvoicesListController(InvoicesService) {
+  function InvoicesListController(InvoicesService, $uibModal) {
     var vm = this;
 
     vm.invoices = InvoicesService.query();
+    vm.payInvoice = payInvoice;
+
+    function payInvoice(invoice) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',
+        size: 'lg',
+        windowClass: 'invoice-modal',
+        controller: ['$state', 'Authentication', 'invoice', function($scope, Authentication, invoice) {
+          var vm = this;
+          vm.invoice = invoice;
+          vm.authentication = Authentication;
+          var dateDue = new Date(vm.invoice.dateDue);
+          var today = new Date();
+          var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
+          vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        }],
+        controllerAs: 'vm',
+        resolve: {
+          invoice: invoice
+        }
+      });
+    }
   }
 }());
 

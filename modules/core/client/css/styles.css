@@ -1829,3 +1829,16 @@ header .alignright .invoice-data-item {
 
 /* ----------------------------------------------------------------------------------- */
 /* * - END of @media ---------------------------------------------------------- */
+
+
+/* * Genrich's style */
+.modal-dialog{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.modal-dialog .modal-content {
+	width: 100%;
+	height: 100%;
+}
