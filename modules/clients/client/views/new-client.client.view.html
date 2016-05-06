@@ -9,7 +9,7 @@
   <div class="container">
     <div class="form-wr">
       <div class="form-wr">
-        <form name="vm.form.clientForm" ng-submit="vm.save(vm.form.clientForm.$valid)" novalidate autocomplete="off">
+        <form name="vm.form.clientForm" ng-submit="$close(false);vm.save(vm.form.clientForm.$valid)" novalidate autocomplete="off">
           <fieldset>
             <div class="form-row form-group" show-errors>
               <input name="name" type="text" ng-model="vm.client.name" id="name" placeholder="Name" required>

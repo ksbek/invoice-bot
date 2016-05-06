@@ -253,7 +253,6 @@
 
       function successCallback(res) {
         $state.go('clients.list');
-        $scope.close();
       }
 
       function errorCallback(res) {
