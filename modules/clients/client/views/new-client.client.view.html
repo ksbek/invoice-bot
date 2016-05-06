@@ -1,0 +1,69 @@
+<header class="fixed-header">
+  <div class="container">
+    <h4>Add New Client</h4>
+    <a href="#" class="btn-close" ng-click="$close(false)"><img src="/modules/core/client/img/i-close.png" alt=""></a>
+  </div><!-- END of .container -->
+</header><!-- END of header -->
+
+<div class="content">
+  <div class="container">
+    <div class="form-wr">
+      <div class="form-wr">
+        <form name="vm.form.clientForm" ng-submit="vm.save(vm.form.clientForm.$valid)" novalidate autocomplete="off">
+          <fieldset>
+            <div class="form-row form-group" show-errors>
+              <input name="name" type="text" ng-model="vm.client.name" id="name" placeholder="Name" required>
+              <div ng-messages="vm.form.clientForm.name.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Client name is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="text" id="companyName" name="companyName" ng-model="vm.client.companyName" placeholder="Company Name" required>
+              <div ng-messages="vm.clientForm.companyName.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Company name is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="email" id="email" name="email" ng-model="vm.client.email" placeholder="Email" lowercase required>
+              <div ng-messages="vm.clientForm.email.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Email address is required.</p>
+                <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="text" id="phoneNumber" name="phoneNumber" ng-model="vm.client.phoneNumber" placeholder="Phone Number">
+              <div ng-messages="vm.clientForm.phoneNumber.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Phone Number is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="text" id="address" name="address" ng-model="vm.client.address" placeholder="Address">
+              <div ng-messages="vm.clientForm.address.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Address is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="text" id="businessNumber" name="businessNumber" ng-model="vm.client.businessNumber" placeholder="Business Number">
+              <div ng-messages="vm.clientForm.businessNumber.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Business Number is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group" show-errors>
+              <input type="text" id="website" name="website" ng-model="vm.client.website" placeholder="Website">
+              <div ng-messages="vm.clientForm.website.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">Website is required.</p>
+              </div>
+            </div>
+            <div class="form-row form-group">
+              <button type="submit">{{vm.client._id ? 'Save' : 'Create'}}</button>
+            </div>
+            <div ng-show="vm.error" class="text-danger">
+              <strong ng-bind="vm.error"></strong>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+  </div><!-- END of .container -->
+</div><!-- END of .content -->

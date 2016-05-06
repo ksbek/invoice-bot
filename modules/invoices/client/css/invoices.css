@@ -1,0 +1,10 @@
+.invoice-modal .modal-dialog{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.invoice-modal .modal-dialog .modal-content {
+	width: 100%;
+	height: 100%;
+}

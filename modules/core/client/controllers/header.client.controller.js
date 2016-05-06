@@ -15,7 +15,7 @@
     vm.isCollapsed = false;
     vm.menu = Menus.getMenu('topbar');
     vm.createClient = createClient;
-
+    vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
 
     function stateChangeSuccess() {

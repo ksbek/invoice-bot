@@ -26,34 +26,55 @@ exports.signup = function (req, res) {
   delete req.body.roles;
 
   // Init user and add missing fields
-  user = req.body;
-  var user = _.extend(user, req.body);
-  user.updated = Date.now();
-
-  if (user.provider === undefined) {
-    user.provider = 'local';
-  }
-
-  // Then save the user
-  user.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function (err) {
+  var user;
+  if (req.body._id) {
+    User.findOne({ _id: req.body._id }, function (err, existing_user) {
+      user = _.extend(existing_user, req.body);
+      user.updated = Date.now();
+      // Then save the user
+      user.save(function (err) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
         } else {
-          res.json(user);
+          // Remove sensitive data before login
+          user.password = undefined;
+          user.salt = undefined;
+
+          req.login(user, function (err) {
+            if (err) {
+              res.status(400).send(err);
+            } else {
+              res.json(user);
+            }
+          });
         }
       });
-    }
-  });
+    });
+  } else {
+    user = new User(req.body);
+    user.provider = 'local';
+    user.save(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        // Remove sensitive data before login
+        user.password = undefined;
+        user.salt = undefined;
+
+        req.login(user, function (err) {
+          if (err) {
+            res.status(400).send(err);
+          } else {
+            res.json(user);
+          }
+        });
+      }
+    });
+  }
 };
 
 /**
@@ -126,12 +147,15 @@ exports.oauthCallback = function (strategy) {
         require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
       }
 
+      return res.redirect('/authentication/account-setup?id=' + user.id);
+      /*
       req.login(user, function (err) {
         if (err) {
           return res.redirect('/authentication/signin');
         }
-        return res.redirect('/');
+        return res.redirect('/authentication/account-setup');
       });
+      */
     })(req, res, next);
   };
 };

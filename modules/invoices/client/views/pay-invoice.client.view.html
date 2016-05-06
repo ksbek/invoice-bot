@@ -1,0 +1,62 @@
+<header class="fixed-header">
+	<div class="container">
+		<h4>Invoice</h4>
+		<span class="invoice-data-item color-yellow">{{vm.invoice.invoice}}</span>
+		<div class="alignright text-right logining-links-wr">
+			<span class="invoice-data-item color-green">Due</span>
+			<h4>{{vm.invoice.dateDueLeft}} days</h4>
+		</div>
+		<a href="#" class="btn-close" ng-click="$close(false)"><img src="/modules/core/client/img/i-close.png" alt=""></a>
+	</div><!-- END of .container -->
+</header><!-- END of header -->
+
+<div class="content">
+	<div class="container">
+		<div class="invoice-item-wr">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-xs-2">
+							<h4 class="color-light-gray">To</h4>
+						</div>
+						<div class="col-xs-8">
+							<h4>{{vm.invoice.client.companyName}}</h4>
+							<h4 class="color-violet">We appreciate your business</h4>
+							<p>No building items and plans outside of your accounting system, no more needless work of duplicating plans and items both in your accounting system and in a third party recurring payments software.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="invoice-info">
+						<h2><i>Total</i> {{vm.invoice.amountDue.amount}} {{vm.invoice.amountDue.currency}}</h2>
+						<h4><i>Tax</i> 2.9%</h4>
+						<h4><i>Subtotal</i> {{vm.invoice.amountDue.amount}} {{vm.invoice.amountDue.currency}}</h4>
+						<a href="javascript:void(0);" class="btn-1">Pay now</a>
+					</div>
+				</div>
+			</div>
+		</div><!-- END of .invoice-item-wr -->
+	</div><!-- END of .container -->
+</div><!-- END of .content -->
+
+<div class="fixed-btm-wr fixed-btm-invoice">
+	<div class="container">
+		<h4 class="color-light-gray">From</h4>
+		<h4>{{vm.authentication.user.companyName}}</h4>
+		<div class="tooltip-wr">
+			<img src="modules/core/client/img/i-info.png" alt="">
+			<div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.authentication.user.companyName}} business number {{vm.authentication.user.businessNumber}}.</div>
+		</div>
+		<span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
+		<div class="invoice-submenu">
+			<i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
+			<ul>
+				<li><a href="javascript:void(0);">Download PDF</a></li>
+				<li><a href="javascript:void(0);">Report</a></li>
+			</ul>
+		</div>
+		<div class="invoice-by">
+			Invoice powered by <a href="http://nowdue.ai">Nowdue <i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
+		</div>
+	</div><!-- END of .container -->
+</div><!-- END of .fixed-btm-wr -->

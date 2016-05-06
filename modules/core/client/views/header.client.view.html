@@ -23,7 +23,26 @@
     </nav>
   </div><!-- END of .container -->
 
-  <div class="container" ng-if="!vm.authentication.user">
+  <!-- home header -->
+  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name.indexOf('home') > -1">
     <a href="/" class="logo"><img src="/modules/core/client/img/logo.png" alt=""></a>
+  </div><!-- END of .container -->
+
+  <!-- account-setup header -->
+  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.accountSetup'">
+    <h4>Account set up</h4>
+    <div class="logining-links-wr">
+      <span>or </span>
+      <a href="#" ui-sref="authentication.signin">Login</a>
+    </div>
+  </div><!-- END of .container -->
+
+  <!-- login header -->
+  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.signin'">
+    <h4>Login</h4>
+    <div class="logining-links-wr">
+      <span>or </span>
+      <a href="#" ui-sref="authentication.accountSetup">Sign up</a>
+    </div>
   </div><!-- END of .container -->
 </div><!-- END of div -->

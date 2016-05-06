@@ -537,7 +537,7 @@
     vm.isCollapsed = false;
     vm.menu = Menus.getMenu('topbar');
     vm.createClient = createClient;
-
+    vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
 
     function stateChangeSuccess() {
@@ -1510,9 +1510,18 @@
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
+      .state('authentication.signup', {
+        url: '/signup',
+        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
+        controller: 'AuthenticationController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'signup'
+        }
+      })
       .state('authentication.accountSetup', {
         url: '/account-setup',
-        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
+        templateUrl: 'modules/users/client/views/authentication/account-setup.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
@@ -1686,12 +1695,8 @@
     vm.callOauthProvider = callOauthProvider;
     vm.credentials = {};
 
-    vm.credentials.slackUserName = $location.search().slackUserName;
-    vm.credentials.companyName = $location.search().companyName;
-    vm.credentials.provider = "slack";
-    vm.credentials.currency = $location.search().currency || "usd";
     vm.credentials._id = $location.search().id;
-
+    vm.credentials.currency = 'usd';
     // Get an eventual error defined in the URL query string:
     vm.error = $location.search().err;
 

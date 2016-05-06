@@ -45,14 +45,18 @@ var UserSchema = new Schema({
   email: {
     type: String,
     lowercase: true,
+    unique: 'Email already exists',
     trim: true,
     default: ''
   },
   username: {
     type: String,
     unique: 'Username already exists',
-    required: 'Please fill in a username',
     lowercase: true,
+    trim: true
+  },
+  currency: {
+    type: String,
     trim: true
   },
   address: {
