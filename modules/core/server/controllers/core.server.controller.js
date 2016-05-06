@@ -20,8 +20,6 @@ exports.renderIndex = function (req, res) {
       plan: req.user.plan,
       integrations: req.user.integrations,
       provider: req.user.provider,
-      username: validator.escape(req.user.username),
-      created: req.user.created.toString(),
       roles: req.user.roles,
       profileImageURL: req.user.profileImageURL,
       email: req.user.email,

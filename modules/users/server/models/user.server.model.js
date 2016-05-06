@@ -51,7 +51,6 @@ var UserSchema = new Schema({
   },
   username: {
     type: String,
-    unique: 'Username already exists',
     lowercase: true,
     trim: true
   },

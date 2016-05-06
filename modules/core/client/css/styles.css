@@ -1832,13 +1832,17 @@ header .alignright .invoice-data-item {
 
 
 /* * Genrich's style */
-.modal-dialog{
+.client-modal .modal-dialog{
 	width: 100%;
 	height: 100%;
 	margin: 0;
 }
 
-.modal-dialog .modal-content {
+.client-modal .modal-dialog .modal-content {
 	width: 100%;
 	height: 100%;
+}
+
+.modal-dialog .modal-content {
+	padding: 0 20px;
 }

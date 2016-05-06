@@ -64,19 +64,20 @@ module.exports = function (token, config) {
                     console.log(client.id);
                     if (response.result.parameters.amount !== '') {
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
-                        rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
-                        console.log(invoice);
+                        if (invoice) {
+                          rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
+                          console.log(invoice);
 
-                        io.emit('invoiceclient', {
-                          type: 'invoiceclient',
-                          profileImageURL: user.profileImageURL,
-                          username: user.username,
-                          user_id: user.id,
-                          client_name: client.name,
-                          amount: invoice.amountDue.amount,
-                          currenty: invoice.amountDue.currency
-                        });
-
+                          io.emit('invoiceclient', {
+                            type: 'invoiceclient',
+                            profileImageURL: user.profileImageURL,
+                            username: user.username,
+                            user_id: user.id,
+                            client_name: client.name,
+                            amount: invoice.amountDue.amount,
+                            currenty: invoice.amountDue.currency
+                          });
+                        }
                       });
                     } else {
                       rtm.sendMessage(response.result.fulfillment.speech, dm.id);

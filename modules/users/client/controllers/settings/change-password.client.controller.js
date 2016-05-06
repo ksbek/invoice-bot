@@ -5,15 +5,16 @@
     .module('users')
     .controller('ChangePasswordController', ChangePasswordController);
 
-  ChangePasswordController.$inject = ['$scope', '$http', 'Authentication', 'PasswordValidator'];
+  ChangePasswordController.$inject = ['$scope', '$http', 'Authentication', 'PasswordValidator', 'newPassword'];
 
-  function ChangePasswordController($scope, $http, Authentication, PasswordValidator) {
+  function ChangePasswordController($scope, $http, Authentication, PasswordValidator, newPassword) {
     var vm = this;
 
     vm.user = Authentication.user;
     vm.changeUserPassword = changeUserPassword;
     vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
-
+    vm.passwordDetails = {};
+    vm.passwordDetails.newPassword = newPassword;
     // Change user password
     function changeUserPassword(isValid) {
       vm.success = vm.error = null;

@@ -1834,15 +1834,16 @@
     .module('users')
     .controller('ChangePasswordController', ChangePasswordController);
 
-  ChangePasswordController.$inject = ['$scope', '$http', 'Authentication', 'PasswordValidator'];
+  ChangePasswordController.$inject = ['$scope', '$http', 'Authentication', 'PasswordValidator', 'newPassword'];
 
-  function ChangePasswordController($scope, $http, Authentication, PasswordValidator) {
+  function ChangePasswordController($scope, $http, Authentication, PasswordValidator, newPassword) {
     var vm = this;
 
     vm.user = Authentication.user;
     vm.changeUserPassword = changeUserPassword;
     vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
-
+    vm.passwordDetails = {};
+    vm.passwordDetails.newPassword = newPassword;
     // Change user password
     function changeUserPassword(isValid) {
       vm.success = vm.error = null;
@@ -1991,14 +1992,15 @@
     .module('users')
     .controller('EditProfileController', EditProfileController);
 
-  EditProfileController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication'];
+  EditProfileController.$inject = ['$scope', '$state', '$http', '$location', 'Users', 'Authentication', '$uibModal'];
 
-  function EditProfileController($scope, $state, $http, $location, Users, Authentication) {
+  function EditProfileController($scope, $state, $http, $location, Users, Authentication, $uibModal) {
     var vm = this;
 
     vm.user = Authentication.user;
     vm.updateUserProfile = updateUserProfile;
-
+    vm.changePassword = changePassword;
+    vm.editStatus = "";
     // Update a user profile
     function updateUserProfile(isValid) {
       vm.success = vm.error = null;
@@ -2015,11 +2017,28 @@
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 
         vm.success = true;
-        response.password = null;
         vm.user = Authentication.user = response;
+        vm.editStatus = "";
       }, function (response) {
         vm.error = response.data.message;
       });
+    }
+
+    function changePassword() {
+      if (vm.passwordDetails && vm.passwordDetails.password !== '') {
+        $uibModal.open({
+          templateUrl: 'modules/users/client/views/settings/confirm-original-password.client.view.html',
+          controller: 'ChangePasswordController',
+          controllerAs: 'vm',
+          resolve: {
+            newPassword: function () {
+              return vm.passwordDetails.password;
+            }
+          }
+        });
+      } else {
+        vm.passwordError = true;
+      }
     }
   }
 }());
