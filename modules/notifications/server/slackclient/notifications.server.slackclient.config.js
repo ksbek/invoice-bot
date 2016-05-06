@@ -64,7 +64,7 @@ module.exports = function (token, config) {
                     console.log(client.id);
                     if (response.result.parameters.amount !== '') {
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
-                        rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', server + '/invoices/' + invoice._id), dm.id);
+                        rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
                         console.log(invoice);
 
                         io.emit('invoiceclient', {
