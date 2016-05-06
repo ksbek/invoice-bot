@@ -40,7 +40,7 @@
     function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
       // Record previous state
       if (Authentication.user) {
-        if (toState.name === 'home') {
+        if (toState.name === 'root.home') {
           $state.transitionTo('notifications').then(function () {
             // Record previous state
             storePreviousState(toState, toParams);

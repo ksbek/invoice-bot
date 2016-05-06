@@ -12,7 +12,17 @@
       .state('clients', {
         abstract: true,
         url: '/clients',
-        template: '<ui-view/>'
+        views: {
+          'header': {
+            templateUrl: 'modules/clients/client/views/header.client.view.html'
+          },
+          'footer': {
+            templateUrl: 'modules/clients/client/views/footer.client.view.html'
+          },
+          'container@': {
+            template: '<ui-view/>'
+          }
+        }
       })
       .state('clients.list', {
         url: '',

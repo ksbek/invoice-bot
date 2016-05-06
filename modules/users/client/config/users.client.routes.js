@@ -14,7 +14,16 @@
       .state('settings', {
         abstract: true,
         url: '/settings',
-        templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
+            controller: 'SettingsController',
+            controllerAs: 'vm'
+          }
+        },
         controller: 'SettingsController',
         controllerAs: 'vm',
         data: {
@@ -87,33 +96,49 @@
       .state('authentication', {
         abstract: true,
         url: '/authentication',
-        templateUrl: 'modules/users/client/views/authentication/authentication.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/users/client/views/authentication/header.client.view.html'
+          }
+        },
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
       .state('authentication.signup', {
         url: '/signup',
-        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'signup'
         }
       })
       .state('authentication.accountSetup', {
         url: '/account-setup',
-        templateUrl: 'modules/users/client/views/authentication/account-setup.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/account-setup.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'Account Setup'
         }
       })
       .state('authentication.signin', {
         url: '/signin?err',
-        templateUrl: 'modules/users/client/views/authentication/signin.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/signin.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'Signin'
         }

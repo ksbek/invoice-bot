@@ -27,13 +27,25 @@
     });
 
     $stateProvider
-      .state('home', {
+      .state('root', {
+        url: '',
+        abstract: true,
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container': {
+            template: '<ui-view/>'
+          }
+        }
+      })
+      .state('root.home', {
         url: '/',
         templateUrl: 'modules/core/client/views/home.client.view.html',
         controller: 'HomeController',
         controllerAs: 'vm'
       })
-      .state('privacy', {
+      .state('root.privacy', {
         url: '/privacy',
         templateUrl: 'modules/core/client/views/privacy.client.view.html',
         data: {
@@ -43,7 +55,14 @@
       })
       .state('not-found', {
         url: '/not-found',
-        templateUrl: 'modules/core/client/views/404.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/404.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Not-Found'
@@ -51,7 +70,14 @@
       })
       .state('bad-request', {
         url: '/bad-request',
-        templateUrl: 'modules/core/client/views/400.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/400.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Bad-Request'
@@ -59,7 +85,14 @@
       })
       .state('forbidden', {
         url: '/forbidden',
-        templateUrl: 'modules/core/client/views/403.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/403.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Forbidden'

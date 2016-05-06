@@ -1,5 +1,12 @@
 {% extends 'layout.server.view.html' %}
 
 {% block content %}
-  <section ui-view></section>
+	
+  <header ui-view="header" class="fixed-header"></header>
+  <div class="content">
+    <div class="container">
+  		<section ui-view="container"></section>
+    </div>
+  </div>
+  <footer ui-view="footer"></footer>
 {% endblock %}

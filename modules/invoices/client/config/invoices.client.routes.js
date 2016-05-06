@@ -12,7 +12,17 @@
       .state('invoices', {
         abstract: true,
         url: '/invoices',
-        template: '<ui-view/>'
+        views: {
+          'header': {
+            templateUrl: 'modules/clients/client/views/header.client.view.html'
+          },
+          'footer': {
+            templateUrl: 'modules/clients/client/views/footer.client.view.html'
+          },
+          'container@': {
+            template: '<ui-view/>'
+          }
+        }
       })
       .state('invoices.list', {
         url: '',
@@ -26,7 +36,7 @@
       .state('invoices.create', {
         url: '/create',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesController',
+        controller: 'InvoicesListController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: newInvoice
@@ -39,7 +49,7 @@
       .state('invoices.edit', {
         url: '/:invoiceId/edit',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesController',
+        controller: 'InvoicesListController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: getInvoice
@@ -49,11 +59,25 @@
           pageTitle: 'Edit Invoice {{ invoiceResolve.name }}'
         }
       })
-      .state('invoices.view', {
-        url: '/:invoiceId',
-        templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
-        controller: 'InvoicesController',
-        controllerAs: 'vm',
+      .state('invoicesview', {
+        url: '/invoices/:invoiceId',
+        views: {
+          'container@': {
+            templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'header': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-header.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'footer': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-footer.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          }
+        },
         resolve: {
           invoiceResolve: getInvoice
         },

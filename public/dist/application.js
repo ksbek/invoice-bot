@@ -142,7 +142,17 @@
       .state('clients', {
         abstract: true,
         url: '/clients',
-        template: '<ui-view/>'
+        views: {
+          'header': {
+            templateUrl: 'modules/clients/client/views/header.client.view.html'
+          },
+          'footer': {
+            templateUrl: 'modules/clients/client/views/footer.client.view.html'
+          },
+          'container@': {
+            template: '<ui-view/>'
+          }
+        }
       })
       .state('clients.list', {
         url: '',
@@ -425,7 +435,7 @@
     function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
       // Record previous state
       if (Authentication.user) {
-        if (toState.name === 'home') {
+        if (toState.name === 'root.home') {
           $state.transitionTo('notifications').then(function () {
             // Record previous state
             storePreviousState(toState, toParams);
@@ -478,13 +488,25 @@
     });
 
     $stateProvider
-      .state('home', {
+      .state('root', {
+        url: '',
+        abstract: true,
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container': {
+            template: '<ui-view/>'
+          }
+        }
+      })
+      .state('root.home', {
         url: '/',
         templateUrl: 'modules/core/client/views/home.client.view.html',
         controller: 'HomeController',
         controllerAs: 'vm'
       })
-      .state('privacy', {
+      .state('root.privacy', {
         url: '/privacy',
         templateUrl: 'modules/core/client/views/privacy.client.view.html',
         data: {
@@ -494,7 +516,14 @@
       })
       .state('not-found', {
         url: '/not-found',
-        templateUrl: 'modules/core/client/views/404.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/404.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Not-Found'
@@ -502,7 +531,14 @@
       })
       .state('bad-request', {
         url: '/bad-request',
-        templateUrl: 'modules/core/client/views/400.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/400.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Bad-Request'
@@ -510,7 +546,14 @@
       })
       .state('forbidden', {
         url: '/forbidden',
-        templateUrl: 'modules/core/client/views/403.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/core/client/views/403.client.view.html'
+          }
+        },
         data: {
           ignoreState: true,
           pageTitle: 'Forbidden'
@@ -1035,7 +1078,17 @@
       .state('invoices', {
         abstract: true,
         url: '/invoices',
-        template: '<ui-view/>'
+        views: {
+          'header': {
+            templateUrl: 'modules/clients/client/views/header.client.view.html'
+          },
+          'footer': {
+            templateUrl: 'modules/clients/client/views/footer.client.view.html'
+          },
+          'container@': {
+            template: '<ui-view/>'
+          }
+        }
       })
       .state('invoices.list', {
         url: '',
@@ -1049,7 +1102,7 @@
       .state('invoices.create', {
         url: '/create',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesController',
+        controller: 'InvoicesListController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: newInvoice
@@ -1062,7 +1115,7 @@
       .state('invoices.edit', {
         url: '/:invoiceId/edit',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesController',
+        controller: 'InvoicesListController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: getInvoice
@@ -1072,11 +1125,25 @@
           pageTitle: 'Edit Invoice {{ invoiceResolve.name }}'
         }
       })
-      .state('invoices.view', {
-        url: '/:invoiceId',
-        templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
-        controller: 'InvoicesController',
-        controllerAs: 'vm',
+      .state('invoicesview', {
+        url: '/invoices/:invoiceId',
+        views: {
+          'container@': {
+            templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'header': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-header.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'footer': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-footer.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          }
+        },
         resolve: {
           invoiceResolve: getInvoice
         },
@@ -1246,9 +1313,16 @@
     $stateProvider
       .state('notifications', {
         url: '/',
-        templateUrl: 'modules/notifications/client/views/notifications.client.view.html',
-        controller: 'NotificationsController',
-        controllerAs: 'vm',
+        views: {
+          'header': {
+            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/notifications/client/views/notifications.client.view.html',
+            controller: 'NotificationsController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           roles: ['user', 'admin'],
           pageTitle: 'notifications'
@@ -1432,7 +1506,16 @@
       .state('settings', {
         abstract: true,
         url: '/settings',
-        templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/users/client/views/settings/settings.client.view.html',
+            controller: 'SettingsController',
+            controllerAs: 'vm'
+          }
+        },
         controller: 'SettingsController',
         controllerAs: 'vm',
         data: {
@@ -1505,33 +1588,49 @@
       .state('authentication', {
         abstract: true,
         url: '/authentication',
-        templateUrl: 'modules/users/client/views/authentication/authentication.client.view.html',
+        views: {
+          'header': {
+            templateUrl: 'modules/users/client/views/authentication/header.client.view.html'
+          }
+        },
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
       .state('authentication.signup', {
         url: '/signup',
-        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'signup'
         }
       })
       .state('authentication.accountSetup', {
         url: '/account-setup',
-        templateUrl: 'modules/users/client/views/authentication/account-setup.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/account-setup.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'Account Setup'
         }
       })
       .state('authentication.signin', {
         url: '/signin?err',
-        templateUrl: 'modules/users/client/views/authentication/signin.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/signin.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
         data: {
           pageTitle: 'Signin'
         }
@@ -1718,7 +1817,7 @@
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        $state.go($state.previous.state.name || 'root.home', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });
@@ -1738,7 +1837,7 @@
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        $state.go($state.previous.state.name || 'root.home', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });
