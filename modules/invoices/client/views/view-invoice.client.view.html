@@ -1,26 +1,46 @@
-<section>
-  <div class="page-header">
-    <h1 data-ng-bind="vm.invoice.name"></h1>
+<div class="invoice-item-wr">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-xs-2">
+          <h4 class="color-light-gray">To</h4>
+        </div>
+        <div class="col-xs-8">
+          <h4>{{vm.invoice.client.companyName}}</h4>
+          <h4 class="color-violet">We appreciate your business</h4>
+          <p>No building items and plans outside of your accounting system, no more needless work of duplicating plans and items both in your accounting system and in a third party recurring payments software.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="invoice-info">
+        <h2><i>Total</i> {{vm.invoice.amountDue.amount}} {{vm.invoice.amountDue.currency}}</h2>
+        <h4><i>Tax</i> 2.9%</h4>
+        <h4><i>Subtotal</i> {{vm.invoice.amountDue.amount}} {{vm.invoice.amountDue.currency}}</h4>
+        <a href="javascript:void(0);" class="btn-1">Pay now</a>
+      </div>
+    </div>
   </div>
-  <div class="pull-right"
-       data-ng-show="vm.invoice.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       data-ui-sref="invoices.edit({ invoiceId: vm.invoice._id })">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" data-ng-click="vm.remove()">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
-  </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span data-ng-bind="vm.invoice.created | date:'mediumDate'"></span>
-      by
-      <span data-ng-if="vm.invoice.user"
-            data-ng-bind="vm.invoice.user.displayName"></span>
-      <span data-ng-if="!vm.invoice.user">Deleted User</span>
-    </em>
-  </small>
-  <p class="lead" data-ng-bind="vm.invoice.content"></p>
-</section>
+</div><!-- END of .invoice-item-wr -->
+
+<div class="fixed-btm-wr fixed-btm-invoice">
+  <div class="container">
+    <h4 class="color-light-gray">From</h4>
+    <h4>{{vm.authentication.user.companyName}}</h4>
+    <div class="tooltip-wr">
+      <img src="modules/core/client/img/i-info.png" alt="">
+      <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.authentication.user.companyName}} business number {{vm.authentication.user.businessNumber}}.</div>
+    </div>
+    <span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
+    <div class="invoice-submenu">
+      <i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
+      <ul>
+        <li><a href="javascript:void(0);">Download PDF</a></li>
+        <li><a href="javascript:void(0);">Report</a></li>
+      </ul>
+    </div>
+    <div class="invoice-by">
+      Invoice powered by <a href="http://nowdue.ai">Nowdue <i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
+    </div>
+  </div><!-- END of .container -->
+</div><!-- END of .fixed-btm-wr -->

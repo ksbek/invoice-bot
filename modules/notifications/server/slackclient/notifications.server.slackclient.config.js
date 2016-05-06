@@ -14,6 +14,8 @@ module.exports = function (token, config) {
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
+  var server = (process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') + config.host + ':' + config.port;
+
   var io = GLOBAL.io;
 
   var rtm = new RtmClient(token, {
@@ -62,7 +64,7 @@ module.exports = function (token, config) {
                     console.log(client.id);
                     if (response.result.parameters.amount !== '') {
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', server + '/invoices/' + invoice._id), dm.id);
                         console.log(invoice);
 
                         io.emit('invoiceclient', {
