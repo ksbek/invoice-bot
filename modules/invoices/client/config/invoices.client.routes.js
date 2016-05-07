@@ -36,7 +36,7 @@
       .state('invoices.create', {
         url: '/create',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesListController',
+        controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: newInvoice
@@ -49,7 +49,7 @@
       .state('invoices.edit', {
         url: '/:invoiceId/edit',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesListController',
+        controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: getInvoice

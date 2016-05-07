@@ -1102,7 +1102,7 @@
       .state('invoices.create', {
         url: '/create',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesListController',
+        controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: newInvoice
@@ -1115,7 +1115,7 @@
       .state('invoices.edit', {
         url: '/:invoiceId/edit',
         templateUrl: 'modules/invoices/client/views/form-invoice.client.view.html',
-        controller: 'InvoicesListController',
+        controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
           invoiceResolve: getInvoice
@@ -1176,10 +1176,12 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', 'Authentication', 'invoiceResolve'];
+  InvoicesController.$inject = ['$scope', '$state', 'Authentication', 'invoiceResolve', 'ClientsService'];
 
-  function InvoicesController ($scope, $state, Authentication, invoice) {
+  function InvoicesController ($scope, $state, Authentication, invoice, ClientsService) {
     var vm = this;
+
+    vm.clients = ClientsService.query();
 
     vm.authentication = Authentication;
     vm.invoice = invoice;
@@ -1187,10 +1189,9 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
-
-    var dateDue = new Date(vm.invoice.dateDue);
+    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
     var today = new Date();
-    var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
+    var timeDiff = Math.abs(vm.invoice.dateDue.getTime() - today.getTime());
     vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     // Remove existing Invoice
@@ -1215,7 +1216,7 @@
       }
 
       function successCallback(res) {
-        $state.go('invoices.view', {
+        $state.go('invoicesview', {
           invoiceId: res._id
         });
       }
@@ -1385,9 +1386,17 @@
         text: vm.messageText,
         created: Date.now()
       };
+      vm.isAnswered = false;
 
-      // Emit a 'chatMessage' message event
-      Socket.emit('notificiationMessage', message);
+      vm.messages.push(message);
+      $http.post('/api/notifications/apiai', message).success(function (response) {
+        // If successful we assign the response to the global user model
+        vm.messages[vm.messages.length - 1].responseText = response.result.fulfillment.speech;
+        vm.isAnswered = true;
+
+      }).error(function (response) {
+        vm.error = response.message;
+      });
 
       // Clear the message text
       vm.messageText = '';

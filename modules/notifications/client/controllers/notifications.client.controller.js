@@ -47,9 +47,17 @@
         text: vm.messageText,
         created: Date.now()
       };
+      vm.isAnswered = false;
 
-      // Emit a 'chatMessage' message event
-      Socket.emit('notificiationMessage', message);
+      vm.messages.push(message);
+      $http.post('/api/notifications/apiai', message).success(function (response) {
+        // If successful we assign the response to the global user model
+        vm.messages[vm.messages.length - 1].responseText = response.result.fulfillment.speech;
+        vm.isAnswered = true;
+
+      }).error(function (response) {
+        vm.error = response.message;
+      });
 
       // Clear the message text
       vm.messageText = '';

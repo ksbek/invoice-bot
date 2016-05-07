@@ -1,21 +1,21 @@
 <div class="fixed-btm-wr fixed-btm-invoice">
-	<div class="container">
-		<h4 class="color-light-gray">From</h4>
-		<h4>{{vm.authentication.user.companyName}}</h4>
-		<div class="tooltip-wr">
-			<img src="modules/core/client/img/i-info.png" alt="">
-			<div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.authentication.user.companyName}} business number {{vm.authentication.user.businessNumber}}.</div>
-		</div>
-		<span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
-		<div class="invoice-submenu">
-			<i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
-			<ul>
-				<li><a href="javascript:void(0);">Download PDF</a></li>
-				<li><a href="javascript:void(0);">Report</a></li>
-			</ul>
-		</div>
-		<div class="invoice-by">
-			Invoice powered by <a href="http://nowdue.ai">Nowdue <i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
-		</div>
-	</div><!-- END of .container -->
+  <div class="container">
+    <h4 class="color-light-gray">From</h4>
+    <h4>{{vm.authentication.user.companyName}}</h4>
+    <div class="tooltip-wr">
+      <img src="modules/core/client/img/i-info.png" alt="">
+      <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.authentication.user.companyName}} business number {{vm.authentication.user.businessNumber}}.</div>
+    </div>
+    <span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
+    <div class="invoice-submenu">
+      <i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
+      <ul>
+        <li><a href="#" ui-sref="invoices.edit({ invoiceId: vm.invoice._id })">Edit Invoice</a></li>
+        <li><a href="#" ng-click="vm.remove()">Delete Invoice</a></li>
+      </ul>
+    </div>
+    <div class="invoice-by">
+      Invoice powered by <a href="http://nowdue.ai">Nowdue <i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
+    </div>
+  </div><!-- END of .container -->
 </div><!-- END of .fixed-btm-wr -->

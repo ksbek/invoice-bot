@@ -1,24 +1,47 @@
-<section>
-  <div class="page-header">
-    <h1>{{vm.invoice._id ? 'Edit Invoice' : 'New Invoice'}}</h1>
-  </div>
-  <div class="col-md-12">
-    <form name="vm.form.invoiceForm" class="form-horizontal" ng-submit="vm.save(vm.form.invoiceForm.$valid)" novalidate>
-      <fieldset>
-        <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.invoice.name" id="name" class="form-control" placeholder="Name" required>
-          <div ng-messages="vm.form.invoiceForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Invoice name is required.</p>
-          </div>
+<div class="form-wr">
+  <form name="vm.form.invoiceForm" ng-submit="vm.save(vm.form.invoiceForm.$valid)" novalidate autocomplete="off">
+    <fieldset>
+      <div class="form-row form-group" show-errors>
+        <input name="invoice" type="text" ng-model="vm.invoice.invoice" id="invoice" placeholder="invoice" required disabled>
+      </div>
+      <div class="form-row form-group" show-errors>
+        <select ng-model="vm.invoice.client._id" name="companyName" ng-options="client._id as client.companyName for client in vm.clients">
+        </select>
+        <div ng-messages="vm.invoiceForm.companyName.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">Company name is required.</p>
         </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-default">{{vm.invoice._id ? 'Update' : 'Create'}}</button>
+      </div>
+      <div class="form-row form-group" show-errors>
+        <input type="date" id="dateDue" name="dateDue" ng-model="vm.invoice.dateDue" required>
+        <div ng-messages="vm.invoiceForm.dateDue.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">DateDue is required.</p>
         </div>
-        <div ng-show="vm.error" class="text-danger">
-          <strong ng-bind="vm.error"></strong>
+      </div>
+      <div class="form-row form-group" show-errors>
+        <input type="text" id="amount" name="amount" ng-model="vm.invoice.amountDue.amount">
+        <div ng-messages="vm.invoiceForm.amount.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">Amount is required.</p>
         </div>
-      </fieldset>
-    </form>
-  </div>
-</section>
+      </div>
+      <div class="form-row form-group" show-errors>
+        <input type="text" id="tax" name="tax" ng-model="vm.invoice.tax" placeholder="Tax - inclusive of taxes">
+        <div ng-messages="vm.invoiceForm.tax.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">Tax is required.</p>
+        </div>
+      </div>
+      <div class="form-row form-group" show-errors>
+        <input type="text" id="description" name="description" ng-model="vm.invoice.description" placeholder="Description">
+        <div ng-messages="vm.invoiceForm.description.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">description is required.</p>
+        </div>
+      </div>
+      <div class="form-row form-group">
+        <button type="submit">{{vm.invoice._id ? 'Save' : 'Create'}}</button>
+      </div>
+      <div ng-show="vm.error" class="text-danger">
+        <strong ng-bind="vm.error"></strong>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
