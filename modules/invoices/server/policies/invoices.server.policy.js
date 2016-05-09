@@ -30,6 +30,12 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/invoices/:invoiceId',
       permissions: ['get']
     }]
+  }, {
+    roles: ['guest'],
+    {
+      resources: '/api/invoices/:invoiceId',
+      permissions: ['get']
+    }]
   }]);
 };
 
