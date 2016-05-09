@@ -1181,7 +1181,9 @@
   function InvoicesController ($scope, $state, Authentication, invoice, ClientsService) {
     var vm = this;
 
-    vm.clients = ClientsService.query();
+    if ($state.current.name !== 'invoicesview') {
+      vm.clients = ClientsService.query();
+    }
 
     vm.authentication = Authentication;
     vm.invoice = invoice;
