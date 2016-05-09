@@ -12,15 +12,19 @@
         </div>
       </div>
       <div class="form-row form-group" show-errors>
-        <input type="date" id="dateDue" name="dateDue" ng-model="vm.invoice.dateDue" required>
+        <input type="date" id="dateDue" name="dateDue" ng-model="vm.invoice.dateDue" placeholder="Date Due" required>
         <div ng-messages="vm.invoiceForm.dateDue.$error" role="alert">
           <p class="help-block error-text" ng-message="required">DateDue is required.</p>
         </div>
       </div>
       <div class="form-row form-group" show-errors>
-        <input type="text" id="amount" name="amount" ng-model="vm.invoice.amountDue.amount">
-        <div ng-messages="vm.invoiceForm.amount.$error" role="alert">
-          <p class="help-block error-text" ng-message="required">Amount is required.</p>
+        <div class="input-group">
+          <input type="text" id="amount" name="amount" ng-model="vm.invoice.amountDue.amount" placeholder="0.00" required>
+          <span class="input-group-btn">
+            <select ng-model="vm.invoice.amountDue.currency">
+              <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{symbol}}</option>
+            </select>
+          </span>
         </div>
       </div>
       <div class="form-row form-group" show-errors>

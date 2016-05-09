@@ -1194,6 +1194,13 @@
     var timeDiff = Math.abs(vm.invoice.dateDue.getTime() - today.getTime());
     vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
+    vm.currencySymbols = {
+      'USD': '$',
+      'AUD': 'A$',
+      'EURO': '€',
+      'GBP': '£'
+    };
+
     // Remove existing Invoice
     function remove() {
       if (confirm('Are you sure you want to delete?')) {
@@ -1203,6 +1210,14 @@
 
     // Save Invoice
     function save(isValid) {
+      if (vm.invoice.tax == null) {
+        vm.invoice.tax = 0;
+      }
+
+      if (vm.invoice.amountDue.amount == null) {
+        vm.invoice.amountDue.amount = 0.0;
+      }
+
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.form.invoiceForm');
         return false;
@@ -1242,6 +1257,13 @@
 
     vm.invoices = InvoicesService.query();
     vm.payInvoice = payInvoice;
+
+    vm.currencySymbols = {
+      USD: '$',
+      AUD: 'A$',
+      EURO: '€',
+      GBP: '£'
+    };
 
     function payInvoice(invoice) {
       var modalInstance = $uibModal.open({

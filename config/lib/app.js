@@ -55,6 +55,8 @@ module.exports.start = function start(callback) {
 
       if (callback) callback(app, db, config);
 
+
+      // connecting all slack dot and api.ai agent at app start
       var User = require('mongoose').model('User');
       var tokens = new Array();
       User.find({ "provider": "slack" }, function (err, users) {

@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
-
+  Schema = mongoose.Schema,
+  SchemaTypes = mongoose.Schema.Types;
 /**
  * Invoice Schema
  */
@@ -45,6 +45,10 @@ var InvoiceSchema = new Schema({
     type: String,
     default: '',
     trim: true
+  },
+  tax: {
+    type: Number,
+    default: 0
   },
   client: {
     type: Schema.ObjectId,

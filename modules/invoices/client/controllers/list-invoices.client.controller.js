@@ -13,6 +13,13 @@
     vm.invoices = InvoicesService.query();
     vm.payInvoice = payInvoice;
 
+    vm.currencySymbols = {
+      USD: '$',
+      AUD: 'A$',
+      EURO: '€',
+      GBP: '£'
+    };
+
     function payInvoice(invoice) {
       var modalInstance = $uibModal.open({
         templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',

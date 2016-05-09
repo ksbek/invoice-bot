@@ -19,8 +19,7 @@
       <span data-ng-bind="invoice.dateDue | date:'dd.MM.yy'"></span>
     </td>
     <td>
-      <span>{{invoice.amountDue.amount}}</span>
-      <span>{{invoice.amountDue.currency}}</span>
+      <span> {{invoice.amountDue.amount | currency:vm.currencySymbols[invoice.amountDue.currency]}}</span>
     </td>
     <td>
       <span data-ng-bind="invoice.received"></span>
@@ -35,11 +34,3 @@
     <td><a href="#" ui-sref="invoicesview({ invoiceId: invoice._id })"><img src="modules/core/client/img/i-file.png" alt=""></a></td>
   </tr>
 </table>
-<div class="fixed-btm-wr">
-  <div class="container">
-    <div class="info-box">
-      <i><img src="/modules/core/client/img/i-info.png" alt=""></i>
-      <p>While you're on a free account you can create unlimited invoices forever. If you want to automate sending, scheduled reminders or gain revenue insights please <a href="settings-plan.html">upgrade</a> your plan.</p>
-    </div><!-- END of .info-box -->
-  </div><!-- END of .container -->
-</div><!-- END of .fixed-btm-wr -->
