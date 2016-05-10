@@ -619,22 +619,6 @@ body .check-wr input {
 	letter-spacing: .01em;
 }
 
-select {
-	display: inline-block;
-	border: 1px solid transparent;
-	margin: 0 0 0;
-	padding: 7px 5px 7px;
-	font-size: 14px;
-	line-height: 16px;
-	font-weight: 400;
-	outline: none;
-	letter-spacing: .01em;
-	background: none;
-	border: 0;
-	min-width: 176px;
-	width: 96%;
-}
-
 .input-group select{
 	display: table-cell;
 	width: initial;
@@ -735,6 +719,15 @@ select {
 	line-height: 14px;
 	font-weight: 700;
 	color: #b3d2cb;
+}
+
+.select-wr.select-lg {
+	width: 96%;
+}
+
+.select-wr.select-lg select{
+	width: 100%;
+	font-size:12px;
 }
 
 *::-webkit-input-placeholder {

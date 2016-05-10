@@ -5,8 +5,10 @@
         <input name="invoice" type="text" ng-model="vm.invoice.invoice" id="invoice" placeholder="invoice" required disabled>
       </div>
       <div class="form-row form-group" show-errors>
-        <select ng-model="vm.invoice.client._id" name="companyName" ng-options="client._id as client.companyName for client in vm.clients">
-        </select>
+        <div class="select-wr select-lg">
+          <select ng-model="vm.invoice.client._id" name="companyName" ng-options="client._id as client.companyName for client in vm.clients">
+          </select>
+        </div>
         <div ng-messages="vm.invoiceForm.companyName.$error" role="alert">
           <p class="help-block error-text" ng-message="required">Company name is required.</p>
         </div>
@@ -19,12 +21,14 @@
       </div>
       <div class="form-row form-group" show-errors>
         <div class="input-group">
-          <input type="text" id="amount" name="amount" ng-model="vm.invoice.amountDue.amount" placeholder="0.00" required>
           <span class="input-group-btn">
-            <select ng-model="vm.invoice.amountDue.currency">
-              <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{symbol}}</option>
-            </select>
+            <div class="select-wr">
+              <select ng-model="vm.invoice.amountDue.currency">
+                <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{symbol}}</option>
+              </select>
+            </div>
           </span>
+          <input type="text" id="amount" name="amount" ng-model="vm.invoice.amountDue.amount" placeholder="0.00">
         </div>
       </div>
       <div class="form-row form-group" show-errors>

@@ -25,11 +25,13 @@
       <span data-ng-bind="invoice.received"></span>
     </td>
     <td>
-      <select data-ng-model="invoice.status">
-        <option value="due">Due</option>
-        <option value="paid">Paid</option>
-        <option value="overdue">OverDue</option>
-      </select>
+      <div class="select-wr">
+        <select data-ng-model="invoice.status">
+          <option value="due">Due</option>
+          <option value="paid">Paid</option>
+          <option value="overdue">OverDue</option>
+        </select>
+      </div>
     </td>
     <td><a href="#" ui-sref="invoicesview({ invoiceId: invoice._id })"><img src="modules/core/client/img/i-file.png" alt=""></a></td>
   </tr>

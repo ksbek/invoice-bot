@@ -1212,11 +1212,11 @@
 
     // Save Invoice
     function save(isValid) {
-      if (vm.invoice.tax == null) {
+      if (vm.invoice.tax === null || vm.invoice.tax === "") {
         vm.invoice.tax = 0;
       }
 
-      if (vm.invoice.amountDue.amount == null) {
+      if (vm.invoice.amountDue.amount === null || vm.invoice.amountDue.amount === "") {
         vm.invoice.amountDue.amount = 0.0;
       }
 
