@@ -33,15 +33,12 @@
 			    min-height: 23px;
 			    line-height: 30px;
 			}
-			.home-wr .logo {
-			    margin: 0 10px;
-			    font-size: 9px;
-			}
+			* [lang~="logo"],
 			.logo {
 			    padding: 0 0 0;
-			    margin: 0 49px 0 0;
+			    margin: 0 10px;
+			    font-size: 9px;
 			    display: inline-block;
-			    font-size: 18px;
 			    line-height: 30px;
 			    font-weight: 700;
 			    color: #a9abed;
@@ -57,17 +54,20 @@
 			    -o-transition: all .3s ease;
 			    transition: all .3s ease;
 			}
+			* [lang~="container"],
 			.container {
 			    padding-left: 6px;
 			    padding-right: 6px;
 			    margin-right: auto;
 			    margin-left: auto;
 			}
+			* [lang~="content"],
 			.content {
 			    background: #FFFFFF;
 			    border-radius: 0 0 30px 30px;
 			    margin-bottom: 30px;
 			}
+			* [lang~="text-center"],
 			.text-center {
 			    text-align: center;
 			}
@@ -76,6 +76,7 @@
 			    line-height: 1.25;
 			    font-weight: 300;
 			}
+			* [lang~="divider-item"],
 			.divider-item {
 				width: 4px;
 			    height: 49px;
@@ -83,10 +84,9 @@
 			    margin: 40px auto 30px;
 			    padding: 0;
 			    background: #e3e4ff;
-			}
-			.divider-blue {
 			    background: #b2fde0;
 			}
+			* [lang~="btn-invoice"],
 			.btn-invoice {
 			    padding: 2px 0 0 0;
 			    border: 1px solid #c7cacd;
@@ -119,55 +119,60 @@
 				font-size: 9px;
 			}
 
-			footer a {
+			* [lang~="footer-link"],
+			footer a
+			{
 				display: block;
 				color: #c1d51d;
 				margin:10px 0;
 				font-size: 9px;
 			}
+			* [lang~="left"],
 			.left {
 				float: left;
 			}
+			* [lang~="right"],
 			.right {
 				float: right;
 			}
+			* [lang~="container"]:before,
 			.clearfix:before, .clearfix:after, .dl-horizontal dd:before, .dl-horizontal dd:after, .container:before, .container:after, .container-fluid:before, .container-fluid:after, .row:before, .row:after, .form-horizontal .form-group:before, .form-horizontal .form-group:after, .btn-toolbar:before, .btn-toolbar:after, .btn-group-vertical > .btn-group:before, .btn-group-vertical > .btn-group:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after, .pager:before, .pager:after, .panel-body:before, .panel-body:after, .modal-footer:before, .modal-footer:after {
 					display: table;
 	    			content: " ";
 			}
 		</style>
 	</head>
-	<body class="home-wr">
+	<body class="home-wr" lang="home-wr">
 		<header>
-			<div class="container">
-				<a href="index.html" class="logo left"><%= invoice.client.companyName %></a>
-				<a href="index.html" class="logo right">View this email in your browser</a>
+			<div class="container" lang="container">
+				<a href="index.html" class="logo left" lang="logo left"><%= invoice.client.companyName %></a>
+				<a href="index.html" class="logo right" lang="logo right">View this email in your browser</a>
 			</div><!-- END of .container -->
 		</header><!-- END of header -->
 
-		<div class="content">
-			<div class="text-center container">
-				<div class="divider-item divider-blue"></div>
+		<div class="content" lang="content">
+			<div class="text-center container" lang="text-center container">
+				<div class="divider-item" lang="divider-item"></div>
 				<h2>nowdue</h2>
-				<a href="https://nowdue.herokuapp.com/invoices/<%= invoice.id %>" class="btn-invoice">Invoice <strong><%= invoice.invoice %></strong></a>
+				<a href="https://nowdue.herokuapp.com/invoices/<%= invoice.id %>" class="btn-invoice" lang="btn-invoice">Invoice <strong><%= invoice.invoice %></strong></a>
 				<p>$<%= invoice.amountDue.amount %></p>
 				<img src="https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png">
 			</div><!-- END of .container -->
 		</div><!-- END of .content -->
 
 		<footer>
-			<div class="left">
-				<div class="footer-nav">
-					<a href="nowdue.ai">Invoice powered by Nowdue</a>
-					<a href="nowdue.ai">Create your own invoice</a>
-					<span>44 Cooper Street, East Sydney NSW Australia</span>
+			<div class="left" lang="left">
+				<div class="footer-nav" lang="footer-nav">
+					<a href="nowdue.ai" lang="footer-link">Invoice powered by Nowdue</a>
+					<a href="nowdue.ai" lang="footer-link">Create your own invoice</a>
+					<span lang="footer-link">44 Cooper Street, East Sydney NSW Australia</span>
 				</div>
 			</div>
-			<div class="right">
-				<div class="footer-nav">
-					<a href="nowdue.ai">Add Us To Your Address Book</a>
-					<a href="nowdue.ai">Report Unsolicited Email</a>
-					<a mailto="team@nowdue.ai"> Contact Us</a>
+			<div class="right" lang="right">
+				<div class="footer-nav" lang="footer-nav">
+					<a href="nowdue.ai" lang="footer-link">Add Us To Your Address Book</a>
+					<a href="nowdue.ai" lang="footer-link">Report Unsolicited Email</a>
+					<a mailto="team@nowdue.ai" lang="footer-link"> Contact Us</a>
 				</div>
 			</div>
 		</footer><!-- END of footer -->
