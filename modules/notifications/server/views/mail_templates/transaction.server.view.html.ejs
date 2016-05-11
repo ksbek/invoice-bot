@@ -15,7 +15,7 @@
 		<style>
 			body {
 				background-color: #f5fdb2;
-				padding: 0 100px;
+				padding: 0 12.5%;
 				margin: 0;
 				min-height: 300px;
 			    margin: 0 auto;
@@ -30,12 +30,12 @@
 				background-color:  #dbdcfa;
 				color: #a9abed;
 				padding: 0;
-			    min-height: 40px;
+			    min-height: 23px;
 			    line-height: 30px;
 			}
 			.home-wr .logo {
-			    margin: 7px 10px 0 10px;
-			    font-size: 12px;
+			    margin: 0 10px;
+			    font-size: 9px;
 			}
 			.logo {
 			    padding: 0 0 0;
@@ -65,14 +65,14 @@
 			}
 			.content {
 			    background: #FFFFFF;
-			    min-height: 430px;
 			    border-radius: 0 0 30px 30px;
+			    margin-bottom: 30px;
 			}
 			.text-center {
 			    text-align: center;
 			}
 			h2 {
-			    font-size: 36px;
+			    font-size: 24px;
 			    line-height: 1.25;
 			    font-weight: 300;
 			}
@@ -80,7 +80,7 @@
 				width: 4px;
 			    height: 49px;
 			    border-radius: 4px;
-			    margin: 50px auto 26px;
+			    margin: 40px auto 30px;
 			    padding: 0;
 			    background: #e3e4ff;
 			}
@@ -101,20 +101,29 @@
 			    display: inline-block;
 			    background: #FFFFFF 9px center;
 			    background-size: 22px auto;
+			    height: 40px;
+    			width: 155px;
 			}
 			p {
 				color: #7b858a;
+				margin: 20px 0 45px 0;
+				font-size: 10px;
+			}
+			img {
+				margin-bottom: 49px;
 			}
 			footer {
-				margin: 50px 30px;
+				margin: 0 22px;
 				color: #c1d51d;
 				background-color: #f5fdb2;
+				font-size: 9px;
 			}
 
 			footer a {
 				display: block;
 				color: #c1d51d;
 				margin:10px 0;
+				font-size: 9px;
 			}
 			.left {
 				float: left;
@@ -142,6 +151,7 @@
 				<h2>nowdue</h2>
 				<a href="https://nowdue.herokuapp.com/invoices/<%= invoice.id %>" class="btn-invoice">Invoice <strong><%= invoice.invoice %></strong></a>
 				<p>$<%= invoice.amountDue.amount %></p>
+				<img src="https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png">
 			</div><!-- END of .container -->
 		</div><!-- END of .content -->
 
