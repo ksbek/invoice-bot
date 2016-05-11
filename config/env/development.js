@@ -34,6 +34,9 @@ module.exports = {
   app: {
     title: defaultEnvConfig.app.title + ' - Development Environment'
   },
+  sendgrid: {
+    apiKey: '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'
+  },
   slack: {
     clientID: process.env.SLACK_ID || '36622746837.37185968785',
     clientSecret: process.env.SLACK_SECRET || 'f0e2f39e649fa97106d53e695561bdc1',

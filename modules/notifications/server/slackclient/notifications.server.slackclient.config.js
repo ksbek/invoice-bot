@@ -18,6 +18,8 @@ module.exports = function (token, config) {
 
   var io = GLOBAL.io;
 
+  var EmailTemplate = require('email-templates').EmailTemplate;
+
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
     logLevel: 'error',
@@ -67,6 +69,9 @@ module.exports = function (token, config) {
                         if (invoice) {
                           rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
                           console.log(invoice);
+                          invoice.client = client;
+                          invoice.user = user;
+                          require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, EmailTemplate);
 
                           io.emit('invoiceclient', {
                             type: 'invoiceclient',
