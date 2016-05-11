@@ -72,6 +72,10 @@ var UserSchema = new Schema({
     includeTaxesOnInvoice: {
       type: Boolean,
       trim: true
+    },
+    tax: {
+      type: Number,
+      default: 0.0
     }
   },
   plan: {

@@ -1,11 +1,18 @@
 <div class="form-wr">
-	<form action="action" name="vm.userForm" class="signin" novalidate autocomplete="off">
-		<div class="form-row">
+	<form name="vm.userForm" class="signin" novalidate autocomplete="off">
+		<div class="form-row invoice-settings">
 			<div class="row">
-				<div class="col-xs-9">
+				<div class="col-xs-7">
 					<p>Include taxes on invoice</p>
+				</div>				
+				<div class="col-xs-3">
+					<div class="tax-input text-center">
+						<button ng-click="vm.user.invoiceSettings.editTax = !vm.user.invoiceSettings.editTax; !vm.user.invoiceSettings.editTax && vm.update()" >Tax</button>
+						<input type="number" ng-model="vm.user.invoiceSettings.tax" ng-disabled="!vm.user.invoiceSettings.editTax" ng-blur="vm.user.invoiceSettings.editTax = !vm.user.invoiceSettings.editTax;vm.update()" placeholder="0" min="0" max="100">
+						<span>%</span>
+					</div>
 				</div>
-				<div class="col-xs-3 text-left">
+				<div class="col-xs-2 text-left">
 					<label class="check-wr">
 						<input type="checkbox" ng-model="vm.user.invoiceSettings.includeTaxesOnInvoice" ng-click="vm.update()">
 						<span>
