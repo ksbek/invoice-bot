@@ -92,4 +92,27 @@ ClientSchema.statics.findClientByName = function (name, user_id, callback) {
   });
 };
 
+/**
+ * Create Client from Slack
+ */
+ClientSchema.statics.createClientFromSlackBot = function (user_id, params, callback) {
+  var _this = this;
+  _this.create({
+    user: user_id,
+    companyName: params.name,
+    name: params.contactsName,
+    email: params.email
+  }, function (err, client) {
+    if (!err) {
+      if (!client) {
+        callback(null);
+      } else {
+        callback(client);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
+
 mongoose.model('Client', ClientSchema);

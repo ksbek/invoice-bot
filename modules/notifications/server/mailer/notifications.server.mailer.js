@@ -10,8 +10,8 @@ module.exports = function (config, invoice, EmailTemplate) {
   var newsletter = new EmailTemplate(templateDir);
 
   newsletter.render({ invoice: invoice }, function (err, result) {
-    email.addTo(invoice.client.email);
-    email.setFrom(invoice.user.email);
+    email.addTo(invoice.user.email);
+    email.setFrom("chris@adsmetric.com");
     email.setSubject("Nowdue Invoice Transaction Email");
     email.setHtml(result.html);
     sendgrid.send(email, function (err, json) {

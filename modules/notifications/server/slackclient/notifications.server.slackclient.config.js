@@ -56,23 +56,39 @@ module.exports = function (token, config) {
 
       request.on('response', function(response) {
         console.log(response);
+
+        // Check the slack user confirm yes for make invoice
         if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Yes Confirm') {
+
+          // Check if the slack user exists
           User.findUserBySlackId(message.user, '', function(user) {
             if (user) {
-              console.log(user.id);
+
+              // Check if the confirm parameters have client name
               if (response.result.parameters.name !== '') {
+
+                // Check if user have client
                 Client.findClientByName(response.result.parameters.name, user.id, function(client) {
                   if (client) {
-                    console.log(client.id);
+
+                    // Check if the confirm paramenters have amount
                     if (response.result.parameters.amount !== '') {
+
+                      // Create invoice with confirm paramenters
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
                         if (invoice) {
+
+                          // Send invoice url to slack
                           rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
+
                           console.log(invoice);
                           invoice.client = client;
                           invoice.user = user;
+
+                          // Send transaction email to user
                           require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, EmailTemplate);
 
+                          // Send notification to notifications page
                           io.emit('invoiceclient', {
                             type: 'invoiceclient',
                             profileImageURL: user.profileImageURL,
@@ -95,7 +111,26 @@ module.exports = function (token, config) {
                 rtm.sendMessage(response.result.fulfillment.speech, dm.id);
               }
             } else {
-              rtm.sendMessage("Sorry, you are not correct", dm.id);
+              rtm.sendMessage("Sorry, you are not registered", dm.id);
+            }
+          });
+
+        // Check the slack user confirm yes for create client
+        } else if (response.result.metadata && response.result.metadata.intentName === 'Create Client Yes Confirm') {
+          // Check if the slack user exists
+          User.findUserBySlackId(message.user, '', function(user) {
+            if (user) {
+
+              // Check if the confirm parameters have business name and email
+              if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
+
+                // Create Client
+                Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
+                  console.log(client);
+                });
+              }
+            } else {
+              rtm.sendMessage("Sorry, you are not registered", dm.id);
             }
           });
         } else {
