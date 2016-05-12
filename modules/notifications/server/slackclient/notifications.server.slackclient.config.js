@@ -127,6 +127,7 @@ module.exports = function (token, config) {
                 // Create Client
                 Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
                   console.log(client);
+                  rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                 });
               }
             } else {
