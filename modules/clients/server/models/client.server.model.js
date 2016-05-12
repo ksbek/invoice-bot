@@ -21,7 +21,6 @@ var ClientSchema = new Schema({
   name: {
     type: String,
     default: '',
-    required: 'Please fill Client name',
     trim: true
   },
   companyName: {
@@ -110,6 +109,7 @@ ClientSchema.statics.createClientFromSlackBot = function (user_id, params, callb
         callback(client);
       }
     } else {
+      console.log(err);
       callback(null);
     }
   });
