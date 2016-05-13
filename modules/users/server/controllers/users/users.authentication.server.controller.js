@@ -42,6 +42,24 @@ exports.signup = function (req, res) {
           user.password = undefined;
           user.salt = undefined;
 
+          request.post('https://api.sendgrid.com/v3/contactdb/recipients', {
+            headers: {
+              'Authorization': 'Bearer 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'
+            },
+            form: {
+              email: user.email,
+              username: user.username,
+              company_name: user.companyName,
+              slack_user: user.providerData.user,
+              slack_team: user.providerData.team,
+              provider: user.provider
+            }
+          }, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+              console.log(body);
+            }
+          });
+
           req.login(user, function (err) {
             if (err) {
               res.status(400).send(err);
@@ -64,6 +82,22 @@ exports.signup = function (req, res) {
         // Remove sensitive data before login
         user.password = undefined;
         user.salt = undefined;
+
+        request.post('https://api.sendgrid.com/v3/contactdb/recipients', {
+          headers: {
+            'Authorization': 'Bearer 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'
+          },
+          form: {
+            email: user.email,
+            username: user.username,
+            company_name: user.companyName,
+            provider: user.provider
+          }
+        }, function (error, response, body) {
+          if (!error && response.statusCode === 200) {
+            console.log(body);
+          }
+        });
 
         req.login(user, function (err) {
           if (err) {
