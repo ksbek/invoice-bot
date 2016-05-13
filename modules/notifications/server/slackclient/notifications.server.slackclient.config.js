@@ -79,7 +79,7 @@ module.exports = function (token, config) {
                         if (invoice) {
 
                           // Send invoice url to slack
-                          rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', 'https://nowdue.herokuapp.com/invoices/' + invoice._id), dm.id);
+                          rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', '<https://nowdue.herokuapp.com/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>'), dm.id);
 
                           console.log(invoice);
                           invoice.client = client;
