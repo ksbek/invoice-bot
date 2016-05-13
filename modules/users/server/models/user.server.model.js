@@ -121,6 +121,10 @@ var UserSchema = new Schema({
   },
   providerData: {},
   additionalProvidersData: {},
+  sendgrid_recipient_id: {
+    type: String,
+    default: ''
+  },
   roles: {
     type: [{
       type: String,
