@@ -20,6 +20,8 @@ module.exports = function (token, config) {
 
   var EmailTemplate = require('email-templates').EmailTemplate;
 
+  var last_invoice = null;
+
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
     logLevel: 'error',
@@ -77,16 +79,12 @@ module.exports = function (token, config) {
                       // Create invoice with confirm paramenters
                       Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
                         if (invoice) {
-
-                          // Send invoice url to slack
-                          rtm.sendMessage(response.result.fulfillment.speech.replace('www.invoice/nowdue.com-----', '<https://nowdue.herokuapp.com/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>'), dm.id);
+                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
 
                           console.log(invoice);
                           invoice.client = client;
                           invoice.user = user;
-
-                          // Send transaction email to user
-                          require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, EmailTemplate);
+                          last_invoice = invoice;
 
                           // Send notification to notifications page
                           io.emit('invoiceclient', {
@@ -114,9 +112,17 @@ module.exports = function (token, config) {
               rtm.sendMessage("Sorry, you are not registered", dm.id);
             }
           });
+        } else
+        // Check the slack user confirm send invoice to client
+        if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Send Yes Confirm') {
+          // Send invoice url to slack
+          rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', '<https://nowdue.herokuapp.com/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>'), dm.id);
 
+          // Send transaction email to user
+          require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, EmailTemplate);
+        } else
         // Check the slack user confirm yes for create client
-        } else if (response.result.metadata && response.result.metadata.intentName === 'Create Client Yes Confirm') {
+        if (response.result.metadata && response.result.metadata.intentName === 'Create Client Yes Confirm') {
           // Check if the slack user exists
           User.findUserBySlackId(message.user, '', function(user) {
             if (user) {
