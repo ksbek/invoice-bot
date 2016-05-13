@@ -44,7 +44,7 @@ exports.signup = function (req, res) {
 
           var postData = [{
             "email": user.email,
-            "username": user.username,
+            "currency": user.currency,
             "company_name": user.companyName,
             "slack_user": user.providerData.user,
             "slack_team": user.providerData.team,
@@ -91,7 +91,7 @@ exports.signup = function (req, res) {
 
         var postData = [{
           "email": user.email,
-          "username": user.username,
+          "currency": user.currency,
           "company_name": user.companyName,
           "provider": user.provider
         }];
