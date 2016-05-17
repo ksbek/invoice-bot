@@ -1851,6 +1851,213 @@ header .alignright .invoice-data-item {
 
 }
 
+
+/* BEGIN of 16.05.16 */
+
+.home-wr header:before {
+	content: "";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	height: 12px;
+	background: url(img/i-bg-1.png) repeat-x left top;
+}
+
+.home-wr h2 {
+    padding: 14px 0 29px;
+    letter-spacing: .05em;
+    font-weight: 600;
+}
+
+.home-wr h4 {
+    padding: 3px 0 43px;
+    font-size: 18px;
+    color: #b9bae3;
+    font-weight: 400;
+    letter-spacing: .02em;
+}
+
+.btn-no-bg {
+    background-image: none;
+    padding: 2px 24px 0;
+    margin: 20px 0 42px;
+}
+
+.slack-logo {
+	display: block;
+    margin: 64px auto 30px;
+	padding: 0 0 0;
+	width: 29px;
+	height: 29px;
+	background: url(img/i-slack.png) no-repeat center;
+}
+
+.invoice-home-box {
+    margin: 45px 0 0;
+	padding: 126px 0 126px;
+	background-color: #dbdcfa;
+	color: #9a9bcf;
+	position: relative;
+}
+
+.invoice-home-box:after {
+	content: "";
+	display: block;
+	position: absolute;
+    z-index: 5;
+    right: 4px;
+    bottom: -188px;
+	width: 345px;
+	height: 260px;
+	background: url(img/bg-lines-1.png) repeat left top;
+}
+
+.inner-box {
+    background-color: #d4d5f6;
+    padding: 1px 60px 18px 70px;
+    margin: 0 auto 10px;
+    max-width: 876px;
+    position: relative;
+}
+
+.inner-box-first:before {
+	content: "";
+	display: block;
+	position: absolute;
+    left: -199px;
+    top: -129px;
+	width: 345px;
+	height: 260px;
+	background: url(img/bg-lines-1.png) repeat left top;
+}
+
+.inner-box-first:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 146px;
+	height: 131px;
+	background: url(img/bg-lines-2.png) repeat left top;
+}
+
+.inner-box:not(.inner-box-first) h3 {
+    margin: 33px 0 18px;
+}
+
+.inner-box h3 {
+    margin: 42px 0 0;
+    padding: 7px 0 8px 40px;
+    line-height: 34px;
+    letter-spacing: .035em;
+    position: relative;
+    z-index: 5;
+}
+
+.inner-box h3:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #b2fde0;
+    width: 4px;
+    border-radius: 5px;
+}
+
+.btn-2 {
+	margin: 0 0 0 0;
+    padding: 8px 41px 9px;
+	display: inline-block;
+	background: #bebfe2;
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 15px;
+	line-height: 20px;
+	font-weight: 400;
+	border: 1px solid #afb1d9;
+	border-radius: 4px;
+}
+
+.btn-2:hover, .btn-2:focus {
+	color: #FFFFFF;
+}
+
+.inner-box .btn-2 {
+    margin: 38px 6px 0;
+}
+
+.future-home-box {
+    padding: 118px 0 75px;
+    margin: 0 0 45px;
+	background-color: #f5fdb2;
+	position: relative;
+}
+
+.future-home-box .container {
+    max-width: 894px;
+}
+
+.future-home-box h2 {
+    padding: 0 0 38px;
+    margin: 0 0 0;
+    font-size: 30px;
+    line-height: 34px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    color: #c49a8d;
+}
+
+.future-home-box p {
+	padding: 0 0 0;
+	margin: 0 0 0;
+	font-size: 18px;
+	line-height: 30px;
+	font-weight: 400;
+	letter-spacing: .03em;
+	color: #b2bd56;
+	max-width: 595px;
+}
+
+.future-home-box:after {
+	content: "";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 100%;
+	right: 0;
+	height: 12px;
+	background: url(img/i-bg-2.png) repeat-x left top;
+}
+
+.future-home-box .text-center {
+    padding: 112px 0 64px;
+}
+
+footer h4, .home-wr footer h4 {
+    padding: 43px 0 52px;
+}
+
+footer p {
+    font-size: 12px;
+}
+
+footer i {
+    display: inline-block;
+    margin: 17px auto 0;
+}
+
+footer .btn-slack {
+    margin: 31px 0 46px 0;
+}
+
+/* END of 16.05.16 */
+
+
 /* ----------------------------------------------------------------------------------- */
 /* * - END of @media ---------------------------------------------------------- */
 

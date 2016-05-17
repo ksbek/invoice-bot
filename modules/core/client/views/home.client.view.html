@@ -1,19 +1,61 @@
-<div class="text-center">
-	<div class="divider-item"></div>
-	<h2>Invoice in the moment</h2>
-	<div class="divider-item divider-md divider-blue"></div>
-	<div class="divider-item divider-blue"></div>
-	<a href="#" ng-click="vm.callOauthProvider('/api/auth/slack')" class="btn-slack">Add to <strong>Slack</strong></a>
-	<div class="divider-item divider-brown"></div>
-
+<div class="text-center home-wr">
+	<div class="container text-center">
+		<div class="divider-item"></div>
+		<h2>Invoice like it is the future</h2>
+		<h4>Send your clients beautifully smart invoices designed for the minimalist age.</h4>
+		<!-- <div class="divider-item divider-md divider-blue"></div> -->
+		<div class="divider-item divider-blue"></div>
+		<a href="#" ng-click="vm.callOauthProvider('/api/auth/slack')" class="btn-slack">Add to <strong>Slack</strong></a>
+		<div class="divider-item divider-brown"></div>
+	</div><!-- END of .container -->
+	<div class="invoice-home-box">
+		<div class="container">
+			<div class="inner-box inner-box-first">
+				<div class="row">
+					<div class="col-sm-7">
+						<h3>Invoice Trump</h3>
+						<h3>For?</h3>
+						<h3>320 million <br> For wasting everyones time</h3>
+					</div>
+					<div class="col-sm-5 text-center">
+						<img src="modules/core/client/img/data/bg-trump.png" alt="">
+					</div>
+				</div>
+			</div>
+			<div class="inner-box">
+				<div class="row">
+					<div class="col-sm-7">
+						<h3>Here is your invoice for Trump!</h3>
+					</div>
+					<div class="col-sm-5 text-right">
+						<a href="javascript:void(0);" class="btn-2">nowdue</a>
+					</div>
+				</div>
+			</div>
+		</div><!-- END of .container -->
+	</div><!-- END of .invoice-home-box -->
+	<div class="future-home-box">
+		<div class="container">
+			<h2>Yes future, I’m ready!</h2>
+			<p>Generate smarter invoices on demand without leaving <strong>Slack</strong>. Connect invoices to your <strong>Stripe</strong> or <strong>PayPal</strong> account and accept seamless client payments. Let us chase payments with automated reminders and intelligently track and report on who’s paid and who hasn’t. We’ll handle your accounts, well... so you don’t have to.</p>
+			<div class="text-center">
+				<img src="modules/core/client/img/data/nowdue+stripe+paypal.png" alt="">
+			</div>
+		</div><!-- END of .container -->
+	</div><!-- END of .future-home-box -->
 	<footer>
 		<div class="container text-center">
+			<a href="account-setup.html" class="btn-slack">Add to <strong>Slack</strong></a>
 			<div class="footer-nav">
 				<a ui-sref="root.privacy">Privacy</a>
 				<span>•</span>
 				<a href="javascript:void(0);">Contact</a>
+				<span>•</span>
+				<a href="javascript:void(0);">@nowdue_ai</a>
 			</div>
-			<h6>&copy; 2016 nowdue.ai</h6>
+			<p>Made while peering out a little white wooden frame window</p>
+			<p>Copyright © 2016 Nowdue AI</p>
+			<p><i><img src="modules/core/client/img/i-footer.png" alt=""></i></p>
 		</div><!-- END of .container -->
 	</footer><!-- END of footer -->
 </div>
