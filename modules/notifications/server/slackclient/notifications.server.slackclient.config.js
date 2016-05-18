@@ -102,7 +102,15 @@ module.exports = function (token, config) {
                       rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     }
                   } else {
-                    rtm.sendMessage("Sorry, we have not such client for you", dm.id);
+                    request = apiai.textRequest("invoice_name_not_found");
+                    request.on('response', function(response) {
+                      rtm.sendMessage(response, dm.id);
+                    });
+
+                    request.on('error', function(error) {
+                      rtm.sendMessage("Sorry, something went wrong", dm.id);
+                    });
+
                   }
                 });
               } else {
@@ -116,7 +124,18 @@ module.exports = function (token, config) {
         // Check the slack user confirm send invoice to client
         if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Send Yes Confirm') {
           // Send invoice url to slack
-          rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', '<https://nowdue.herokuapp.com/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>'), dm.id);
+
+          var response_speech = response.result.fulfillment.speech;
+          if (last_invoice.user.currency === 'AUD') {
+            response_speech.replace('[CurrencySymbol]', 'A$');
+          } else if (last_invoice.user.currency === 'EURO') {
+            response_speech.replace('[CurrencySymbol]', '€');
+          } else {
+            response_speech.replace('[CurrencySymbol]', '$');
+          }
+
+          response_speech.replace('INV000', '<https://nowdue.herokuapp.com/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
+          rtm.sendMessage(response_speech, dm.id);
 
           // Send transaction email to user
           require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, EmailTemplate);
