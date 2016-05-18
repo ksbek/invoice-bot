@@ -89,6 +89,9 @@ exports.list = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      if (clients.length === 0) {
+        res.jsonp(clients);
+      }
       var completed = 0;
       var complete = function() {
         completed++;
