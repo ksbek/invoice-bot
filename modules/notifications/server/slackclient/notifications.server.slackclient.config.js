@@ -152,7 +152,10 @@ module.exports = function (token, config) {
                 // Create Client
                 Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
                   console.log(client);
-                  rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                  if (client)
+                    rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', '<https://nowdue.herokuapp.com/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
+                  else
+                    rtm.sendMessage("Sorry, Something went wrong.", dm.id);
                 });
               }
             } else {
