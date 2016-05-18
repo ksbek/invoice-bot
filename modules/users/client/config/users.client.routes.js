@@ -66,6 +66,15 @@
           pageTitle: 'Settings plans'
         }
       })
+      .state('settings.pricing', {
+        url: '/pricing',
+        templateUrl: 'modules/users/client/views/settings/pricing.client.view.html',
+        controller: 'PricingController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Settings Pricing'
+        }
+      })
       .state('settings.password', {
         url: '/password',
         templateUrl: 'modules/users/client/views/settings/change-password.client.view.html',

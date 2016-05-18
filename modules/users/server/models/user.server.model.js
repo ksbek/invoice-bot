@@ -56,7 +56,7 @@ var UserSchema = new Schema({
   },
   currency: {
     type: String,
-    default: '$',
+    default: 'USD',
     trim: true
   },
   address: {
