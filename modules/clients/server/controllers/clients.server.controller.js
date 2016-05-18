@@ -99,9 +99,15 @@ exports.list = function(req, res) {
 
       var processing = function(client) {
         Invoice.find({ client: client.id }, function (err, invoices) {
-          client.invoices = invoices;
-          arrClients.push(client);
-          complete();
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          } else {
+            client.invoices = invoices;
+            arrClients.push(client);
+            complete();
+          }
         });
       };
       for (var i = 0; i < clients.length; i++) {
