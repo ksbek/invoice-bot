@@ -6,9 +6,9 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', 'Authentication', 'invoiceResolve', 'ClientsService'];
+  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal'];
 
-  function InvoicesController ($scope, $state, Authentication, invoice, ClientsService) {
+  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal) {
     var vm = this;
 
     if ($state.current.name !== 'invoicesview') {
@@ -32,6 +32,8 @@
       'EURO': '€',
       'GBP': '£'
     };
+
+    vm.payNow = payNow;
 
     // Remove existing Invoice
     function remove() {
@@ -71,6 +73,54 @@
       function errorCallback(res) {
         vm.error = res.data.message;
       }
+    }
+
+    // Pay Now
+    function payNow(invoice) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',
+        size: 'sm',
+        windowClass: 'invoice-modal',
+        controller: ['$state', 'Authentication', 'invoice', function($scope, Authentication, invoice) {
+          var vm = this;
+          vm.invoice = invoice;
+          vm.authentication = Authentication;
+          var dateDue = new Date(vm.invoice.dateDue);
+          var today = new Date();
+          var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
+          vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+          vm.pay = pay;
+          vm.details = {};
+
+          function pay() {
+            vm.error = "";
+            $http.post('/api/invoices/' + vm.invoice._id + '/paynow', {
+              params: {
+                card: vm.details
+              }
+            }).success(function (response) {
+              // If successful show success message and clear form
+              vm.invoice.status = 1;
+              vm.invoice.$update(successCallback, errorCallback);
+              function successCallback(res) {
+                $state.go('invoices.list');
+              }
+
+              function errorCallback(res) {
+                vm.error = res.data.message;
+              }
+
+            }).error(function (response) {
+              vm.error = response.message;
+            });
+          }
+        }],
+        controllerAs: 'vm',
+        resolve: {
+          invoice: invoice
+        }
+      });
     }
   }
 }());

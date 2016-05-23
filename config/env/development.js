@@ -34,6 +34,16 @@ module.exports = {
   app: {
     title: defaultEnvConfig.app.title + ' - Development Environment'
   },
+  stripe: {
+    apiKey: 'sk_test_4YXlxHuxjTMAas2CPaCU6vOq',
+    apiPubKey: 'pk_test_4YXlGUPl7CoGOJV8f6UoZon5',
+    clientID: 'ca_8VAoL00VWMBT1SQSzbgz7EoqlrifusII',
+    access_token: "sk_test_x4UELGyS3RG7cg3HL2sGChjX",
+    refresh_token: "rt_8VCTMOV8jOyOWcgDFQW1v6QFMhummjTwyjmhIpVbzXMZe5Sl",
+    token_type: "bearer",
+    stripe_publishable_key: "pk_test_kg1ox8xM4J9bLeyCyMAypMYL",
+    stripe_user_id: "acct_14PQfYC61nQir0i8"
+  },
   sendgrid: {
     apiKey: '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'
   },

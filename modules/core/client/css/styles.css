@@ -2039,7 +2039,7 @@ header .alignright .invoice-data-item {
 }
 
 footer h4, .home-wr footer h4 {
-    padding: 43px 0 52px;
+    /* padding: 43px 0 52px; */
 }
 
 footer p {

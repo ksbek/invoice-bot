@@ -17,6 +17,8 @@ module.exports = function(app) {
     .put(invoices.update)
     .delete(invoices.delete);
 
+  app.route('/api/invoices/:invoiceId/paynow').post(invoices.paynow);
+
   // Finish by binding the Invoice middleware
   app.param('invoiceId', invoices.invoiceByID);
 };

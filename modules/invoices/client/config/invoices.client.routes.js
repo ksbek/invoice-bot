@@ -82,7 +82,7 @@
           invoiceResolve: getInvoice
         },
         data: {
-          pageTitle: 'Invoice {{ articleResolve.name }}'
+          pageTitle: 'Invoice View'
         }
       });
   }

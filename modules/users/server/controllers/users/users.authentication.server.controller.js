@@ -333,3 +333,28 @@ exports.removeOAuthProvider = function (req, res, next) {
     }
   });
 };
+
+
+exports.stripeCallback = function (req, res) {
+  var code = req.query.code;
+
+  // Make /oauth/token endpoint POST request
+  request.post({
+    url: 'https://connect.stripe.com/oauth/token',
+    form: {
+      grant_type: "authorization_code",
+      client_id: config.stripe.clientID,
+      code: code,
+      client_secret: config.stripe.apiKey
+    }
+  }, function(err, r, body) {
+
+    var accessToken = JSON.parse(body).access_token;
+
+    // Do something with your accessToken
+
+    // For demo"s sake, output in response:
+    res.send({ "Your Token": accessToken });
+
+  });
+};

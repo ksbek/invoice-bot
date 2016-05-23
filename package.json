@@ -73,6 +73,7 @@
     "slack-node": "~0.2.0",
     "slackbots": "^0.5.1",
     "socket.io": "~1.4.5",
+    "stripe": "^4.6.0",
     "swig": "~1.4.2",
     "validator": "~5.1.0"
   },

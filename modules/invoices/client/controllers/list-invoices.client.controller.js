@@ -11,7 +11,6 @@
     var vm = this;
 
     vm.invoices = InvoicesService.query();
-    vm.payInvoice = payInvoice;
 
     vm.currencySymbols = {
       USD: '$',
@@ -20,6 +19,7 @@
       GBP: '£'
     };
 
+    /*
     function payInvoice(invoice) {
       var modalInstance = $uibModal.open({
         templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',
@@ -40,5 +40,6 @@
         }
       });
     }
+    */
   }
 }());

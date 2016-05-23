@@ -37,8 +37,8 @@ var InvoiceSchema = new Schema({
     default: 0
   },
   status: {
-    type: String,
-    default: '',
+    type: Number,
+    default: 0,
     trim: true
   },
   description: {
@@ -96,15 +96,15 @@ InvoiceSchema.statics.findUniqueInvoiceNumber = function (number, callback) {
 /**
  * Create instance method
  */
-InvoiceSchema.statics.createInvoiceFromSlackBot = function (user_id, client_id, params, callback) {
+InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, params, callback) {
   var _this = this;
   var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
   _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
     _this.create({
-      user: user_id,
+      user: user.id,
       client: client_id,
       name: params.name,
-      amountDue: { amount: params.amount },
+      amountDue: { amount: params.amount, currency: user.currency },
       dateDue: calcDate(params.duedate),
       description: params.description,
       invoice: number

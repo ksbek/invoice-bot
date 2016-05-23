@@ -77,16 +77,26 @@ module.exports = function (token, config) {
                     if (response.result.parameters.amount !== '') {
 
                       // Create invoice with confirm paramenters
-                      Invoice.createInvoiceFromSlackBot(user.id, client.id, response.result.parameters, function(invoice) {
+                      Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {
                         if (invoice) {
-                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                          var response_speech = response.result.fulfillment.speech;
+                          if (invoice.user.currency === 'AUD') {
+                            response_speech.replace('[CurrencySymbol]', 'A$');
+                          } else if (invoice.user.currency === 'EURO') {
+                            response_speech.replace('[CurrencySymbol]', '€');
+                          } else {
+                            response_speech.replace('[CurrencySymbol]', '$');
+                          }
 
+                          response_speech.replace('INV000', '<https://nowdue.herokuapp.com/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                          console.log(response_speech);
+                          rtm.sendMessage(response_speech, dm.id);
                           console.log(invoice);
                           invoice.client = client;
                           invoice.user = user;
                           last_invoice = invoice;
 
-                          // Send notification to notifications page
+                          // Send notification to notifications pageWhen the user syncs their Stripe account to Nowdue we need to be able to process this transaction fee. Nowdue will only charge the user $2USD 0.32% when their client makes a payment.
                           io.emit('invoiceclient', {
                             type: 'invoiceclient',
                             profileImageURL: user.profileImageURL,
@@ -126,15 +136,6 @@ module.exports = function (token, config) {
           // Send invoice url to slack
 
           var response_speech = response.result.fulfillment.speech;
-          if (last_invoice.user.currency === 'AUD') {
-            response_speech.replace('[CurrencySymbol]', 'A$');
-          } else if (last_invoice.user.currency === 'EURO') {
-            response_speech.replace('[CurrencySymbol]', '€');
-          } else {
-            response_speech.replace('[CurrencySymbol]', '$');
-          }
-
-          response_speech.replace('INV000', '<https://nowdue.herokuapp.com/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
           rtm.sendMessage(response_speech, dm.id);
 
           // Send transaction email to user

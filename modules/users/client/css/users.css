@@ -62,3 +62,7 @@
 .invoice-settings span {
   color: #7b858a;
 }
+
+.pricing-settings h3 {
+  display: inline-block;
+}

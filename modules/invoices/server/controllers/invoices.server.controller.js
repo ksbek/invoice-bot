@@ -6,6 +6,8 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Invoice = mongoose.model('Invoice'),
+  config = require(path.resolve('./config/config')),
+  stripe = require('stripe')(config.stripe.access_token),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -88,6 +90,46 @@ exports.list = function(req, res) {
       });
     } else {
       res.jsonp(invoices);
+    }
+  });
+};
+
+/**
+ * Pay Invoice
+ */
+exports.paynow = function(req, res) {
+  stripe.tokens.create({
+    card: req.body.params.card
+  }, function(err, token) {
+    // asynchronously called
+    if (err) {
+      return res.status(400).send({
+        message: err.message
+      });
+    } else {
+      var application_fee = Math.ceil(req.invoice.amountDue.amount * 0.32);
+
+      stripe.customers.create({
+        email: req.invoice.client.email,
+        source: token.id
+      }).then(function(customer) {
+        stripe.charges.create({
+          amount: req.invoice.amountDue.amount * 100,
+          currency: req.user.currency,
+          customer: customer.id,
+          application_fee: application_fee,
+          receipt_email: req.invoice.client.email
+        }).then(function(charge) {
+          // New charge created on a new customer
+          console.log(charge);
+          res.send(charge);
+        });
+      }).catch(function(err) {
+        // Deal with an error
+        return res.status(400).send({
+          message: err.message
+        });
+      });
     }
   });
 };

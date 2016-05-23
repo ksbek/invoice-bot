@@ -37,6 +37,15 @@ module.exports = {
       }
     }
   },
+  stripe: {
+    apiKey: 'sk_live_4YXldnXlwst5j1FWza4Di37q',
+    apiPubKey: 'pk_live_4YXlSIEysOA7ERb61H32Kl3C',
+    clientID: 'ca_8VAoM49zUOuy94tRB9Op87Gqy8t137Ih',
+    access_token: "sk_live_lPqnttFfvnLfpYjQdUCdzVZ5",
+    refresh_token: "rt_8VIAF4yOb1EhKSvUQhc7SyRBvmftjEk1dYyHm9URLOgvMz0X",
+    stripe_publishable_key: "pk_live_KMYP3Sjwv5mcL179p9QO6juk",
+    stripe_user_id: "acct_14PQfYC61nQir0i8"
+  },
   sendgrid: {
     apiKey: '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'
   },

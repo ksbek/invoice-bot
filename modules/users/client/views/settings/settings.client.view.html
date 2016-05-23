@@ -10,7 +10,7 @@
         <a ui-sref="settings.integrations" ui-sref-active="active">INTEGRATIONS</a>
       </div>
       <div class="col-xs-3 text-center">
-        <a href="/api/auth/signout" target="_self" class="btn-sign-out">SIGN OUT</a>
+        <a href="/api/auth/signout" target="_self" class="btn-sign-out" ng-if="vm.state.current.name == 'settings.profile'">SIGN OUT</a>
       </div>
     </div>
   </div>
