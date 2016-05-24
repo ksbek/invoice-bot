@@ -101,7 +101,7 @@
               }
             }).success(function (response) {
               // If successful show success message and clear form
-              vm.invoice.status = 1;
+              vm.invoice.status = 'paid';
               vm.invoice.$update(successCallback, errorCallback);
               function successCallback(res) {
                 $state.go('invoices.list');

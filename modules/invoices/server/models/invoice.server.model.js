@@ -37,8 +37,8 @@ var InvoiceSchema = new Schema({
     default: 0
   },
   status: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: 'due',
     trim: true
   },
   description: {

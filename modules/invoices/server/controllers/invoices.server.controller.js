@@ -115,7 +115,7 @@ exports.paynow = function(req, res) {
       }).then(function(customer) {
         stripe.charges.create({
           amount: req.invoice.amountDue.amount * 100,
-          currency: req.user.currency,
+          currency: req.invoice.amountDue.currency,
           customer: customer.id,
           application_fee: application_fee,
           receipt_email: req.invoice.client.email
