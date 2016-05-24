@@ -69,7 +69,7 @@
       .state('settings.pricing', {
         url: '/pricing',
         templateUrl: 'modules/users/client/views/settings/pricing.client.view.html',
-        controller: 'PricingController',
+        controller: 'PlansController',
         controllerAs: 'vm',
         data: {
           pageTitle: 'Settings Pricing'

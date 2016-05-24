@@ -3,6 +3,348 @@
 	min-width: auto;
 }
 
-.invoice-modal .modal-dialog .modal-content {
-	
+.invoice-modal .modal-dialog .btn-close {
+	right: 20px;
+	top: 10px;
+}
+
+.invoice-modal .modal-dialog .form-row {
+	padding: 18px 0 18px 18px;
+}
+
+.invoice-modal .modal-dialog button:disabled {
+	border: none;
+	background: none;
+	color: #64f1b0;
+}
+
+.invoice-modal .modal-dialog button:disabled:hover {
+	border: none;
+	background: none;
+}
+
+/* Inoivce paid success modal */
+.invoice-paid-success-modal {
+	width: auto;
+	min-width: auto;
+}
+
+.invoice-paid-success-modal .modal-content {
+	background: #EEE;
+}
+
+.invoice-paid-success-modal .form-wr{
+	height: 400px;
+}
+
+.invoice-paid-success-modal #top-text{
+	position: absolute;
+	top: 120px;
+	left: 0;
+	right: 0;
+	color: #999;
+}
+
+.invoice-paid-success-modal #bottom-text{
+	position: absolute;
+	bottom: 120px;
+	left: 0;
+	right: 0;
+	color: #999;
+}
+
+.invoice-paid-success-modal .box{
+  position: absolute;
+  top: calc(50% - 40px);
+  top: -webkit-calc(50% - 40px);
+  left: calc(50% - 27px);
+  left: -webkit-calc(50% - 27px);
+}
+
+.invoice-paid-success-modal  .file{
+  width: 55px;
+  height: 70px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: inset 8px 0 0 #fff,
+    inset -8px 0 0 #fff,
+    inset 0 27px 0 #fff,
+    inset 0 31px 0 #CBCCCC,
+    inset 0 42px 0 #fff,
+    inset 0 46px 0 #CBCCCC,
+    inset 0 56px 0 #fff,
+    inset 0 60px 0 #CBCCCC;
+}
+
+.invoice-paid-success-modal  .file:after{
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: 0px;
+  height: 0px;
+  border-bottom: 25px solid transparent;
+  border-left: 25px solid transparent;
+  border-top: 25px solid #EEE;
+}
+
+.invoice-paid-success-modal  .file:before{
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  background: #DCDDDD;
+  border-radius: 2px;
+}
+
+.invoice-paid-success-modal  ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.invoice-paid-success-modal  ul li{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: #353535;
+  height: 4px;
+  width: 40px;
+}
+
+.invoice-paid-success-modal  ul li:nth-child(1){
+  top: 27px;
+  left: 7px;
+  width: 0px;
+  -webkit-animation: loader 0.5s linear 1s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation: loader 0.5s linear 1s;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: loader 0.5s linear 1s;
+  -o-animation-fill-mode: forwards;
+  animation: loader 0.5s linear 1s;
+  animation-fill-mode: forwards;
+}
+
+.invoice-paid-success-modal  ul li:nth-child(2){
+  top: 42px;
+  left: 7px;
+  width: 0px;
+  -webkit-animation: loader 0.5s linear 1.5s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation: loader 0.5s linear 1.5s;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: loader 0.5s linear 1.5s;
+  -o-animation-fill-mode: forwards;
+  animation: loader 0.5s linear 1.5s;
+  animation-fill-mode: forwards;
+}
+
+.invoice-paid-success-modal  ul li:nth-child(3){
+  top: 56px;
+  left: 7px;
+  width: 0px;
+  -webkit-animation: loader 0.5s linear 2.0s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation: loader 0.5s linear 2.0s;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: loader 0.5s linear 2.0s;
+  -o-animation-fill-mode: forwards;
+  animation: loader 0.5s linear 2.0s;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes loader{
+  0%{
+    width: 0px;
+  }
+  100%{
+    width: 40px;
+  }
+}
+
+@-moz-keyframes loader{
+  0%{
+    width: 0px;
+  }
+  100%{
+    width: 40px;
+  }
+}
+
+@-o-keyframes loader{
+  0%{
+    width: 0px;
+  }
+  100%{
+    width: 40px;
+  }
+}
+
+@keyframes loader{
+  0%{
+    width: 0px;
+  }
+  100%{
+    width: 40px;
+  }
+}
+
+.invoice-paid-success-modal  .tick{
+  width: 42px;
+  height: 40px;
+  background: #fff;
+  position: absolute;
+  top: 21px;
+  left: 6px;
+  z-index: 10;
+  opacity: 0;
+  -webkit-animation: tick 0.5s linear 2.6s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation: tick 0.5s linear 2.6s;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: tick 0.5s linear 2.6s;
+  -o-animation-fill-mode: forwards;
+  animation: tick 0.5s linear 2.6s;
+  animation-fill-mode: forwards;
+}
+
+.invoice-paid-success-modal  .tick div{
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  -webkit-animation: tick 0.5s linear 2.6s;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation: tick 0.5s linear 2.6s;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: tick 0.5s linear 2.6s;
+  -o-animation-fill-mode: forwards;
+  animation: tick 0.5s linear 2.6s;
+  animation-fill-mode: forwards;
+}
+
+.invoice-paid-success-modal  .tick div:after{
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 7px;
+  width: 8px;
+  height: 15px;
+  background: #1DAE2A;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.invoice-paid-success-modal  .tick div:before{
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 21px;
+  width: 8px;
+  height: 30px;
+  background: #1DAE2A;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+@-webkit-keyframes tick{
+  0%{
+    -webkit-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -webkit-transform: scale(1);
+    width: 42px;
+    height: 40px;
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes tick{
+  0%{
+    -moz-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -moz-transform: scale(1);
+    width: 42px;
+    height: 40px;
+    opacity: 1;
+  }
+}
+
+@-o-keyframes tick{
+  0%{
+    -o-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -o-transform: scale(1);
+    width: 42px;
+    height: 40px;
+    opacity: 1;
+  }
+}
+
+@keyframes tick{
+  0%{
+    transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    transform: scale(1);
+    width: 42px;
+    height: 40px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes tick_div{
+  0%{
+    -webkit-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -webkit-transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes tick_div{
+  0%{
+    -moz-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -moz-transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@-o-keyframes tick_div{
+  0%{
+    -o-transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    -o-transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes tick_div{
+  0%{
+    transform: scale(0);
+    opacity: 0;
+  }
+  100%{
+    transform: scale(1);
+    opacity: 1;
+  }
 }

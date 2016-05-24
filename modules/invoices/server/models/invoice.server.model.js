@@ -22,6 +22,9 @@ var InvoiceSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  datePaid: {
+    type: Date
+  },
   amountDue: {
     amount: {
       type: Number,

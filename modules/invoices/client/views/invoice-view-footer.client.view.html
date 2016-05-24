@@ -10,7 +10,7 @@
     <div class="invoice-submenu">
       <i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
       <ul>
-        <li><a href="#" ui-sref="invoices.edit({ invoiceId: vm.invoice._id })">Edit Invoice</a></li>
+        <li ng-if="vm.invoice.status != 'paid'"><a href="#" ui-sref="invoices.edit({ invoiceId: vm.invoice._id })">Edit Invoice</a></li>
         <li><a href="#" ng-click="vm.remove()">Delete Invoice</a></li>
       </ul>
     </div>

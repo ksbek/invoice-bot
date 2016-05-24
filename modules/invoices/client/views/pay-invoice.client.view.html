@@ -1,3 +1,6 @@
+
+<a href="#" class="btn-close" ng-click="$close(false)"><img src="/modules/core/client/img/i-close.png" alt=""></a>
+  
 <div class="form-wr">
   <form id="payment-form" ng-submit="vm.pay(vm.form.invoiceForm.$valid)" novalidate autocomplete="off">
     <div ng-show="vm.error" class="text-danger">
@@ -27,6 +30,9 @@
         <input type="text" size="4" data-stripe="cvc" ng-model="vm.details.cvc" placeholder="CVC">
       </label>
     </div>
-    <button class="submit">Pay {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}}</button>
+    <button type="submit" ng-disabled="vm.loading">
+      <span ng-show="vm.loading"></i>Please Wait...</span>
+      <span ng-show="!vm.loading">Pay {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}}</span>
+    </button>
   </form>
 </div>

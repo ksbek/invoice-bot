@@ -17,7 +17,7 @@
         <h2><i>Total</i> {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} </h2>
         <h4><i>Tax</i>{{vm.invoice.tax}}%</h4>
         <h4><i>Subtotal</i> {{vm.invoice.amountDue.amount*(1-vm.invoice.tax/100) | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}}</h4>
-        <a href="#" ng-click="vm.payNow(vm.invoice)" class="btn-1">Pay Now</a>
+        <a href="#" ng-click="vm.payNow(vm.invoice)" class="btn-1" ng-if="vm.invoice.status != 'paid'">Pay Now</a>
       </div>
     </div>
   </div>

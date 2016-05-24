@@ -26,6 +26,14 @@
     var timeDiff = Math.abs(vm.invoice.dateDue.getTime() - today.getTime());
     vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
+    if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
+      timeDiff = Math.ceil(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
+      if (timeDiff < 1)
+        vm.invoice.paidDate = timeDiff + "Days ago";
+      else
+        vm.invoice.paidDate = "Today";
+    }
+
     vm.currencySymbols = {
       'USD': '$',
       'AUD': 'A$',
@@ -81,20 +89,17 @@
         templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',
         size: 'sm',
         windowClass: 'invoice-modal',
+        backdrop: 'static',
         controller: ['$state', 'Authentication', 'invoice', function($scope, Authentication, invoice) {
           var vm = this;
           vm.invoice = invoice;
           vm.authentication = Authentication;
-          var dateDue = new Date(vm.invoice.dateDue);
-          var today = new Date();
-          var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
-          vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
           vm.pay = pay;
           vm.details = {};
 
           function pay() {
             vm.error = "";
+            vm.loading = true;
             $http.post('/api/invoices/' + vm.invoice._id + '/paynow', {
               params: {
                 card: vm.details
@@ -102,16 +107,30 @@
             }).success(function (response) {
               // If successful show success message and clear form
               vm.invoice.status = 'paid';
+              vm.invoice.datePaid = new Date();
               vm.invoice.$update(successCallback, errorCallback);
               function successCallback(res) {
-                $state.go('invoices.list');
+                modalInstance.close();
+                var modalSuccessInstance = $uibModal.open({
+                  templateUrl: 'modules/invoices/client/views/paid-invoice-modal.client.view.html',
+                  size: 'sm',
+                  windowClass: 'invoice-paid-success-modal'
+                });
+                if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
+                  timeDiff = Math.ceil(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
+                  if (timeDiff < 1)
+                    vm.invoice.paidDate = timeDiff + "Days ago";
+                  else
+                    vm.invoice.paidDate = "Today";
+                }
               }
 
               function errorCallback(res) {
+                modalInstance.close();
                 vm.error = res.data.message;
               }
-
             }).error(function (response) {
+              vm.loading = false;
               vm.error = response.message;
             });
           }

@@ -44,7 +44,8 @@ module.exports = {
     access_token: "sk_live_lPqnttFfvnLfpYjQdUCdzVZ5",
     refresh_token: "rt_8VIAF4yOb1EhKSvUQhc7SyRBvmftjEk1dYyHm9URLOgvMz0X",
     stripe_publishable_key: "pk_live_KMYP3Sjwv5mcL179p9QO6juk",
-    stripe_user_id: "acct_14PQfYC61nQir0i8"
+    stripe_user_id: "acct_14PQfYC61nQir0i8",
+    application_fee: 0.01
   },
   sendgrid: {
     apiKey: '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'

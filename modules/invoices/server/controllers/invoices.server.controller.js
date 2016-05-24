@@ -107,7 +107,7 @@ exports.paynow = function(req, res) {
         message: err.message
       });
     } else {
-      var application_fee = Math.ceil(req.invoice.amountDue.amount * 0.32);
+      var application_fee = Math.ceil(req.invoice.amountDue.amount * 100 * config.stripe.application_fee);
 
       stripe.customers.create({
         email: req.invoice.client.email,
