@@ -34,6 +34,7 @@ module.exports = {
   app: {
     title: defaultEnvConfig.app.title + ' - Development Environment'
   },
+  baseUrl: 'http://localhost:3000',
   stripe: {
     apiKey: 'sk_test_4YXlxHuxjTMAas2CPaCU6vOq',
     apiPubKey: 'pk_test_4YXlGUPl7CoGOJV8f6UoZon5',
@@ -46,7 +47,11 @@ module.exports = {
     application_fee: 0.01
   },
   sendgrid: {
-    apiKey: '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'
+    apiKey: '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',
+    templates: {
+      invoicePaid: '16f65b4c-b93f-44a0-aae9-6a3ddae3ced4',
+      invoiceCreated: '4d01add6-571a-4772-801b-47dfaccb84e8'
+    }
   },
   slack: {
     clientID: process.env.SLACK_ID || '36622746837.37185968785',

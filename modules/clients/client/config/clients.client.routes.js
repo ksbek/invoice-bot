@@ -16,9 +16,6 @@
           'header': {
             templateUrl: 'modules/clients/client/views/header.client.view.html'
           },
-          'footer': {
-            templateUrl: 'modules/clients/client/views/footer.client.view.html'
-          },
           'container@': {
             template: '<ui-view/>'
           }

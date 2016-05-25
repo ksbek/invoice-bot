@@ -70,7 +70,7 @@ var calcDate = function (dateString) {
     var res = date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
     return new Date(res);
   } else {
-    return Date.now;
+    return new Date;
   }
 };
 
@@ -106,7 +106,6 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, par
     _this.create({
       user: user.id,
       client: client_id,
-      name: params.name,
       amountDue: { amount: params.amount, currency: user.currency },
       dateDue: calcDate(params.duedate),
       description: params.description,

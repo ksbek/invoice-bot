@@ -146,9 +146,6 @@
           'header': {
             templateUrl: 'modules/clients/client/views/header.client.view.html'
           },
-          'footer': {
-            templateUrl: 'modules/clients/client/views/footer.client.view.html'
-          },
           'container@': {
             template: '<ui-view/>'
           }
@@ -569,9 +566,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal) {
+  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -597,6 +594,18 @@
         resolve: {
           clientResolve: newClient
         }
+      });
+    }
+
+    function init() {
+      // Make sure the Socket is connected
+      if (!Socket.socket) {
+        Socket.connect();
+      }
+
+      // Add an event listener to the 'notificiationMessage' event
+      Socket.on(Authentication.user.id + 'invoiceclient', function (message) {
+        vm.messages.unshift(message);
       });
     }
 
@@ -1082,9 +1091,6 @@
           'header': {
             templateUrl: 'modules/clients/client/views/header.client.view.html'
           },
-          'footer': {
-            templateUrl: 'modules/clients/client/views/footer.client.view.html'
-          },
           'container@': {
             template: '<ui-view/>'
           }
@@ -1205,10 +1211,11 @@
     }
 
     vm.currencySymbols = {
-      'USD': '$',
-      'AUD': 'A$',
-      'EURO': '€',
-      'GBP': '£'
+      'USD': '$USD',
+      'AUD': '$AUD',
+      'EUR': '€EURO',
+      'GBP': '£UK',
+      'CAD': '$CAD'
     };
 
     vm.payNow = payNow;
@@ -1276,29 +1283,17 @@
               }
             }).success(function (response) {
               // If successful show success message and clear form
-              vm.invoice.status = 'paid';
-              vm.invoice.datePaid = new Date();
-              vm.invoice.$update(successCallback, errorCallback);
-              function successCallback(res) {
-                modalInstance.close();
-                var modalSuccessInstance = $uibModal.open({
-                  templateUrl: 'modules/invoices/client/views/paid-invoice-modal.client.view.html',
-                  size: 'sm',
-                  windowClass: 'invoice-paid-success-modal'
-                });
-                if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
-                  timeDiff = Math.ceil(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
-                  if (timeDiff < 1)
-                    vm.invoice.paidDate = timeDiff + "Days ago";
-                  else
-                    vm.invoice.paidDate = "Today";
-                }
-              }
+              vm.invoice.status = response.status;
+              if (vm.invoice.status === 'paid')
+                vm.invoice.paidDate = "Today";
 
-              function errorCallback(res) {
-                modalInstance.close();
-                vm.error = res.data.message;
-              }
+              modalInstance.close();
+
+              var modalSuccessInstance = $uibModal.open({
+                templateUrl: 'modules/invoices/client/views/paid-invoice-modal.client.view.html',
+                size: 'sm',
+                windowClass: 'invoice-paid-success-modal'
+              });
             }).error(function (response) {
               vm.loading = false;
               vm.error = response.message;
@@ -1439,9 +1434,9 @@
     .module('notifications')
     .controller('NotificationsController', NotificationsController);
 
-  NotificationsController.$inject = ['$scope', '$state', '$http', 'Authentication', 'Socket'];
+  NotificationsController.$inject = ['$scope', '$state', '$http', 'Authentication', 'NotificationsService'];
 
-  function NotificationsController($scope, $state, $http, Authentication, Socket) {
+  function NotificationsController($scope, $state, $http, Authentication, NotificationsService) {
     var vm = this;
 
     vm.messages = [];
@@ -1451,26 +1446,13 @@
     vm.isAnswered = true;
     init();
 
+    vm.notifications = NotificationsService.query();
+
     function init() {
       // If user is not signed in then redirect back home
       if (!Authentication.user) {
         $state.go('home');
       }
-
-      // Make sure the Socket is connected
-      if (!Socket.socket) {
-        Socket.connect();
-      }
-
-      // Add an event listener to the 'notificiationMessage' event
-      Socket.on('invoiceclient', function (message) {
-        vm.messages.unshift(message);
-      });
-
-      // Remove the event listener when the controller instance is destroyed
-      $scope.$on('$destroy', function () {
-        Socket.removeListener('invoiceclient');
-      });
     }
 
     // Create a controller method for sending messages
@@ -1521,6 +1503,30 @@
       vm.messageText = '';
     }
     */
+  }
+}());
+
+angular
+  .module('notifications').filter('unsafe', ["$sce", function($sce) { return $sce.trustAsHtml; }]);
+
+// Invoices service used to communicate Invoices REST endpoints
+(function () {
+  'use strict';
+
+  angular
+    .module('notifications')
+    .factory('NotificationsService', NotificationsService);
+
+  NotificationsService.$inject = ['$resource'];
+
+  function NotificationsService($resource) {
+    return $resource('api/notifications/:notificationId', {
+      notificationId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
   }
 }());
 

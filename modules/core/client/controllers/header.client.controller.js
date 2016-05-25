@@ -5,9 +5,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal) {
+  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -33,6 +33,18 @@
         resolve: {
           clientResolve: newClient
         }
+      });
+    }
+
+    function init() {
+      // Make sure the Socket is connected
+      if (!Socket.socket) {
+        Socket.connect();
+      }
+
+      // Add an event listener to the 'notificiationMessage' event
+      Socket.on(Authentication.user.id + 'invoiceclient', function (message) {
+        vm.messages.unshift(message);
       });
     }
 

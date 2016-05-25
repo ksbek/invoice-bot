@@ -5,9 +5,10 @@
     </div>
     <h5>Info</h5>
     <div class="info-box">
-      <p>While you're on a free account you can create unlimited invoices forever. If you want to automate sending, scheduled reminders or gain revenue insights please <a href="settings-plan.html">upgrade</a> your plan.</p>
+      <p>Before you can send invoices please connect or create a Stripe account to accept payments.</p>
     </div><!-- END of .info-box -->
   </div><!-- END of .notifications-group -->
+  <!-- 
   <div class="notifications-group">
     <div class="img-wr">
       <img src="/modules/core/client/img/data/i-user-1.jpg" alt="">
@@ -25,17 +26,11 @@
       </div>
       <h6>2:47pm</h6>
     </div>
-  </div><!-- END of .notifications-group -->
-  <div class="notifications-group" data-ng-repeat="message in vm.messages">
-    <div class="img-wr">
-      <img ng-src="vm.message.profileImgUrl" alt="">
-    </div>
-    <h5>Me</h5>
+  </div>--><!-- END of .notifications-group -->
+  <div class="notifications-group" data-ng-repeat="notification in vm.notifications">
     <div class="notifications-item">
-      <div class="notifications-item-text">
-        <p>Assigned an <a data-ui-sref="invoices.list">invoice</a> for <a data-ui-sref="clients.list">{{message.client_name}}</a>&nbsp;{{message.amount | currency}}</p>
-      </div>
-      <h6>2:51pm</h6>
+      <div class="notifications-item-text" ng-bind-html="notification.description | unsafe"></div>
+      <h6>{{notification.created | date}}</h6>
     </div>
   </div><!-- END of .notifications-group -->
 </div><!-- END of .notifications-wr -->

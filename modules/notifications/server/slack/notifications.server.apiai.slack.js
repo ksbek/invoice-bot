@@ -20,8 +20,6 @@ module.exports = function (token, config) {
 
   var EmailTemplate = require('email-templates').EmailTemplate;
 
-  var last_invoice = null;
-
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
     logLevel: 'error',
@@ -49,6 +47,9 @@ module.exports = function (token, config) {
   rtm.on(RTM_EVENTS.MESSAGE, function (message) {
     console.log(message);
     var user = rtm.dataStore.getUserById(message.user);
+
+    if (!user)
+      return;
 
     var dm = rtm.dataStore.getDMByName(user.name);
     if (dm) {
@@ -88,16 +89,15 @@ module.exports = function (token, config) {
                             response_speech.replace('[CurrencySymbol]', '$');
                           }
 
-                          response_speech.replace('INV000', '<https://nowdue.herokuapp.com/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                          response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
                           console.log(response_speech);
                           rtm.sendMessage(response_speech, dm.id);
                           console.log(invoice);
                           invoice.client = client;
                           invoice.user = user;
-                          last_invoice = invoice;
 
-                          // Send notification to notifications pageWhen the user syncs their Stripe account to Nowdue we need to be able to process this transaction fee. Nowdue will only charge the user $2USD 0.32% when their client makes a payment.
-                          io.emit('invoiceclient', {
+                          // Send invoice created notification to notifications page
+                          io.emit(user.id + 'invoiceclient', {
                             type: 'invoiceclient',
                             profileImageURL: user.profileImageURL,
                             username: user.username,
@@ -134,12 +134,17 @@ module.exports = function (token, config) {
         // Check the slack user confirm send invoice to client
         if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Send Yes Confirm') {
           // Send invoice url to slack
+          User.findUserBySlackId(message.user, '', function(user) {
+            if (user) {
+              var last_invoice = Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1);
+              var response_speech = response.result.fulfillment.speech;
+              response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
+              rtm.sendMessage(response_speech, dm.id);
 
-          var response_speech = response.result.fulfillment.speech;
-          rtm.sendMessage(response_speech, dm.id);
-
-          // Send transaction email to user
-          require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, EmailTemplate);
+              // Send transaction email to user
+              require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, user, 1);
+            }
+          });
         } else
         // Check the slack user confirm yes for create client
         if (response.result.metadata && response.result.metadata.intentName === 'Create Client Yes Confirm') {
@@ -154,7 +159,7 @@ module.exports = function (token, config) {
                 Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
                   console.log(client);
                   if (client)
-                    rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', '<https://nowdue.herokuapp.com/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
+                    rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
                   else
                     rtm.sendMessage("Sorry, Something went wrong.", dm.id);
                 });

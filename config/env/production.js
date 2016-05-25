@@ -37,6 +37,7 @@ module.exports = {
       }
     }
   },
+  baseUrl: 'https://nowdue.herokuapp.com',
   stripe: {
     apiKey: 'sk_live_4YXldnXlwst5j1FWza4Di37q',
     apiPubKey: 'pk_live_4YXlSIEysOA7ERb61H32Kl3C',
@@ -48,7 +49,11 @@ module.exports = {
     application_fee: 0.01
   },
   sendgrid: {
-    apiKey: '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'
+    apiKey: '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',
+    templates: {
+      invoicePaid: '16f65b4c-b93f-44a0-aae9-6a3ddae3ced4',
+      invoiceCreated: '4d01add6-571a-4772-801b-47dfaccb84e8'
+    }
   },
   slack: {
     clientID: process.env.SLACK_ID || '36622746837.37185968785',

@@ -35,10 +35,11 @@
     }
 
     vm.currencySymbols = {
-      'USD': '$',
-      'AUD': 'A$',
-      'EURO': '€',
-      'GBP': '£'
+      'USD': '$USD',
+      'AUD': '$AUD',
+      'EUR': '€EURO',
+      'GBP': '£UK',
+      'CAD': '$CAD'
     };
 
     vm.payNow = payNow;
@@ -106,29 +107,17 @@
               }
             }).success(function (response) {
               // If successful show success message and clear form
-              vm.invoice.status = 'paid';
-              vm.invoice.datePaid = new Date();
-              vm.invoice.$update(successCallback, errorCallback);
-              function successCallback(res) {
-                modalInstance.close();
-                var modalSuccessInstance = $uibModal.open({
-                  templateUrl: 'modules/invoices/client/views/paid-invoice-modal.client.view.html',
-                  size: 'sm',
-                  windowClass: 'invoice-paid-success-modal'
-                });
-                if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
-                  timeDiff = Math.ceil(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
-                  if (timeDiff < 1)
-                    vm.invoice.paidDate = timeDiff + "Days ago";
-                  else
-                    vm.invoice.paidDate = "Today";
-                }
-              }
+              vm.invoice.status = response.status;
+              if (vm.invoice.status === 'paid')
+                vm.invoice.paidDate = "Today";
 
-              function errorCallback(res) {
-                modalInstance.close();
-                vm.error = res.data.message;
-              }
+              modalInstance.close();
+
+              var modalSuccessInstance = $uibModal.open({
+                templateUrl: 'modules/invoices/client/views/paid-invoice-modal.client.view.html',
+                size: 'sm',
+                windowClass: 'invoice-paid-success-modal'
+              });
             }).error(function (response) {
               vm.loading = false;
               vm.error = response.message;
