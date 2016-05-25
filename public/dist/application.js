@@ -144,7 +144,7 @@
         url: '/clients',
         views: {
           'header': {
-            templateUrl: 'modules/clients/client/views/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             template: '<ui-view/>'
@@ -566,9 +566,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket) {
+  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket, $window) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -578,6 +578,13 @@
     vm.createClient = createClient;
     vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+    vm.callOauthProvider = callOauthProvider;
+    // OAuth provider request
+    function callOauthProvider(url) {
+      // Effectively call OAuth authentication route:
+      $window.location.href = url;
+    }
 
     function stateChangeSuccess() {
       // Collapsing the menu after navigation
@@ -1089,7 +1096,7 @@
         url: '/invoices',
         views: {
           'header': {
-            templateUrl: 'modules/clients/client/views/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             template: '<ui-view/>'
@@ -1182,9 +1189,9 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal'];
+  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window'];
 
-  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal) {
+  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window) {
     var vm = this;
 
     if ($state.current.name !== 'invoicesview') {
@@ -1273,6 +1280,14 @@
           vm.authentication = Authentication;
           vm.pay = pay;
           vm.details = {};
+          vm.errorCode = "";
+
+          vm.callOauthProvider = callOauthProvider;
+          // OAuth provider request
+          function callOauthProvider(url) {
+            // Effectively call OAuth authentication route:
+            $window.location.href = url;
+          }
 
           function pay() {
             vm.error = "";
@@ -1296,6 +1311,8 @@
               });
             }).error(function (response) {
               vm.loading = false;
+              if (response.code && response.code === 'not-stripe-connected')
+                vm.errorCode = response.code;
               vm.error = response.message;
             });
           }
@@ -1410,7 +1427,7 @@
         url: '/',
         views: {
           'header': {
-            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             templateUrl: 'modules/notifications/client/views/notifications.client.view.html',
@@ -1434,9 +1451,9 @@
     .module('notifications')
     .controller('NotificationsController', NotificationsController);
 
-  NotificationsController.$inject = ['$scope', '$state', '$http', 'Authentication', 'NotificationsService'];
+  NotificationsController.$inject = ['$scope', '$state', '$http', '$window', 'Authentication', 'NotificationsService'];
 
-  function NotificationsController($scope, $state, $http, Authentication, NotificationsService) {
+  function NotificationsController($scope, $state, $http, $window, Authentication, NotificationsService) {
     var vm = this;
 
     vm.messages = [];
@@ -1445,6 +1462,13 @@
     vm.authentication = Authentication;
     vm.isAnswered = true;
     init();
+
+    vm.callOauthProvider = callOauthProvider;
+    // OAuth provider request
+    function callOauthProvider(url) {
+      // Effectively call OAuth authentication route:
+      $window.location.href = url;
+    }
 
     vm.notifications = NotificationsService.query();
 
@@ -1622,7 +1646,7 @@ angular
         url: '/settings',
         views: {
           'header': {
-            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             templateUrl: 'modules/users/client/views/settings/settings.client.view.html',

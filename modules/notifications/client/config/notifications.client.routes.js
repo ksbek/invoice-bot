@@ -13,7 +13,7 @@
         url: '/',
         views: {
           'header': {
-            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             templateUrl: 'modules/notifications/client/views/notifications.client.view.html',

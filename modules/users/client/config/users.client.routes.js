@@ -16,7 +16,7 @@
         url: '/settings',
         views: {
           'header': {
-            templateUrl: 'modules/users/client/views/settings/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             templateUrl: 'modules/users/client/views/settings/settings.client.view.html',

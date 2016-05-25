@@ -6,9 +6,9 @@
     .module('notifications')
     .controller('NotificationsController', NotificationsController);
 
-  NotificationsController.$inject = ['$scope', '$state', '$http', 'Authentication', 'NotificationsService'];
+  NotificationsController.$inject = ['$scope', '$state', '$http', '$window', 'Authentication', 'NotificationsService'];
 
-  function NotificationsController($scope, $state, $http, Authentication, NotificationsService) {
+  function NotificationsController($scope, $state, $http, $window, Authentication, NotificationsService) {
     var vm = this;
 
     vm.messages = [];
@@ -17,6 +17,13 @@
     vm.authentication = Authentication;
     vm.isAnswered = true;
     init();
+
+    vm.callOauthProvider = callOauthProvider;
+    // OAuth provider request
+    function callOauthProvider(url) {
+      // Effectively call OAuth authentication route:
+      $window.location.href = url;
+    }
 
     vm.notifications = NotificationsService.query();
 

@@ -5,6 +5,7 @@
  */
 var path = require('path'),
   _ = require('lodash'),
+  qs = require('qs'),
   config = require(path.resolve('./config/config')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
@@ -334,6 +335,13 @@ exports.removeOAuthProvider = function (req, res, next) {
   });
 };
 
+exports.authStripe = function (req, res) {
+  res.redirect('https://connect.stripe.com/oauth/authorize' + "?" + qs.stringify({
+    response_type: "code",
+    scope: "read_write",
+    client_id: config.stripe.clientID
+  }));
+};
 
 exports.stripeCallback = function (req, res) {
   var code = req.query.code;
@@ -348,13 +356,17 @@ exports.stripeCallback = function (req, res) {
       client_secret: config.stripe.apiKey
     }
   }, function(err, r, body) {
+    var user = req.user;
 
-    var accessToken = JSON.parse(body).access_token;
-
-    // Do something with your accessToken
-
-    // For demo"s sake, output in response:
-    res.send({ "Your Token": accessToken });
-
+    if (user) {
+      // Merge existing user
+      user = _.extend(user, req.body);
+      user.stripe = JSON.parse(body);
+      user.integrations.stripe = true;
+      user.save(function (err) {
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, user, 8);
+        return res.redirect('/');
+      });
+    }
   });
 };

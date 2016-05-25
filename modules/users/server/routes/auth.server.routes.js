@@ -58,5 +58,6 @@ module.exports = function (app) {
   app.route('/api/auth/slack').get(users.oauthCall('slack'));
   app.route('/api/auth/slack/callback').get(users.oauthCallback('slack'));
 
+  app.route('/api/auth/stripe').get(users.authStripe);
   app.route('/api/auth/stripe/callback').get(users.stripeCallback);
 };

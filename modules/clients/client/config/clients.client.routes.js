@@ -14,7 +14,7 @@
         url: '/clients',
         views: {
           'header': {
-            templateUrl: 'modules/clients/client/views/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           },
           'container@': {
             template: '<ui-view/>'

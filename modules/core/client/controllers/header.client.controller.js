@@ -5,9 +5,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket'];
+  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket) {
+  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket, $window) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -17,6 +17,13 @@
     vm.createClient = createClient;
     vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+    vm.callOauthProvider = callOauthProvider;
+    // OAuth provider request
+    function callOauthProvider(url) {
+      // Effectively call OAuth authentication route:
+      $window.location.href = url;
+    }
 
     function stateChangeSuccess() {
       // Collapsing the menu after navigation

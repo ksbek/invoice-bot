@@ -8,7 +8,6 @@ var path = require('path'),
   Invoice = mongoose.model('Invoice'),
   Notification = mongoose.model('Notification'),
   config = require(path.resolve('./config/config')),
-  stripe = require('stripe')(config.stripe.access_token),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -99,6 +98,14 @@ exports.list = function(req, res) {
  * Pay Invoice
  */
 exports.paynow = function(req, res) {
+  if (!req.user.stripe)
+    return res.status(400).send({
+      message: '',
+      code: 'not-stripe-connected'
+    });
+
+  var stripe = require('stripe')(req.user.stripe.access_token);
+
   if (req.invoice.status === 'paid')
     return res.status(400).send({
       message: "This invoice is already paid"
@@ -139,7 +146,7 @@ exports.paynow = function(req, res) {
               });
             } else {
               // Send Notificatin to notification page and slack
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, req.user);
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, req.user, 19);
 
               // Send paid invoice email to user
               require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, req.user, 2);

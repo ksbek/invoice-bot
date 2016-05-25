@@ -105,6 +105,9 @@ var UserSchema = new Schema({
       trim: true
     }
   },
+  stripe: {
+
+  },
   password: {
     type: String,
     default: ''

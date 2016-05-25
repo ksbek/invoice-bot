@@ -6,9 +6,9 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal'];
+  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window'];
 
-  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal) {
+  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window) {
     var vm = this;
 
     if ($state.current.name !== 'invoicesview') {
@@ -97,6 +97,14 @@
           vm.authentication = Authentication;
           vm.pay = pay;
           vm.details = {};
+          vm.errorCode = "";
+
+          vm.callOauthProvider = callOauthProvider;
+          // OAuth provider request
+          function callOauthProvider(url) {
+            // Effectively call OAuth authentication route:
+            $window.location.href = url;
+          }
 
           function pay() {
             vm.error = "";
@@ -120,6 +128,8 @@
               });
             }).error(function (response) {
               vm.loading = false;
+              if (response.code && response.code === 'not-stripe-connected')
+                vm.errorCode = response.code;
               vm.error = response.message;
             });
           }

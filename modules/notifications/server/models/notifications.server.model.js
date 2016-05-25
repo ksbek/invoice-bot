@@ -47,14 +47,6 @@ var NotificationSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
-  },
-  client: {
-    type: Schema.ObjectId,
-    ref: 'Client'
-  },
-  invoice: {
-    type: Schema.ObjectId,
-    ref: 'Invoice'
   }
 });
 

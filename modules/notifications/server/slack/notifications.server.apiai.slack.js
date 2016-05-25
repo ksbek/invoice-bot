@@ -60,116 +60,123 @@ module.exports = function (token, config) {
       request.on('response', function(response) {
         console.log(response);
 
-        // Check the slack user confirm yes for make invoice
-        if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Yes Confirm') {
+        if (response.result.metadata) {
+          switch (response.result.metadata.intentName) {
 
-          // Check if the slack user exists
-          User.findUserBySlackId(message.user, '', function(user) {
-            if (user) {
+            // Check the slack user confirm yes for make invoice
+            case 'Make Invoice Yes Confirm':
+              // Check if the slack user exists
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
 
-              // Check if the confirm parameters have client name
-              if (response.result.parameters.name !== '') {
+                  // Check if the confirm parameters have client name
+                  if (response.result.parameters.name !== '') {
 
-                // Check if user have client
-                Client.findClientByName(response.result.parameters.name, user.id, function(client) {
-                  if (client) {
+                    // Check if user have client
+                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                      if (client) {
 
-                    // Check if the confirm paramenters have amount
-                    if (response.result.parameters.amount !== '') {
+                        // Check if the confirm paramenters have amount
+                        if (response.result.parameters.amount !== '') {
 
-                      // Create invoice with confirm paramenters
-                      Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {
-                        if (invoice) {
-                          var response_speech = response.result.fulfillment.speech;
-                          if (invoice.user.currency === 'AUD') {
-                            response_speech.replace('[CurrencySymbol]', 'A$');
-                          } else if (invoice.user.currency === 'EURO') {
-                            response_speech.replace('[CurrencySymbol]', '€');
-                          } else {
-                            response_speech.replace('[CurrencySymbol]', '$');
-                          }
+                          // Create invoice with confirm paramenters
+                          Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {
+                            if (invoice) {
+                              var response_speech = response.result.fulfillment.speech;
+                              if (invoice.user.currency === 'AUD') {
+                                response_speech.replace('[CurrencySymbol]', 'A$');
+                              } else if (invoice.user.currency === 'EURO') {
+                                response_speech.replace('[CurrencySymbol]', '€');
+                              } else {
+                                response_speech.replace('[CurrencySymbol]', '$');
+                              }
 
-                          response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
-                          console.log(response_speech);
-                          rtm.sendMessage(response_speech, dm.id);
-                          console.log(invoice);
-                          invoice.client = client;
-                          invoice.user = user;
+                              response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                              console.log(response_speech);
+                              rtm.sendMessage(response_speech, dm.id);
+                              console.log(invoice);
+                              invoice.client = client;
+                              invoice.user = user;
 
-                          // Send invoice created notification to notifications page
-                          io.emit(user.id + 'invoiceclient', {
-                            type: 'invoiceclient',
-                            profileImageURL: user.profileImageURL,
-                            username: user.username,
-                            user_id: user.id,
-                            client_name: client.name,
-                            amount: invoice.amountDue.amount,
-                            currenty: invoice.amountDue.currency
+                              // Send invoice created notification to notifications page
+                              io.emit(user.id + 'invoiceclient', {
+                                type: 'invoiceclient',
+                                profileImageURL: user.profileImageURL,
+                                username: user.username,
+                                user_id: user.id,
+                                client_name: client.name,
+                                amount: invoice.amountDue.amount,
+                                currenty: invoice.amountDue.currency
+                              });
+                            }
                           });
+                        } else {
+                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                         }
-                      });
-                    } else {
-                      rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-                    }
+                      } else {
+                        request = apiai.textRequest("invoice_name_not_found");
+                        request.on('response', function(response) {
+                          rtm.sendMessage(response, dm.id);
+                        });
+
+                        request.on('error', function(error) {
+                          rtm.sendMessage("Sorry, something went wrong", dm.id);
+                        });
+
+                      }
+                    });
                   } else {
-                    request = apiai.textRequest("invoice_name_not_found");
-                    request.on('response', function(response) {
-                      rtm.sendMessage(response, dm.id);
-                    });
-
-                    request.on('error', function(error) {
-                      rtm.sendMessage("Sorry, something went wrong", dm.id);
-                    });
-
+                    rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                   }
-                });
-              } else {
-                rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-              }
-            } else {
-              rtm.sendMessage("Sorry, you are not registered", dm.id);
-            }
-          });
-        } else
-        // Check the slack user confirm send invoice to client
-        if (response.result.metadata && response.result.metadata.intentName === 'Make Invoice Send Yes Confirm') {
-          // Send invoice url to slack
-          User.findUserBySlackId(message.user, '', function(user) {
-            if (user) {
-              var last_invoice = Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1);
-              var response_speech = response.result.fulfillment.speech;
-              response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
-              rtm.sendMessage(response_speech, dm.id);
+                } else {
+                  rtm.sendMessage("Sorry, you are not registered", dm.id);
+                }
+              });
+              break;
 
-              // Send transaction email to user
-              require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, user, 1);
-            }
-          });
-        } else
-        // Check the slack user confirm yes for create client
-        if (response.result.metadata && response.result.metadata.intentName === 'Create Client Yes Confirm') {
-          // Check if the slack user exists
-          User.findUserBySlackId(message.user, '', function(user) {
-            if (user) {
+            // Check the slack user confirm send invoice to client
+            case 'Make Invoice Send Yes Confirm':
+              // Send invoice url to slack
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+                  var last_invoice = Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1);
+                  var response_speech = response.result.fulfillment.speech;
+                  response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
+                  rtm.sendMessage(response_speech, dm.id);
 
-              // Check if the confirm parameters have business name and email
-              if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
+                  // Send transaction email to user
+                  require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, user, 1);
+                }
+              });
+              break;
 
-                // Create Client
-                Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
-                  console.log(client);
-                  if (client)
-                    rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
-                  else
-                    rtm.sendMessage("Sorry, Something went wrong.", dm.id);
-                });
-              }
-            } else {
-              rtm.sendMessage("Sorry, you are not registered", dm.id);
-            }
-          });
-        } else {
-          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+            // Check the slack user confirm yes for create client
+            case 'Create Client Yes Confirm':
+              // Check if the slack user exists
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+
+                  // Check if the confirm parameters have business name and email
+                  if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
+
+                    // Create Client
+                    Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
+                      console.log(client);
+                      if (client)
+                        rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
+                      else
+                        rtm.sendMessage("Sorry, Something went wrong.", dm.id);
+                    });
+                  }
+                } else {
+                  rtm.sendMessage("Sorry, you are not registered", dm.id);
+                }
+              });
+              break;
+            default:
+              rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+              break;
+          }
         }
       });
 
