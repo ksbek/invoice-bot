@@ -2,7 +2,7 @@
   <div class="container" ng-if="vm.authentication.user">
     <div class="settings-nav-wr">
       <ul>
-        <li ng-if="vm.authentication.user.stripe">
+        <li ng-if="!vm.authentication.user.integrations.stripe">
           <a href="#" class="stripe-connect" ng-click="vm.callOauthProvider('/api/auth/stripe')"><span>Connect with Stripe</span></a>
         </li>
         <li>
