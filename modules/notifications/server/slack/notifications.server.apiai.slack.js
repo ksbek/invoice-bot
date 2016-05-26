@@ -95,10 +95,13 @@ module.exports = function (token, config) {
                           "ts": Date.now
                         };
 
-                        var msgpack = {
+                        var data = {
+                          type: "message",
+                          text: response.result.fulfillment.speech,
+                          channel: dm.id,
                           attachments: [attachment]
                         };
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id, msgpack);
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                         // var web = new WebClient(token);
 
                         // web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
