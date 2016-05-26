@@ -10,6 +10,7 @@ module.exports = function (token, config) {
   var Invoice = mongoose.model('Invoice');
 
   var RtmClient = require('@slack/client').RtmClient;
+  var WebClient = require('@slack/client').WebClient;
   var MemoryDataStore = require('@slack/client').MemoryDataStore;
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
@@ -17,8 +18,6 @@ module.exports = function (token, config) {
   var server = (process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') + config.host + ':' + config.port;
 
   var io = GLOBAL.io;
-
-  var EmailTemplate = require('email-templates').EmailTemplate;
 
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
@@ -62,6 +61,72 @@ module.exports = function (token, config) {
 
         if (response.result.metadata) {
           switch (response.result.metadata.intentName) {
+
+            case 'Invoice Description':
+
+              // Check if the slack user exists
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+                  if (response.result.parameters.name !== '') {
+
+                    // Check if user have client
+                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                      if (client) {
+                        var attachment = {
+                          "fallback": "Required plain-text summary of the attachment.",
+                          "color": "#f1d4fc",
+                          "pretext": response.result.fulfillment.speech,
+                          "author_name": "Invoice: Intercom",
+                          "author_link": "http://flickr.com/bobby/",
+                          "author_icon": "http://flickr.com/icons/bobby.jpg",
+                          "title": "Invoice amount: $" + response.result.parameters.amount,
+                          "text": "Description: Designing new user experience interface",
+                          "fields": [
+                            {
+                              "title": "Nowdue allowance: 7 days",
+                              "value": "Send to: " + client.name + " at " + client.email,
+                              "short": false
+                            }
+                          ],
+                          "image_url": "http://my-website.com/path/to/image.jpg",
+                          "thumb_url": "http://example.com/path/to/thumb.png",
+                          "footer": "Nowdue AI",
+                          "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+                          "ts": Date.now
+                        };
+
+                        var msgpack = {
+                          attachments: [attachment]
+                        };
+
+                        var web = new WebClient(user.providerData.tokenSecret.access_token, {
+                          // Sets the level of logging we require
+                          logLevel: 'error',
+                          // Initialise a data store for our client, this will load additional helper functions for the storing and retrieval of data
+                          dataStore: new MemoryDataStore(),
+                          // Boolean indicating whether Slack should automatically reconnect after an error response
+                          autoReconnect: true,
+                          // Boolean indicating whether each message should be marked as read or not after it is processed
+                          autoMark: true
+                        });
+
+                        web.team.info(function teamInfoCb(err, info) {
+                          if (err) {
+                            console.log('Error:', err);
+                          } else {
+                            console.log('Team Info:', info);
+                          }
+                        });
+
+                        web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
+                          console.log(response);
+                        });
+                      }
+                    });
+                  }
+                }
+              });
+              break;
 
             // Check the slack user confirm yes for make invoice
             case 'Make Invoice Yes Confirm':

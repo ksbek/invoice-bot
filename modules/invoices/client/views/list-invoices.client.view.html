@@ -5,7 +5,6 @@
     <th>DATE ISSUED</th>
     <th>DATE  DUE</th>
     <th>AMOUNT DUE</th>
-    <th>RECEIVED</th>
     <th>STATUS</th>
     <th> </th>
   </tr>
@@ -20,9 +19,6 @@
     </td>
     <td>
       <span> {{invoice.amountDue.amount | currency:vm.currencySymbols[invoice.amountDue.currency]}}</span>
-    </td>
-    <td>
-      <span data-ng-bind="invoice.received"></span>
     </td>
     <td>
       <div class="select-wr" ng-class="{'color-purple': invoice.status == 'due', 'color-red': invoice.status == 'overdue', 'color-green': invoice.status == 'paid'}">
