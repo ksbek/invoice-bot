@@ -25,11 +25,11 @@
       <span data-ng-bind="invoice.received"></span>
     </td>
     <td>
-      <div class="select-wr">
+      <div class="select-wr" ng-class="{'color-purple': invoice.status == 'due', 'color-red': invoice.status == 'overdue', 'color-green': invoice.status == 'paid'}">
         <select data-ng-model="invoice.status">
-          <option value="due">Due</option>
-          <option value="paid">Paid</option>
-          <option value="overdue">OverDue</option>
+          <option value="due" class="color-purple">Nowdue</option>
+          <option value="paid" class="color-green">Paid</option>
+          <option value="overdue" class="color-red">OverDue</option>
         </select>
       </div>
     </td>
