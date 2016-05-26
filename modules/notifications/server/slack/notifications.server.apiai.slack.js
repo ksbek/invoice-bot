@@ -91,7 +91,8 @@ module.exports = function (token, config) {
                                 response_speech.replace('[CurrencySymbol]', '$');
                               }
 
-                              response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                              // response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                              response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id);
                               console.log(response_speech);
                               rtm.sendMessage(response_speech, dm.id);
                               console.log(invoice);
@@ -139,13 +140,17 @@ module.exports = function (token, config) {
               // Send invoice url to slack
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
-                  var last_invoice = Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1);
-                  var response_speech = response.result.fulfillment.speech;
-                  response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + last_invoice._id + '|Invoice ' + last_invoice.invoice + '>');
-                  rtm.sendMessage(response_speech, dm.id);
+                  Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                    if (invoice) {
+                      var response_speech = response.result.fulfillment.speech;
+                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
+                      response_speech = response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + invoice[0]._id);
+                      rtm.sendMessage(response_speech, dm.id);
 
-                  // Send transaction email to user
-                  require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, last_invoice, user, 1);
+                      // Send transaction email to user
+                      require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice[0], user, 1);
+                    }
+                  });
                 }
               });
               break;
@@ -162,10 +167,13 @@ module.exports = function (token, config) {
                     // Create Client
                     Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
                       console.log(client);
-                      if (client)
-                        rtm.sendMessage(response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>'), dm.id);
-                      else
+                      if (client) {
+                        // var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>');
+                        var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit');
+                        rtm.sendMessage(response_speech, dm.id);
+                      } else {
                         rtm.sendMessage("Sorry, Something went wrong.", dm.id);
+                      }
                     });
                   }
                 } else {
