@@ -101,12 +101,14 @@ module.exports = function (token, config) {
                           channel: dm.id,
                           attachments: [attachment]
                         };
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id, data);
                         // var web = new WebClient(token);
 
                         // web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
                         //  console.log(response);
                         // });
+                      } else {
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                       }
                     });
                   }
