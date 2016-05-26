@@ -10,8 +10,6 @@
   function InvoicesListController(InvoicesService, $uibModal) {
     var vm = this;
 
-    vm.invoices = InvoicesService.query();
-
     vm.currencySymbols = {
       USD: '$',
       AUD: 'A$',
@@ -19,6 +17,20 @@
       GBP: '£'
     };
 
+    vm.invoices = InvoicesService.query();
+
+    vm.invoices.$promise.then(function (invoices) {
+      vm.invoices = invoices;
+      for (var i = 0; i < vm.invoices.length; i ++) {
+        var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateDue).getTime()) / (1000 * 3600 * 24));
+        if (vm.invoices[i].status !== 'paid') {
+          if (dueDays < 7)
+            vm.invoices[i].status = "due";
+          else
+            vm.invoices[i].status = "overdue";
+        }
+      }
+    });
     /*
     function payInvoice(invoice) {
       var modalInstance = $uibModal.open({
