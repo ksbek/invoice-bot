@@ -1112,6 +1112,16 @@ body .check-wr input {
 	background: #cafce5;
 }
 
+.color-purple {
+	color: #b1b2dc;
+	background: #e7e8fd;
+}
+
+.color-red {
+	color: #cb7cb4;
+	background: #ffd6f3;
+}
+
 .color-light-blue {
 	color: #c4e2f9;
 	background: #ebf5fd;

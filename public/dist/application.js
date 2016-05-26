@@ -1206,13 +1206,13 @@
     vm.save = save;
     vm.invoice.dateDue = new Date(vm.invoice.dateDue);
     var today = new Date();
-    var timeDiff = Math.abs(vm.invoice.dateDue.getTime() - today.getTime());
-    vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    var timeDiff = today.getTime() - vm.invoice.dateDue.getTime();
+    vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
-      timeDiff = Math.ceil(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
+      timeDiff = Math.floor(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
       if (timeDiff < 1)
-        vm.invoice.paidDate = timeDiff + "Days ago";
+        vm.invoice.paidDate = timeDiff + "d ago";
       else
         vm.invoice.paidDate = "Today";
     }
