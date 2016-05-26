@@ -98,12 +98,12 @@ module.exports = function (token, config) {
                         var msgpack = {
                           attachments: [attachment]
                         };
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id, msgpack);
+                        // var web = new WebClient(token);
 
-                        var web = new WebClient(token);
-
-                        web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
-                          console.log(response);
-                        });
+                        // web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
+                        //  console.log(response);
+                        // });
                       }
                     });
                   }
