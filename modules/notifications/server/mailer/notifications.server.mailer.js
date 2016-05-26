@@ -19,7 +19,7 @@ module.exports = function (config, invoice, user, mail_type) {
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
       email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
-      email.addSubstitution("$&lt;%= invoice.amountDue.amount %&gt;", invoice.amountDue.amount);
+      email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", invoice.amountDue.amount);
       break;
     case 2:
       // Invoice Paid
@@ -29,7 +29,7 @@ module.exports = function (config, invoice, user, mail_type) {
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
       email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
-      email.addSubstitution("$&lt;%= invoice.amountDue.amount %&gt;", invoice.amountDue.amount);
+      email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", invoice.amountDue.amount);
   }
 
   sendgrid.send(email, function (err, json) {
