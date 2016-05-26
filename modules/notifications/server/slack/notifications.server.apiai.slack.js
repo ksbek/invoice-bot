@@ -99,24 +99,7 @@ module.exports = function (token, config) {
                           attachments: [attachment]
                         };
 
-                        var web = new WebClient(user.providerData.tokenSecret.access_token, {
-                          // Sets the level of logging we require
-                          logLevel: 'error',
-                          // Initialise a data store for our client, this will load additional helper functions for the storing and retrieval of data
-                          dataStore: new MemoryDataStore(),
-                          // Boolean indicating whether Slack should automatically reconnect after an error response
-                          autoReconnect: true,
-                          // Boolean indicating whether each message should be marked as read or not after it is processed
-                          autoMark: true
-                        });
-
-                        web.team.info(function teamInfoCb(err, info) {
-                          if (err) {
-                            console.log('Error:', err);
-                          } else {
-                            console.log('Team Info:', info);
-                          }
-                        });
+                        var web = new WebClient(token);
 
                         web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
                           console.log(response);
