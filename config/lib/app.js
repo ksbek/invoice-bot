@@ -64,7 +64,7 @@ module.exports.start = function start(callback) {
           if (user.providerData.tokenSecret.bot) {
             var token = user.providerData.tokenSecret.bot.bot_access_token;
             if (tokens.indexOf(token) === -1) {
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config);
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 0);
               tokens.push(token);
             }
             user.runningStatus = {};

@@ -1,7 +1,7 @@
 'use strict';
 
 // Create the notifications configuration
-module.exports = function (token, config) {
+module.exports = function (token, config, isFirst) {
   var apiai = require('apiai')(config.apiai.clientAccessToken);
 
   var mongoose = require('mongoose');
@@ -15,9 +15,9 @@ module.exports = function (token, config) {
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
-  var server = (process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') + config.host + ':' + config.port;
-
   var io = GLOBAL.io;
+
+  var web = new WebClient(token);
 
   var rtm = new RtmClient(token, {
     // Sets the level of logging we require
@@ -41,6 +41,20 @@ module.exports = function (token, config) {
 
     // Log the slack team name and the bot's name
     console.log('Connected to ' + team.name + ' as ' + user.name);
+
+    if (isFirst === 1) {
+      User.findUserBySlackId(rtm.activeUserId, '', function(user) {
+        if (user) {
+          var text = "Whoa!!! " + user.companyName + ", it's the future! How nice to finally meet you.";
+          text += "I'm ​*Jimmy*​ from Nowdue and I'm super excited about joining your team! I'm really good at creating invoices, tracking payments and chasing up late paying clients. I can also do other simple tasks, like adding customers to your client's list.";
+          text += "One of my goals is to help you get paid faster so I hope you don't mind that I take a modern approach to invoicing and like to do things a little different. You will notice Nowdue invoices are uniquely set, by default to be now due from the day it is sent! This means the invoice due date status will appear as now due for a period of ​_7 days_​ before becoming overdue. If you want to extend the due date allowance you can do so by changing the overdue date range from the ​*Invoicing Settings*​.";
+          text += "Now, this is super important. To get the absolute most out of Nowdue please connect your Stripe account so you can accept direct payments. Once that's done I'll securely link your invoices with your payment provider so clients to easily pay your invoices. I'll also track and report back to you when they do.";
+          text += "Please click to connect ​*Stripe*​";
+          text += "To get started, my two main commands are `add client` to log a client and `create invoice` to send an invoice but more on that later. I'm dying to drop you a bomb of ​*must-know*​ ​_knowledge_​. Is that cool with you?";
+          rtm.sendMessage(text);
+        }
+      });
+    }
   });
 
   rtm.on(RTM_EVENTS.MESSAGE, function (message) {
@@ -108,22 +122,18 @@ module.exports = function (token, config) {
                         var attachment = {
                           "fallback": "Required plain-text summary of the attachment.",
                           "color": "#f1d4fc",
-                          "author_name": "Invoice: Intercom",
-                          "author_link": "http://flickr.com/bobby/",
-                          "author_icon": "http://flickr.com/icons/bobby.jpg",
+                          "author_name": "Invoice: " + user.companyName,
                           "title": "Invoice amount: $" + response.result.parameters.amount,
-                          "text": "Description: Designing new user experience interface",
+                          "text": "Description: " + response.result.paramenters.description,
                           "fields": [
                             {
-                              "title": "Nowdue allowance: 7 days",
+                              "title": "Nowdue allowance: " + user.dueDateAllowance + " days",
                               "value": "Send to: " + client.name + " at " + client.email,
                               "short": false
                             }
                           ],
-                          "image_url": "http://my-website.com/path/to/image.jpg",
-                          "thumb_url": "http://example.com/path/to/thumb.png",
                           "footer": "Nowdue AI",
-                          "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+                          "footer_icon": "https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png",
                           "ts": new Date().getTime() / 1000
                         };
 
@@ -131,7 +141,6 @@ module.exports = function (token, config) {
                           attachments: [attachment]
                         };
                         // rtm.sendMessage(response.result.fulfillment.speech, dm.id, data);
-                        var web = new WebClient(token);
 
                         web.chat.postMessage(dm.id, response.result.fulfillment.speech, data, function(err, response) {
                           console.log(response);
@@ -187,7 +196,8 @@ module.exports = function (token, config) {
                               // response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
                               response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id);
                               console.log(response_speech);
-                              rtm.sendMessage(response_speech, dm.id);
+                              // rtm.sendMessage(response_speech, dm.id);
+                              web.chat.postMessage(dm.id, response_speech);
                               console.log(invoice);
                               invoice.client = client;
                               invoice.user = user;
@@ -241,8 +251,8 @@ module.exports = function (token, config) {
                       var response_speech = response.result.fulfillment.speech;
                       // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
                       response_speech = response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + invoice[0]._id);
-                      rtm.sendMessage(response_speech, dm.id);
-
+                      // rtm.sendMessage(response_speech, dm.id);
+                      web.chat.postMessage(dm.id, response_speech);
                       // Send transaction email to user
                       require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice[0], user, 1);
                     }
@@ -266,7 +276,8 @@ module.exports = function (token, config) {
                       if (client) {
                         // var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>');
                         var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit');
-                        rtm.sendMessage(response_speech, dm.id);
+                        // rtm.sendMessage(response_speech, dm.id);
+                        web.chat.postMessage(dm.id, response_speech);
                       } else {
                         rtm.sendMessage("Sorry, Something went wrong.", dm.id);
                       }

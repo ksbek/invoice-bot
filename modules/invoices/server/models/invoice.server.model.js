@@ -102,12 +102,13 @@ InvoiceSchema.statics.findUniqueInvoiceNumber = function (number, callback) {
 InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, params, callback) {
   var _this = this;
   var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
+  var dueDate = new Date(new Date().setTime(new Date().getTime() + (user.dueDateAllowance * 24 * 60 * 60 * 1000)));
   _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
     _this.create({
       user: user.id,
       client: client_id,
       amountDue: { amount: params.amount, currency: user.currency },
-      dateDue: calcDate(params.duedate),
+      dateDue: dueDate,
       description: params.description,
       invoice: number
     }, function (err, invoice) {
