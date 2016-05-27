@@ -196,7 +196,7 @@ exports.oauthCallback = function (strategy) {
 
       var token = user.providerData.tokenSecret.bot.bot_access_token;
       if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config, 1);
+        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config, 0);
       }
       async.waterfall([
         // Generate random token
