@@ -13,6 +13,16 @@
     vm.user = Authentication.user;
     vm.update = update;
 
+    vm.currencySymbols = {
+      'USD': '$',
+      'AUD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'CAD': '$'
+    };
+
+    if (!vm.user.currency || vm.user.currency === "")
+      vm.user.currency = 'USD';
     // Update a user profile
     function update() {
       vm.success = vm.error = null;
@@ -23,6 +33,7 @@
 
         vm.success = true;
         vm.user = Authentication.user = response;
+        $state.go('notifications');
       }, function (response) {
         vm.error = response.data.message;
       });

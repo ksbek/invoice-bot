@@ -27,20 +27,8 @@
         <label>Password Requirements</label>
         <uib-progressbar value="requirementsProgress" type="{{requirementsColor}}"><span style="color:white; white-space:nowrap;">{{requirementsProgress}}%</span></uib-progressbar>
       </div>
-      <div class="form-row form-group">
-        <span class="label-placeholder">Select a currency</span>
-        <div class="select-wr">
-          <select ng-model="vm.credentials.currency">
-            <option value="USD">$USD</option>
-            <option value="AUD">$AUD</option>
-            <option value="CAD">$CAD</option>
-            <option value="EUR">€EURO</option>
-            <option value="GBP">£UK</option>
-          </select>
-        </div>
-      </div>
       <div class="text-center form-row form-group">
-        <button type="submit">Save</button>
+        <button type="submit">Next</button>
       </div>
       <div ng-show="vm.error" class="text-center text-danger">
         <strong ng-bind="vm.error"></strong>

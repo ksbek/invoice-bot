@@ -5,11 +5,11 @@
   .module('invoices')
   .controller('InvoicesListController', InvoicesListController);
 
-  InvoicesListController.$inject = ['InvoicesService', '$uibModal'];
+  InvoicesListController.$inject = ['InvoicesService', '$uibModal', 'Authentication'];
 
-  function InvoicesListController(InvoicesService, $uibModal) {
+  function InvoicesListController(InvoicesService, $uibModal, Authentication) {
     var vm = this;
-
+    vm.authentication = Authentication;
     vm.currencySymbols = {
       USD: '$',
       AUD: 'A$',
@@ -24,7 +24,7 @@
       for (var i = 0; i < vm.invoices.length; i ++) {
         var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateDue).getTime()) / (1000 * 3600 * 24));
         if (vm.invoices[i].status !== 'paid') {
-          if (dueDays < 7)
+          if (dueDays < vm.authentication.user.dueDateAllowance || vm.authentication.user.dueDateAllowance === 0)
             vm.invoices[i].status = "due";
           else
             vm.invoices[i].status = "overdue";

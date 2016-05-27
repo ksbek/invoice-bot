@@ -9,11 +9,11 @@
 		<span class="invoice-data-item color-purple">Nowdue</span>
 		<h4>Yesterday</h4>
 	</div>
-	<div class="alignright text-right" ng-if="vm.invoice.status != 'paid' && vm.invoice.dueDays > 1 && vm.invoice.dueDays < 7">
+	<div class="alignright text-right" ng-if="vm.invoice.status != 'paid' && vm.invoice.dueDays > 1 && vm.invoice.dueDays < vm.authentication.user.dueDateAllowance">
 		<span class="invoice-data-item color-purple">Nowdue</span>
 		<h4>{{vm.invoice.dueDays}}d ago</h4>
 	</div>
-	<div class="alignright text-right" ng-if="vm.invoice.status != 'paid' && vm.invoice.dueDays >= 7 && vm.invoice.dueDays < 31">
+	<div class="alignright text-right" ng-if="vm.invoice.status != 'paid' && vm.invoice.dueDays > 0 && vm.invoice.dueDays >= vm.authentication.user.dueDateAllowance && vm.invoice.dueDays < 31">
 		<span class="invoice-data-item color-red">Overdue</span>
 		<h4>{{vm.invoice.dueDays}}d ago</h4>
 	</div>

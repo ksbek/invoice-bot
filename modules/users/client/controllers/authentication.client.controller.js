@@ -16,9 +16,17 @@
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
     vm.credentials = {};
+    var token = $location.search().token;
+    if (token) {
+      $http.post('/api/auth/getUserInfoFromToken', { token: token }).success(function (response) {
+        vm.credentials = response;
+        vm.credentials.token = token;
+      }).error(function (response) {
+        vm.credentials.token = token;
+        vm.error = response.message;
+      });
+    }
 
-    vm.credentials._id = $location.search().id;
-    vm.credentials.currency = 'usd';
     // Get an eventual error defined in the URL query string:
     vm.error = $location.search().err;
 
@@ -41,7 +49,7 @@
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'root.home', $state.previous.params);
+        $state.go($state.previous.state.name || 'settings.invoice', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });

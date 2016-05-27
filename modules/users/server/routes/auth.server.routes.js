@@ -60,4 +60,6 @@ module.exports = function (app) {
 
   app.route('/api/auth/stripe').get(users.authStripe);
   app.route('/api/auth/stripe/callback').get(users.stripeCallback);
+
+  app.route('/api/auth/getUserInfoFromToken').post(users.getUserInfoFromToken);
 };

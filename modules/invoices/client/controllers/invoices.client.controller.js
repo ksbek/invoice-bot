@@ -34,6 +34,10 @@
         vm.invoice.paidDate = "Today";
     }
 
+    if (vm.invoice.amountDue.currency === undefined || vm.invoice.amountDue.currency === "")
+      vm.invoice.amountDue.currency = vm.authentication.user.currency || 'USD';
+    if (vm.invoice.tax === undefined || vm.invoice.tax === 0)
+      vm.invoice.tax = vm.authentication.user.tax || 0;
     vm.currencySymbols = {
       'USD': '$USD',
       'AUD': '$AUD',

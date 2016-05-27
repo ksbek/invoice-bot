@@ -61,6 +61,39 @@ module.exports = function (token, config) {
 
         if (response.result.metadata) {
           switch (response.result.metadata.intentName) {
+            case 'Invoice Name':
+            case 'Make Invoice with Name':
+
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+                  if (response.result.parameters.name !== '') {
+
+                    // Check if user have client
+                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                      if (client) {
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                      } else {
+                        var context = {
+                          "name": "invoice-name-not-found"
+                        };
+                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
+                        newrequest.on('response', function(response) {
+                          // rtm.sendMessage("asDF", dm.id);
+                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        });
+
+                        newrequest.on('error', function(error) {
+                          console.log(error);
+                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
+                        });
+
+                        newrequest.end();
+                      }
+                    });
+                  }
+                }
+              });
+              break;
 
             case 'Invoice Description':
 
@@ -75,7 +108,6 @@ module.exports = function (token, config) {
                         var attachment = {
                           "fallback": "Required plain-text summary of the attachment.",
                           "color": "#f1d4fc",
-                          "pretext": response.result.fulfillment.speech,
                           "author_name": "Invoice: Intercom",
                           "author_link": "http://flickr.com/bobby/",
                           "author_icon": "http://flickr.com/icons/bobby.jpg",
@@ -92,23 +124,31 @@ module.exports = function (token, config) {
                           "thumb_url": "http://example.com/path/to/thumb.png",
                           "footer": "Nowdue AI",
                           "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
-                          "ts": Date.now
+                          "ts": new Date().getTime() / 1000
                         };
 
                         var data = {
-                          type: "message",
-                          text: response.result.fulfillment.speech,
-                          channel: dm.id,
                           attachments: [attachment]
                         };
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id, data);
-                        // var web = new WebClient(token);
+                        // rtm.sendMessage(response.result.fulfillment.speech, dm.id, data);
+                        var web = new WebClient(token);
 
-                        // web.chat.postMessage(dm.id, response.result.fulfillment.speech, msgpack, function(err, response) {
-                        //  console.log(response);
-                        // });
+                        web.chat.postMessage(dm.id, response.result.fulfillment.speech, data, function(err, response) {
+                          console.log(response);
+                        });
                       } else {
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        var context = {
+                          "name": "invoice-name-not-found"
+                        };
+                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
+                        newrequest.on('response', function(response) {
+                          rtm.sendMessage(response, dm.id);
+                        });
+
+                        newrequest.on('error', function(error) {
+                          console.log(error);
+                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
+                        });
                       }
                     });
                   }
@@ -168,15 +208,18 @@ module.exports = function (token, config) {
                           rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                         }
                       } else {
-                        request = apiai.textRequest("invoice_name_not_found");
-                        request.on('response', function(response) {
+                        var context = {
+                          "name": "invoice-name-not-found"
+                        };
+                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
+                        newrequest.on('response', function(response) {
                           rtm.sendMessage(response, dm.id);
                         });
 
-                        request.on('error', function(error) {
-                          rtm.sendMessage("Sorry, something went wrong", dm.id);
+                        newrequest.on('error', function(error) {
+                          console.log(error);
+                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
                         });
-
                       }
                     });
                   } else {

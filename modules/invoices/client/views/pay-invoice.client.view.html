@@ -5,7 +5,7 @@
   <form id="payment-form" ng-submit="vm.pay(vm.form.invoiceForm.$valid)" novalidate autocomplete="off">
     <div class="text-danger">
       <strong ng-if="vm.errorCode != 'not-strpe-connected'" ng-bind="vm.error"></strong>
-      <strong ng-if="vm.errorCode == 'not-strpe-connected'">Before you can send invoices please connect or create a <a href="#" ng-click="vm.callOauthProvider('/api/auth/stripe')">Stripe</a> account to accept payments.</strong>
+      <strong ng-if="vm.errorCode == 'not-strpe-connected'">Stripe not connected</strong>
     </div>
      <div class="form-row">
       <label>

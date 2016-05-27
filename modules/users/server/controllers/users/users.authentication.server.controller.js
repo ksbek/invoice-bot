@@ -11,7 +11,9 @@ var path = require('path'),
   mongoose = require('mongoose'),
   passport = require('passport'),
   request = require('request'),
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  async = require('async'),
+  crypto = require('crypto');
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = [
@@ -28,8 +30,17 @@ exports.signup = function (req, res) {
 
   // Init user and add missing fields
   var user;
-  if (req.body._id) {
-    User.findOne({ _id: req.body._id }, function (err, existing_user) {
+  if (req.body.token) {
+    User.findOne({
+      accountSetupToken: req.body.token,
+      accountSetupTokenExpires: {
+        $gt: Date.now()
+      }
+    }, function (err, existing_user) {
+      if (err || !existing_user) {
+        return res.status(400).send({ 'message': 'Token is incorrect.' });
+      }
+
       user = _.extend(existing_user, req.body);
       user.updated = Date.now();
       // Then save the user
@@ -193,8 +204,32 @@ exports.oauthCallback = function (strategy) {
       if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
         require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config);
       }
+      async.waterfall([
+        // Generate random token
+        function (done) {
+          crypto.randomBytes(20, function (err, buffer) {
+            var token = buffer.toString('hex');
+            done(err, token);
+          });
+        },
+        // Save token to user
+        function (token, done) {
+          user.accountSetupToken = token;
+          user.accountSetupTokenExpires = Date.now() + 3600000; // 1 hour
 
-      return res.redirect('/authentication/account-setup?id=' + user.id);
+          user.save(function (err) {
+            done(err, token, user);
+          });
+        },
+        function (token, user, done) {
+          return res.redirect('/authentication/account-setup?token=' + token);
+        }
+      ], function (err) {
+        if (err) {
+          return next(err);
+        }
+      });
+
       /*
       req.login(user, function (err) {
         if (err) {
@@ -332,6 +367,23 @@ exports.removeOAuthProvider = function (req, res, next) {
         }
       });
     }
+  });
+};
+
+/**
+ * Account setup GET from token
+ */
+exports.getUserInfoFromToken = function (req, res) {
+  User.findOne({
+    accountSetupToken: req.body.token,
+    accountSetupTokenExpires: {
+      $gt: Date.now()
+    }
+  }, function (err, user) {
+    if (err || !user) {
+      return res.status(400).send({ 'message': 'Token is incorrect.' });
+    }
+    return res.json(user);
   });
 };
 

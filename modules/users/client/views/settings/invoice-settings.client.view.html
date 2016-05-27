@@ -1,27 +1,70 @@
 <div class="form-wr">
-	<form name="vm.userForm" class="signin" novalidate autocomplete="off">
+	<form name="vm.userForm" class="signin" ng-submit="vm.update()" novalidate autocomplete="off">
 		<div class="form-row invoice-settings">
 			<div class="row">
-				<div class="col-xs-7">
-					<p>Include taxes on invoice</p>
+				<div class="col-xs-8">
+					<p>VAT or GST</p>
 				</div>				
-				<div class="col-xs-3">
-					<div class="tax-input text-center">
-						<button ng-click="vm.user.invoiceSettings.editTax = !vm.user.invoiceSettings.editTax; !vm.user.invoiceSettings.editTax && vm.update()" >Tax</button>
-						<input type="number" ng-model="vm.user.invoiceSettings.tax" ng-disabled="!vm.user.invoiceSettings.editTax" ng-blur="vm.user.invoiceSettings.editTax = !vm.user.invoiceSettings.editTax;vm.update()" placeholder="0" min="0" max="100">
+				<div class="col-xs-2">
+					<p class="tax-input text-right">
+						<button>Tax</button>
+					</p>
+				</div>
+				<div class="col-xs-2">
+					<div class="tax-input text-left">
+						<span>+</span>
+						<input type="number" ng-model="vm.user.tax" placeholder="0" min="0" max="100">
 						<span>%</span>
 					</div>
 				</div>
-				<div class="col-xs-2 text-left">
-					<label class="check-wr">
-						<input type="checkbox" ng-model="vm.user.invoiceSettings.includeTaxesOnInvoice" ng-click="vm.update()">
-						<span>
-							<span class="ch-disabled-text">Disabled</span>
-							<span class="ch-checked-text">Active</span>
-						</span>
-					</label>
+			</div>
+
+		</div>
+		<div class="form-row invoice-settings">
+			<div class="row">
+				<div class="col-xs-8">
+					<p>Currency</p>
+				</div>				
+				<div class="col-xs-2">
+					<p class="tax-input text-right">
+						<button>{{vm.currencySymbols[vm.user.currency]}}</button>
+					</p>
+				</div>
+				<div class="col-xs-2">
+					<div class="tax-input text-left">
+						<div class="select-wr">
+						<select ng-model="vm.user.currency">
+							<option value="USD">USD</option>
+							<option value="AUD">AUD</option>
+							<option value="CAD">CAD</option>
+							<option value="EUR">EURO</option>
+							<option value="GBP">UK</option>
+						</select>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+		<div class="form-row invoice-settings">
+			<div class="row">
+				<div class="col-xs-8">
+					<p>Due date allowance</p>
+				</div>
+				<div class="col-xs-2">
+					<p class="tax-input text-right">
+						<button>Due</button>
+					</p>
+				</div>
+				<div class="col-xs-2">
+					<div class="tax-input text-left">
+						<input type="number" ng-model="vm.user.dueDateAllowance" placeholder="0">
+						<span>days</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="text-center form-row form-group">
+        	<button type="submit">Save</button>
+      </div>
 	</form>
 </div><!-- END of .form-wr -->

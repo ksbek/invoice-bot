@@ -1217,6 +1217,10 @@
         vm.invoice.paidDate = "Today";
     }
 
+    if (vm.invoice.amountDue.currency === undefined || vm.invoice.amountDue.currency === "")
+      vm.invoice.amountDue.currency = vm.authentication.user.currency || 'USD';
+    if (vm.invoice.tax === undefined || vm.invoice.tax === 0)
+      vm.invoice.tax = vm.authentication.user.tax || 0;
     vm.currencySymbols = {
       'USD': '$USD',
       'AUD': '$AUD',
@@ -1333,11 +1337,11 @@
   .module('invoices')
   .controller('InvoicesListController', InvoicesListController);
 
-  InvoicesListController.$inject = ['InvoicesService', '$uibModal'];
+  InvoicesListController.$inject = ['InvoicesService', '$uibModal', 'Authentication'];
 
-  function InvoicesListController(InvoicesService, $uibModal) {
+  function InvoicesListController(InvoicesService, $uibModal, Authentication) {
     var vm = this;
-
+    vm.authentication = Authentication;
     vm.currencySymbols = {
       USD: '$',
       AUD: 'A$',
@@ -1352,7 +1356,7 @@
       for (var i = 0; i < vm.invoices.length; i ++) {
         var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateDue).getTime()) / (1000 * 3600 * 24));
         if (vm.invoices[i].status !== 'paid') {
-          if (dueDays < 7)
+          if (dueDays < vm.authentication.user.dueDateAllowance || vm.authentication.user.dueDateAllowance === 0)
             vm.invoices[i].status = "due";
           else
             vm.invoices[i].status = "overdue";
@@ -1951,9 +1955,17 @@ angular
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
     vm.credentials = {};
+    var token = $location.search().token;
+    if (token) {
+      $http.post('/api/auth/getUserInfoFromToken', { token: token }).success(function (response) {
+        vm.credentials = response;
+        vm.credentials.token = token;
+      }).error(function (response) {
+        vm.credentials.token = token;
+        vm.error = response.message;
+      });
+    }
 
-    vm.credentials._id = $location.search().id;
-    vm.credentials.currency = 'usd';
     // Get an eventual error defined in the URL query string:
     vm.error = $location.search().err;
 
@@ -1976,7 +1988,7 @@ angular
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'root.home', $state.previous.params);
+        $state.go($state.previous.state.name || 'settings.invoice', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });
@@ -2315,6 +2327,16 @@ angular
     vm.user = Authentication.user;
     vm.update = update;
 
+    vm.currencySymbols = {
+      'USD': '$',
+      'AUD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'CAD': '$'
+    };
+
+    if (!vm.user.currency || vm.user.currency === "")
+      vm.user.currency = 'USD';
     // Update a user profile
     function update() {
       vm.success = vm.error = null;
@@ -2325,6 +2347,7 @@ angular
 
         vm.success = true;
         vm.user = Authentication.user = response;
+        $state.go('notifications');
       }, function (response) {
         vm.error = response.data.message;
       });

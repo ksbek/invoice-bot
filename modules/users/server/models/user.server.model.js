@@ -59,6 +59,16 @@ var UserSchema = new Schema({
     default: 'USD',
     trim: true
   },
+  tax: {
+    type: Number,
+    default: 0.0,
+    trim: true
+  },
+  dueDateAllowance: {
+    type: Number,
+    default: 7,
+    trim: true
+  },
   address: {
     type: String,
     trim: true
@@ -68,16 +78,6 @@ var UserSchema = new Schema({
     trim: true
   },
   conversationSettings: {
-  },
-  invoiceSettings: {
-    includeTaxesOnInvoice: {
-      type: Boolean,
-      trim: true
-    },
-    tax: {
-      type: Number,
-      default: 0.0
-    }
   },
   plan: {
     type: String,
@@ -143,6 +143,13 @@ var UserSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  /* Account Setup Token */
+  accountSetupToken: {
+    type: String
+  },
+  accountSetupTokenExpires: {
+    type: Date
   },
   /* For reset password */
   resetPasswordToken: {
