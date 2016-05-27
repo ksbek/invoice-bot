@@ -41,7 +41,6 @@ exports.signup = function (req, res) {
         return res.status(400).send({ 'message': 'Token is incorrect.' });
       }
       user = _.extend(existing_user, req.body);
-      user.password = req.body.password;
       user.updated = Date.now();
       // Then save the user
       user.save(function (err) {
@@ -188,7 +187,7 @@ exports.oauthCallback = function (strategy) {
       // return res.redirect("/authentication/account-setup?slackUserName=" + user.providerData.user + "&companyName=" + user.providerData.team + "&id=" + user.id + "&email=" + user.email + "&currency=" + user.currency);
 
       if (err) {
-        return res.redirect('/authentication/signin?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
+        return res.redirect('/?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
       }
       if (!user) {
         return res.redirect('/authentication/signin');
@@ -196,7 +195,7 @@ exports.oauthCallback = function (strategy) {
 
       var token = user.providerData.tokenSecret.bot.bot_access_token;
       if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-        require(require('path').resolve("modules/notifications/server/slackclient/notifications.server.slackclient.config.js"))(token, config, 0);
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 0);
       }
       async.waterfall([
         // Generate random token
@@ -377,6 +376,7 @@ exports.getUserInfoFromToken = function (req, res) {
     if (err || !user) {
       return res.status(400).send({ 'message': 'Token is incorrect.' });
     }
+    user.password = "";
     return res.json(user);
   });
 };
