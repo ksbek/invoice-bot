@@ -8,15 +8,15 @@
   // Setting HTML5 Location Mode
   angular
     .module(app.applicationModuleName)
-    .config(bootstrapConfig)
-    .run(function ($rootScope, $localForage) {
+    .config(bootstrapConfig);
+    // .run(function ($rootScope, $localForage) {
       // $localForage.getItem('messages').then(function(data) {
       // if (!data)
       //    $rootScope.messages = new Array();
       //  else
       //    $rootScope.messages = JSON.parse(data);
       // });
-    });
+    // });
 
   function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
