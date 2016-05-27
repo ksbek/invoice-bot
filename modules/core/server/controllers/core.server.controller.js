@@ -10,6 +10,7 @@ exports.renderIndex = function (req, res) {
   var safeUserObject = null;
   if (req.user) {
     safeUserObject = {
+      id: req.user.id,
       companyName: req.user.companyName,
       businessNumber: req.user.businessNumber,
       clientsName: req.user.clientsName,

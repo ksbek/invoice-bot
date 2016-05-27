@@ -6,9 +6,9 @@
     .module('notifications')
     .controller('NotificationsController', NotificationsController);
 
-  NotificationsController.$inject = ['$scope', '$state', '$http', '$window', 'Authentication', 'NotificationsService'];
+  NotificationsController.$inject = ['$scope', '$state', '$rootScope', '$http', '$window', 'Authentication', 'NotificationsService'];
 
-  function NotificationsController($scope, $state, $http, $window, Authentication, NotificationsService) {
+  function NotificationsController($scope, $state, $rootScope, $http, $window, Authentication, NotificationsService) {
     var vm = this;
 
     vm.messages = [];

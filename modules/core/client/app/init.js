@@ -8,15 +8,27 @@
   // Setting HTML5 Location Mode
   angular
     .module(app.applicationModuleName)
-    .config(bootstrapConfig);
+    .config(bootstrapConfig)
+    .run(function ($rootScope, $localForage) {
+      $localForage.getItem('messages').then(function(data) {
+        if (!data)
+          $rootScope.messages = new Array();
+        else
+          $rootScope.messages = JSON.parse(data);
+      });
+    });
 
-  function bootstrapConfig($locationProvider, $httpProvider) {
+  function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
 
     $httpProvider.interceptors.push('authInterceptor');
+
+    $localForageProvider.config({
+      name: 'Nowdue'
+    });
   }
 
-  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider'];
+  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider', '$localForageProvider'];
 
   // Then define the init function for starting up the application
   angular.element(document).ready(init);

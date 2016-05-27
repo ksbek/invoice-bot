@@ -5,9 +5,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window'];
+  HeaderController.$inject = ['$scope', '$state', '$rootScope', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window', '$localForage'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket, $window) {
+  function HeaderController($scope, $state, $rootScope, Authentication, Menus, $uibModal, Socket, $window, $localForage) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -17,6 +17,8 @@
     vm.createClient = createClient;
     vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+    init();
 
     vm.callOauthProvider = callOauthProvider;
     // OAuth provider request
@@ -50,8 +52,13 @@
       }
 
       // Add an event listener to the 'notificiationMessage' event
-      Socket.on(Authentication.user.id + 'invoiceclient', function (message) {
-        vm.messages.unshift(message);
+      Socket.on(Authentication.user.id + 'notification', function (message) {
+        $rootScope.messages.push(message.notification);
+        $localForage.setItem('messages', JSON.stringify($rootScope.messages)).then(function() {
+          $localForage.getItem('messages').then(function(data) {
+            $rootScope.messages = JSON.parse(data);
+          });
+        });
       });
     }
 

@@ -203,15 +203,7 @@ module.exports = function (token, config, isFirst) {
                               invoice.user = user;
 
                               // Send invoice created notification to notifications page
-                              io.emit(user.id + 'invoiceclient', {
-                                type: 'invoiceclient',
-                                profileImageURL: user.profileImageURL,
-                                username: user.username,
-                                user_id: user.id,
-                                client_name: client.name,
-                                amount: invoice.amountDue.amount,
-                                currenty: invoice.amountDue.currency
-                              });
+                              require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, invoice, user, 1);
                             }
                           });
                         } else {

@@ -5,7 +5,7 @@
 
   var service = {
     applicationModuleName: applicationModuleName,
-    applicationModuleVendorDependencies: ['ngResource', 'ngAnimate', 'ngMessages', 'ui.router', 'ui.bootstrap', 'angularFileUpload'],
+    applicationModuleVendorDependencies: ['ngResource', 'ngAnimate', 'ngMessages', 'ui.router', 'ui.bootstrap', 'angularFileUpload', 'LocalForageModule'],
     registerModule: registerModule
   };
 
@@ -31,15 +31,27 @@
   // Setting HTML5 Location Mode
   angular
     .module(app.applicationModuleName)
-    .config(bootstrapConfig);
+    .config(bootstrapConfig)
+    .run(["$rootScope", "$localForage", function ($rootScope, $localForage) {
+      $localForage.getItem('messages').then(function(data) {
+        if (!data)
+          $rootScope.messages = new Array();
+        else
+          $rootScope.messages = JSON.parse(data);
+      });
+    }]);
 
-  function bootstrapConfig($locationProvider, $httpProvider) {
+  function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
 
     $httpProvider.interceptors.push('authInterceptor');
+
+    $localForageProvider.config({
+      name: 'Nowdue'
+    });
   }
 
-  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider'];
+  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider', '$localForageProvider'];
 
   // Then define the init function for starting up the application
   angular.element(document).ready(init);
@@ -566,9 +578,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window'];
+  HeaderController.$inject = ['$scope', '$state', '$rootScope', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window', '$localForage'];
 
-  function HeaderController($scope, $state, Authentication, Menus, $uibModal, Socket, $window) {
+  function HeaderController($scope, $state, $rootScope, Authentication, Menus, $uibModal, Socket, $window, $localForage) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];
@@ -578,6 +590,8 @@
     vm.createClient = createClient;
     vm.state = $state;
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+    init();
 
     vm.callOauthProvider = callOauthProvider;
     // OAuth provider request
@@ -611,8 +625,13 @@
       }
 
       // Add an event listener to the 'notificiationMessage' event
-      Socket.on(Authentication.user.id + 'invoiceclient', function (message) {
-        vm.messages.unshift(message);
+      Socket.on(Authentication.user.id + 'notification', function (message) {
+        $rootScope.messages.push(message.notification);
+        $localForage.setItem('messages', JSON.stringify($rootScope.messages)).then(function() {
+          $localForage.getItem('messages').then(function(data) {
+            $rootScope.messages = JSON.parse(data);
+          });
+        });
       });
     }
 
@@ -1467,9 +1486,9 @@
     .module('notifications')
     .controller('NotificationsController', NotificationsController);
 
-  NotificationsController.$inject = ['$scope', '$state', '$http', '$window', 'Authentication', 'NotificationsService'];
+  NotificationsController.$inject = ['$scope', '$state', '$rootScope', '$http', '$window', 'Authentication', 'NotificationsService'];
 
-  function NotificationsController($scope, $state, $http, $window, Authentication, NotificationsService) {
+  function NotificationsController($scope, $state, $rootScope, $http, $window, Authentication, NotificationsService) {
     var vm = this;
 
     vm.messages = [];

@@ -17,6 +17,11 @@ module.exports = function (config, invoice, user, type) {
   notification.type = type;
 
   switch (type) {
+    case 1:
+      notification.title = 'A successful request to issue an invoice to a client';
+      notification.description = 'Created ' + '<a href="' + config.baseUrl + '/invoices/' + invoice.id + '">INV' + invoice.invoice + '</a>' + ' for ' + '<a href="' + config.baseUrl + '/clients/' + invoice.client.id + '">' + invoice.client.companyName + '</a>' + ' Amount $' + invoice.amountDue.amount;
+      slackDescription = 'Created ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> for ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' Amount $' + invoice.amountDue.amount;
+      break;
     case 8:
       notification.title = 'Successful integration with Stripe';
       notification.description = 'Succefully connected Stripe.';
@@ -24,12 +29,17 @@ module.exports = function (config, invoice, user, type) {
       break;
     case 19:
       notification.title = 'Paid';
-      notification.description = '<a href="' + config.baseUrl + '/clients/' + invoice.client.id + '">' + invoice.client.companyName + '</a> Paid Invoice' + '<a href="' + config.baseUrl + '/invoices/' + invoice.id + '">' + invoice.invoice + '</a>' + ', Amount $' + invoice.amountDue.amount;
-      slackDescription = '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '> Paid Invoice' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|' + invoice.invoice + '>' + ', Amount $' + invoice.amountDue.amount;
+      notification.description = 'Totally my fav client. ' + '<a href="' + config.baseUrl + '/clients/' + invoice.client.id + '">' + invoice.client.companyName + '</a> paid ' + '<a href="' + config.baseUrl + '/invoices/' + invoice.id + '">INV' + invoice.invoice + '</a>' + ' $' + invoice.amountDue.amount;
+      slackDescription = 'Totally my fav client. ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '> paid ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' $' + invoice.amountDue.amount;
       break;
   }
 
-  notification.save(function(err) {
+  notification.save(function(err, notification) {
+    io.emit(user.id + 'notification', {
+      type: 'notificationCreated',
+      notification: notification
+    });
+
     if (webhookUri) {
       slack.setWebhook(webhookUri);
       slack.webhook({
