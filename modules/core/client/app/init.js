@@ -10,12 +10,12 @@
     .module(app.applicationModuleName)
     .config(bootstrapConfig)
     .run(function ($rootScope, $localForage) {
-      $localForage.getItem('messages').then(function(data) {
-        if (!data)
-          $rootScope.messages = new Array();
-        else
-          $rootScope.messages = JSON.parse(data);
-      });
+      // $localForage.getItem('messages').then(function(data) {
+      // if (!data)
+      //    $rootScope.messages = new Array();
+      //  else
+      //    $rootScope.messages = JSON.parse(data);
+      // });
     });
 
   function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {

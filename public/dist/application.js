@@ -33,12 +33,12 @@
     .module(app.applicationModuleName)
     .config(bootstrapConfig)
     .run(["$rootScope", "$localForage", function ($rootScope, $localForage) {
-      $localForage.getItem('messages').then(function(data) {
-        if (!data)
-          $rootScope.messages = new Array();
-        else
-          $rootScope.messages = JSON.parse(data);
-      });
+      // $localForage.getItem('messages').then(function(data) {
+      // if (!data)
+      //    $rootScope.messages = new Array();
+      //  else
+      //    $rootScope.messages = JSON.parse(data);
+      // });
     }]);
 
   function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {
@@ -626,12 +626,12 @@
 
       // Add an event listener to the 'notificiationMessage' event
       Socket.on(Authentication.user.id + 'notification', function (message) {
-        $rootScope.messages.push(message.notification);
-        $localForage.setItem('messages', JSON.stringify($rootScope.messages)).then(function() {
-          $localForage.getItem('messages').then(function(data) {
-            $rootScope.messages = JSON.parse(data);
-          });
-        });
+        // $rootScope.messages.push(message.notification);
+        // $localForage.setItem('messages', JSON.stringify($rootScope.messages)).then(function() {
+        //  $localForage.getItem('messages').then(function(data) {
+        //    $rootScope.messages = JSON.parse(data);
+        //  });
+        // });
       });
     }
 
