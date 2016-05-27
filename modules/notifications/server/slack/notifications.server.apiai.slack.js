@@ -124,7 +124,7 @@ module.exports = function (token, config, isFirst) {
                           "color": "#f1d4fc",
                           "author_name": "Invoice: " + user.companyName,
                           "title": "Invoice amount: $" + response.result.parameters.amount,
-                          "text": "Description: " + response.result.paramenters.description,
+                          "text": "Description: " + response.result.parameters.description,
                           "fields": [
                             {
                               "title": "Nowdue allowance: " + user.dueDateAllowance + " days",
@@ -194,7 +194,7 @@ module.exports = function (token, config, isFirst) {
                               }
 
                               // response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
-                              response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id);
+                              response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
                               console.log(response_speech);
                               // rtm.sendMessage(response_speech, dm.id);
                               web.chat.postMessage(dm.id, response_speech);
@@ -250,7 +250,7 @@ module.exports = function (token, config, isFirst) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
                       // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
-                      response_speech = response_speech.replace('PAGE LINK', config.baseUrl + '/invoices/' + invoice[0]._id);
+                      response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
                       // rtm.sendMessage(response_speech, dm.id);
                       web.chat.postMessage(dm.id, response_speech);
                       // Send transaction email to user
@@ -275,7 +275,7 @@ module.exports = function (token, config, isFirst) {
                       console.log(client);
                       if (client) {
                         // var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>');
-                        var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', config.baseUrl + '/clients/' + client._id + '/edit');
+                        var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');
                         // rtm.sendMessage(response_speech, dm.id);
                         web.chat.postMessage(dm.id, response_speech);
                       } else {
