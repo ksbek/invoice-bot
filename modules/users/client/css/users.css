@@ -40,7 +40,7 @@
   text-align: right;
   padding-right: 0;
 }
-.invoice-settings .tax-input button {
+.invoice-settings p span{
   display: inline;
   overflow: hidden;
   vertical-align: middle;
@@ -52,9 +52,10 @@
   color: #b3d2cb;
   height: 20px;
   width: 50px;
-  float: none;
+  float: right;
   font-size: 10px;
   border: 0;
+  text-align: center;
 }
 .invoice-settings .tax-input button:focus {
   border: none;

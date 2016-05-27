@@ -107,7 +107,7 @@
         url: '/authentication',
         views: {
           'header': {
-            templateUrl: 'modules/users/client/views/authentication/header.client.view.html'
+            templateUrl: 'modules/core/client/views/header.client.view.html'
           }
         },
         controller: 'AuthenticationController',

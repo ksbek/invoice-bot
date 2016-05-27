@@ -29,6 +29,9 @@
   <!-- home header -->
   <div class="container" ng-if="!vm.authentication.user && vm.state.current.name.indexOf('authentication') == -1">
     <a href="/" class="logo"><img src="/modules/core/client/img/logo.png" alt=""></a>
+    <div class="logining-links-wr">
+      <a href="#" ui-sref="authentication.signin">SIGN IN</a>
+    </div>
   </div><!-- END of .container -->
 
   <!-- account-setup header -->
@@ -36,16 +39,15 @@
     <h4>Account set up</h4>
     <div class="logining-links-wr">
       <span>or </span>
-      <a href="#" ui-sref="authentication.signin">Login</a>
+      <a href="#" ui-sref="authentication.signin">SIGN IN</a>
     </div>
   </div><!-- END of .container -->
 
   <!-- login header -->
   <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.signin'">
-    <h4>Login</h4>
+    <h4>SIGN IN</h4>
     <div class="logining-links-wr">
-      <span>or </span>
-      <a href="#" ui-sref="authentication.accountSetup">Sign up</a>
+      <a href="#" ui-sref="root.home">Back to home</a>
     </div>
   </div><!-- END of .container -->
 </div><!-- END of div -->
