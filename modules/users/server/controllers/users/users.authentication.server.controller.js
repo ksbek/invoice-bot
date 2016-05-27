@@ -40,8 +40,8 @@ exports.signup = function (req, res) {
       if (err || !existing_user) {
         return res.status(400).send({ 'message': 'Token is incorrect.' });
       }
-
       user = _.extend(existing_user, req.body);
+      user.password = req.body.password;
       user.updated = Date.now();
       // Then save the user
       user.save(function (err) {

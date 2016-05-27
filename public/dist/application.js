@@ -2128,6 +2128,7 @@ angular
         $scope.$broadcast('show-errors-reset', 'vm.passwordForm');
         vm.success = true;
         vm.passwordDetails = null;
+        $scope.$close();
       }).error(function (response) {
         vm.error = response.message;
       });
