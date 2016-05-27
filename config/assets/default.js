@@ -18,9 +18,7 @@ module.exports = {
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
         'public/lib/angular-file-upload/dist/angular-file-upload.js',
-        'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
-        'public/lib/localforage/dist/localforage.js',
-        'public/lib/angular-localforage/dist/angular-localForage.js'
+        'public/lib/owasp-password-strength-test/owasp-password-strength-test.js'
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
