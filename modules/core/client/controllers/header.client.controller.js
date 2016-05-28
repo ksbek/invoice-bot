@@ -5,9 +5,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', '$rootScope', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window', '$localForage'];
+  HeaderController.$inject = ['$scope', '$state', '$rootScope', 'Authentication', 'Menus', '$uibModal', 'Socket', '$window'];
 
-  function HeaderController($scope, $state, $rootScope, Authentication, Menus, $uibModal, Socket, $window, $localForage) {
+  function HeaderController($scope, $state, $rootScope, Authentication, Menus, $uibModal, Socket, $window) {
     var vm = this;
 
     vm.accountMenu = Menus.getMenu('account').items[0];

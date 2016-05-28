@@ -18,17 +18,13 @@
       // });
     // });
 
-  function bootstrapConfig($locationProvider, $httpProvider, $localForageProvider) {
+  function bootstrapConfig($locationProvider, $httpProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
 
     $httpProvider.interceptors.push('authInterceptor');
-
-    $localForageProvider.config({
-      name: 'Nowdue'
-    });
   }
 
-  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider', '$localForageProvider'];
+  bootstrapConfig.$inject = ['$locationProvider', '$httpProvider'];
 
   // Then define the init function for starting up the application
   angular.element(document).ready(init);
