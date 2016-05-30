@@ -99,7 +99,7 @@ ClientSchema.statics.createClientFromSlackBot = function (user_id, params, callb
   _this.create({
     user: user_id,
     companyName: params.name,
-    name: params.contactsName,
+    name: params.contactname,
     email: params.email
   }, function (err, client) {
     if (!err) {
