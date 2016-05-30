@@ -178,10 +178,10 @@ module.exports = function (token, config, isFirst) {
                     Client.findClientByName(response.result.parameters.name, user.id, function(client) {
                       if (client) {
 
-                        // Check if the confirm paramenters have amount
+                        // Check if the confirm parameters have amount
                         if (response.result.parameters.amount !== '') {
 
-                          // Create invoice with confirm paramenters
+                          // Create invoice with confirm parameters
                           Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {
                             if (invoice) {
                               var response_speech = response.result.fulfillment.speech;
@@ -238,15 +238,15 @@ module.exports = function (token, config, isFirst) {
               // Send invoice url to slack
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
-                  Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                  Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
-                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
-                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
+                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
                       // rtm.sendMessage(response_speech, dm.id);
                       web.chat.postMessage(dm.id, response_speech);
                       // Send transaction email to user
-                      require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice[0], user, 1);
+                      require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 1);
                     }
                   });
                 }
@@ -258,15 +258,51 @@ module.exports = function (token, config, isFirst) {
               // Send invoice url to slack
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
-                  Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                  Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
-                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
-                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
+                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
+                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
                       // rtm.sendMessage(response_speech, dm.id);
                       web.chat.postMessage(dm.id, response_speech);
                     }
                   });
+                }
+              });
+              break;
+
+            case 'Create Client Email':
+            case 'Create Client Email Same Name':
+              // Check if the slack user exists
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+
+                  // Check if the confirm parameters have business name and email
+                  if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
+                    var attachment = {
+                      "fallback": "Required plain-text summary of the attachment.",
+                      "color": "#f1d4fc",
+                      "author_name": "Client: " + response.result.parameters.name,
+                      "title": "Contact: $" + response.result.parameters.contactname,
+                      "text": "Description: " + response.result.parameters.description,
+                      "fields": [
+                        {
+                          "value": "Email address: " + response.result.parameters.email,
+                          "short": false
+                        }
+                      ],
+                      "footer": "Nowdue AI",
+                      "footer_icon": "https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png",
+                      "ts": new Date().getTime() / 1000
+                    };
+
+                    var data = {
+                      attachments: [attachment]
+                    };
+                    web.chat.postMessage(dm.id, response.result.fulfillment.speech, data);
+                  }
+                } else {
+                  rtm.sendMessage("Sorry, you are not registered", dm.id);
                 }
               });
               break;

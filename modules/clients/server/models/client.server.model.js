@@ -76,7 +76,7 @@ var ClientSchema = new Schema({
  */
 ClientSchema.statics.findClientByName = function (name, user_id, callback) {
   this.findOne({
-    $or: [{ name: name }, { companyName: name }],
+    $or: [{ "name": { $regex: new RegExp(["^", name, "$"].join(""), "i") } }, { "companyName": { $regex: new RegExp(["^", name, "$"].join(""), "i") } }],
     user: user_id
   }, function (err, client) {
     if (!err) {
