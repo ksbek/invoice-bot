@@ -75,8 +75,7 @@ module.exports = function (token, config, isFirst) {
 
         if (response.result.metadata) {
           switch (response.result.metadata.intentName) {
-            case 'Invoice Name':
-            case 'Make Invoice with Name':
+            case 'Invoice Lookup':
 
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
