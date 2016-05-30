@@ -80,7 +80,7 @@ module.exports = function (token, config, isFirst) {
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
                   if (response.result.parameters.name !== '') {
-                    rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                    // rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
                     Client.findClientByName(response.result.parameters.name, user.id, function(client) {
                       var context = {};
