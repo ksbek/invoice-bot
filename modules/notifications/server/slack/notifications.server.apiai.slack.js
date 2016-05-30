@@ -80,28 +80,31 @@ module.exports = function (token, config, isFirst) {
               User.findUserBySlackId(message.user, '', function(user) {
                 if (user) {
                   if (response.result.parameters.name !== '') {
-
+                    rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
                     Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                      var context = {};
                       if (client) {
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        context = {
+                          "name": "invoice-name"
+                        };
                       } else {
-                        var context = {
+                        context = {
                           "name": "invoice-name-not-found"
                         };
-                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
-                        newrequest.on('response', function(response) {
-                          // rtm.sendMessage("asDF", dm.id);
-                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-                        });
-
-                        newrequest.on('error', function(error) {
-                          console.log(error);
-                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
-                        });
-
-                        newrequest.end();
                       }
+                      var newrequest = apiai.textRequest(response.result.parameters.name, { 'contexts': [context] });
+                      newrequest.on('response', function(response) {
+                        // rtm.sendMessage("asDF", dm.id);
+                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                      });
+
+                      newrequest.on('error', function(error) {
+                        console.log(error);
+                        // rtm.sendMessage("Sorry, something went wrong", dm.id);
+                      });
+
+                      newrequest.end();
                     });
                   }
                 }
