@@ -93,9 +93,10 @@ module.exports = function (token, config, isFirst) {
                           "name": "invoice-name-not-found"
                         };
                       }
-                      var newrequest = apiai.textRequest(response.result.parameters.name, { 'contexts': [context] });
+                      var newrequest = apiai.textRequest(response.result.fulfillment.speech, { 'contexts': [context] });
                       newrequest.on('response', function(response) {
                         // rtm.sendMessage("asDF", dm.id);
+                        console.log(response);
                         rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                       });
 
