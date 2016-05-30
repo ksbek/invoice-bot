@@ -122,7 +122,7 @@ module.exports = function (token, config, isFirst) {
                         var attachment = {
                           "fallback": "Required plain-text summary of the attachment.",
                           "color": "#f1d4fc",
-                          "author_name": "Invoice: " + user.companyName,
+                          "author_name": "Invoice: " + client.companyName,
                           "title": "Invoice amount: $" + response.result.parameters.amount,
                           "text": "Description: " + response.result.parameters.description,
                           "fields": [
@@ -242,11 +242,29 @@ module.exports = function (token, config, isFirst) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
                       // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
-                      response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
+                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
                       // rtm.sendMessage(response_speech, dm.id);
                       web.chat.postMessage(dm.id, response_speech);
                       // Send transaction email to user
                       require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice[0], user, 1);
+                    }
+                  });
+                }
+              });
+              break;
+
+            // Check the slack user confirm no send invoice to client
+            case 'Make Invoice Send No Confirm':
+              // Send invoice url to slack
+              User.findUserBySlackId(message.user, '', function(user) {
+                if (user) {
+                  Invoice.find({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                    if (invoice) {
+                      var response_speech = response.result.fulfillment.speech;
+                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|Invoice ' + invoice[0].invoice + '>');
+                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice[0]._id + '|INV' + invoice[0].invoice + '>');
+                      // rtm.sendMessage(response_speech, dm.id);
+                      web.chat.postMessage(dm.id, response_speech);
                     }
                   });
                 }
