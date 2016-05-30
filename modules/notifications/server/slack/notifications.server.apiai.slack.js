@@ -283,8 +283,7 @@ module.exports = function (token, config, isFirst) {
                       "fallback": "Required plain-text summary of the attachment.",
                       "color": "#f1d4fc",
                       "author_name": "Client: " + response.result.parameters.name,
-                      "title": "Contact: $" + response.result.parameters.contactname,
-                      "text": "Description: " + response.result.parameters.description,
+                      "title": "Contact: " + response.result.parameters.contactname,
                       "fields": [
                         {
                           "value": "Email address: " + response.result.parameters.email,
