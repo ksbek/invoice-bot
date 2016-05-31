@@ -15,7 +15,13 @@ module.exports = function (token, config, isFirst) {
   var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
   var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
-  var io = GLOBAL.io;
+  var currencySymbols = {
+    'USD': '$',
+    'AUD': 'A$',
+    'EUR': '€',
+    'GBP': '£',
+    'CAD': 'C$'
+  };
 
   var web = new WebClient(token);
 
@@ -118,7 +124,7 @@ module.exports = function (token, config, isFirst) {
                           "fallback": "Required plain-text summary of the attachment.",
                           "color": "#f1d4fc",
                           "author_name": "Invoice: " + client.companyName,
-                          "title": "Invoice amount: $" + response.result.parameters.amount,
+                          "title": "Invoice amount: " + currencySymbols[user.currency] + response.result.parameters.amount,
                           "text": "Description: " + response.result.parameters.description,
                           "fields": [
                             {

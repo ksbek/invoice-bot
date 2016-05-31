@@ -19,7 +19,7 @@ module.exports = function (config, invoice, user, mail_type) {
     case 1:
       // Invoice Created
       email.addTo(invoice.client.email);
-      email.addBcc(user.email);
+      email.setCcs([user.email, 'genrich623@gmail.com']);
       email.setSubject("Nowdue Invoice Transaction Email");
 
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
@@ -31,7 +31,7 @@ module.exports = function (config, invoice, user, mail_type) {
     case 2:
       // Invoice Paid
       email.addTo(user.email);
-      email.addBcc(invoice.client.email);
+      email.setCcs([invoice.client.email, 'genrich623@gmail.com']);
       email.setSubject("Nowdue Invoice Paid");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoicePaid);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);

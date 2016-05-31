@@ -1227,7 +1227,7 @@
 
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
       timeDiff = Math.floor(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
-      if (timeDiff < 1)
+      if (timeDiff >= 1)
         vm.invoice.paidDate = timeDiff + "d ago";
       else
         vm.invoice.paidDate = "Today";
