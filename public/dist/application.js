@@ -1301,7 +1301,13 @@
           vm.pay = pay;
           vm.details = {};
           vm.errorCode = "";
-
+          vm.currencySymbols = {
+            'USD': '$',
+            'AUD': 'A$',
+            'EUR': '€',
+            'GBP': '£',
+            'CAD': 'C$'
+          };
           vm.callOauthProvider = callOauthProvider;
           // OAuth provider request
           function callOauthProvider(url) {
