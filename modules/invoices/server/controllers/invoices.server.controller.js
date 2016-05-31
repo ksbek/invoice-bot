@@ -151,6 +151,11 @@ exports.paynow = function(req, res) {
                   res.send(invoice);
                 }
               });
+            }).catch(function(err) {
+              // Deal with an error
+              return res.status(400).send({
+                message: err.message
+              });
             });
           }).catch(function(err) {
             // Deal with an error
