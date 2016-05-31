@@ -1,10 +1,10 @@
 <div class="fixed-btm-wr fixed-btm-invoice">
   <div class="container">
     <h4 class="color-light-gray">From</h4>
-    <h4>{{vm.authentication.user.companyName}}</h4>
+    <h4>{{vm.invoice.user.companyName}}</h4>
     <div class="tooltip-wr">
       <img src="modules/core/client/img/i-info.png" alt="">
-      <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.authentication.user.companyName}} business number {{vm.authentication.user.businessNumber}}.</div>
+      <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.invoice.user.companyName}}.</div>
     </div>
     <span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
     <div class="invoice-submenu">

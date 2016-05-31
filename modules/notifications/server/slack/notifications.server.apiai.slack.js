@@ -220,7 +220,7 @@ module.exports = function (token, config, isFirst) {
 
                 // Check the slack user confirm send invoice to client
                 case 'Make Invoice Send Yes Confirm':
-                  Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                  Invoice.findOne({ user: user.id }).populate('user', 'companyName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
                       // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
@@ -236,7 +236,7 @@ module.exports = function (token, config, isFirst) {
                 // Check the slack user confirm no send invoice to client
                 case 'Make Invoice Send No Confirm':
                   // Send invoice url to slack
-                  Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
+                  Invoice.findOne({ user: user.id }).populate('user', 'companyName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
                       // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');

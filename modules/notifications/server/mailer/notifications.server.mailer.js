@@ -6,13 +6,13 @@ module.exports = function (config, invoice, user, mail_type) {
   var email = new sendgrid.Email();
 
   email.html = '<h1>Hi There</h1>';
-  email.setFrom("chris@adsmetric.com");
+  email.setFrom(config.sendgrid.from);
   email.addFilter('templates', 'enable', 1);
-
   switch (mail_type) {
     case 1:
       // Invoice Created
       email.addTo(invoice.client.email);
+      email.addCc(user.email);
       email.setSubject("Nowdue Invoice Transaction Email");
 
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
@@ -24,6 +24,7 @@ module.exports = function (config, invoice, user, mail_type) {
     case 2:
       // Invoice Paid
       email.addTo(user.email);
+      email.addCc(invoice.client.email);
       email.setSubject("Nowdue Invoice Paid");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoicePaid);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);

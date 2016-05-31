@@ -53,7 +53,8 @@ module.exports = {
     templates: {
       invoicePaid: '16f65b4c-b93f-44a0-aae9-6a3ddae3ced4',
       invoiceCreated: '4d01add6-571a-4772-801b-47dfaccb84e8'
-    }
+    },
+    from: 'jimmy@nowdue.ai'
   },
   slack: {
     clientID: process.env.SLACK_ID || '36622746837.37185968785',
