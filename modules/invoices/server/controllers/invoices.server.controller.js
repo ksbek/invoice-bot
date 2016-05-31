@@ -6,6 +6,7 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Invoice = mongoose.model('Invoice'),
+  User = mongoose.model('User'),
   Notification = mongoose.model('Notification'),
   config = require(path.resolve('./config/config')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
@@ -98,68 +99,70 @@ exports.list = function(req, res) {
  * Pay Invoice
  */
 exports.paynow = function(req, res) {
-  if (!req.user.stripe)
-    return res.status(400).send({
-      message: '',
-      code: 'not-stripe-connected'
-    });
+  User.findById(req.invoice.user.id, function (err, user) {
+    if (user) {
+      var stripe = require('stripe')(user.stripe.access_token);
 
-  var stripe = require('stripe')(req.user.stripe.access_token);
+      if (req.invoice.status === 'paid')
+        return res.status(400).send({
+          message: "This invoice is already paid"
+        });
 
-  if (req.invoice.status === 'paid')
-    return res.status(400).send({
-      message: "This invoice is already paid"
-    });
+      stripe.tokens.create({
+        card: req.body.params.card
+      }, function(err, token) {
+        // asynchronously called
+        if (err) {
+          return res.status(400).send({
+            message: err.message
+          });
+        } else {
+          var application_fee = Math.ceil(req.invoice.amountDue.amount * 100 * config.stripe.application_fee);
 
-  stripe.tokens.create({
-    card: req.body.params.card
-  }, function(err, token) {
-    // asynchronously called
-    if (err) {
-      return res.status(400).send({
-        message: err.message
+          stripe.customers.create({
+            email: req.invoice.client.email,
+            source: token.id
+          }).then(function(customer) {
+            stripe.charges.create({
+              amount: req.invoice.amountDue.amount * 100,
+              currency: req.invoice.amountDue.currency,
+              customer: customer.id,
+              application_fee: application_fee,
+              receipt_email: req.invoice.client.email
+            }).then(function(charge) {
+              var invoice = req.invoice;
+              invoice.status = 'paid';
+              invoice.received = 1;
+              invoice.datePaid = new Date();
+              invoice = _.extend(invoice, req.body);
+
+              invoice.save(function(err) {
+                if (err) {
+                  return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                  });
+                } else {
+                  // Send Notificatin to notification page and slack
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, user, 19);
+
+                  // Send paid invoice email to user
+                  require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, 2);
+
+                  res.send(invoice);
+                }
+              });
+            });
+          }).catch(function(err) {
+            // Deal with an error
+            return res.status(400).send({
+              message: err.message
+            });
+          });
+        }
       });
     } else {
-      var application_fee = Math.ceil(req.invoice.amountDue.amount * 100 * config.stripe.application_fee);
-
-      stripe.customers.create({
-        email: req.invoice.client.email,
-        source: token.id
-      }).then(function(customer) {
-        stripe.charges.create({
-          amount: req.invoice.amountDue.amount * 100,
-          currency: req.invoice.amountDue.currency,
-          customer: customer.id,
-          application_fee: application_fee,
-          receipt_email: req.invoice.client.email
-        }).then(function(charge) {
-          var invoice = req.invoice;
-          invoice.status = 'paid';
-          invoice.received = 1;
-          invoice.datePaid = new Date();
-          invoice = _.extend(invoice, req.body);
-
-          invoice.save(function(err) {
-            if (err) {
-              return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-              });
-            } else {
-              // Send Notificatin to notification page and slack
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, req.user, 19);
-
-              // Send paid invoice email to user
-              require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, req.user, 2);
-
-              res.send(invoice);
-            }
-          });
-        });
-      }).catch(function(err) {
-        // Deal with an error
-        return res.status(400).send({
-          message: err.message
-        });
+      return res.status(400).send({
+        message: err
       });
     }
   });

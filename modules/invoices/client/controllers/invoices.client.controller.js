@@ -21,9 +21,10 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
-    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
+    vm.invoice.dateIssued = new Date(vm.invoice.dateIssued);
     var today = new Date();
-    var timeDiff = today.getTime() - vm.invoice.dateDue.getTime();
+    var timeDiff = today.getTime() - vm.invoice.dateIssued.getTime();
+    vm.dueDateAllowance = new Date(vm.invoice.dateIssued).getTime() - vm.invoice.dateIssued.getTime();
     vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
@@ -39,11 +40,11 @@
     if (vm.invoice.tax === undefined || vm.invoice.tax === 0)
       vm.invoice.tax = vm.authentication.user.tax || 0;
     vm.currencySymbols = {
-      'USD': '$USD',
-      'AUD': '$AUD',
-      'EUR': '€EURO',
-      'GBP': '£UK',
-      'CAD': '$CAD'
+      'USD': '$',
+      'AUD': 'A$',
+      'EUR': '€',
+      'GBP': '£',
+      'CAD': 'C$'
     };
 
     vm.payNow = payNow;

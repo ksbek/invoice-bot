@@ -1,8 +1,10 @@
 .invoice-modal .modal-dialog .exp-date input {
 	width: auto;
-	min-width: auto;
+	min-width: 45px;
 }
-
+.invoice-modal .modal-dialog .exp-date span {
+  margin-right: 5px;
+}
 .invoice-modal .modal-dialog .btn-close {
 	right: 20px;
 	top: 10px;
