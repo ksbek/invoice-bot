@@ -6,10 +6,10 @@ module.exports = function (config, invoice, user, mail_type) {
   var email = new sendgrid.Email();
   var currencySymbols = {
     'USD': '$',
-    'AUD': 'A$',
+    'AUD': '$',
     'EUR': '€',
     'GBP': '£',
-    'CAD': 'C$'
+    'CAD': '$'
   };
 
   email.html = '<h1>Hi There</h1>';
