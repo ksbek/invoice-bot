@@ -66,19 +66,17 @@ module.exports = function (token, config, isFirst) {
 
     var dm = rtm.dataStore.getDMByName(user.name);
     if (dm) {
-      rtm.sendTyping(dm.id);
+      // rtm.sendTyping(dm.id);
+      User.findUserBySlackId(message.user, '', function(user) {
+        if (user) {
+          var request = apiai.textRequest(message.text);
 
-      var request = apiai.textRequest(message.text);
+          request.on('response', function(response) {
+            console.log(response);
 
-      request.on('response', function(response) {
-        console.log(response);
-
-        if (response.result.metadata) {
-          switch (response.result.metadata.intentName) {
-            case 'Invoice Lookup':
-
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
+            if (response.result.metadata) {
+              switch (response.result.metadata.intentName) {
+                case 'Invoice Lookup':
                   if (response.result.parameters.name !== '') {
                     // rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
@@ -108,15 +106,9 @@ module.exports = function (token, config, isFirst) {
                       newrequest.end();
                     });
                   }
-                }
-              });
-              break;
+                  break;
 
-            case 'Invoice Description':
-
-              // Check if the slack user exists
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
+                case 'Invoice Description':
                   if (response.result.parameters.name !== '') {
 
                     // Check if user have client
@@ -164,16 +156,10 @@ module.exports = function (token, config, isFirst) {
                       }
                     });
                   }
-                }
-              });
-              break;
+                  break;
 
-            // Check the slack user confirm yes for make invoice
-            case 'Make Invoice Yes Confirm':
-              // Check if the slack user exists
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
-
+                // Check the slack user confirm yes for make invoice
+                case 'Make Invoice Yes Confirm':
                   // Check if the confirm parameters have client name
                   if (response.result.parameters.name !== '') {
 
@@ -230,17 +216,10 @@ module.exports = function (token, config, isFirst) {
                   } else {
                     rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                   }
-                } else {
-                  rtm.sendMessage("Sorry, you are not registered", dm.id);
-                }
-              });
-              break;
+                  break;
 
-            // Check the slack user confirm send invoice to client
-            case 'Make Invoice Send Yes Confirm':
-              // Send invoice url to slack
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
+                // Check the slack user confirm send invoice to client
+                case 'Make Invoice Send Yes Confirm':
                   Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
@@ -252,15 +231,11 @@ module.exports = function (token, config, isFirst) {
                       require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 1);
                     }
                   });
-                }
-              });
-              break;
+                  break;
 
-            // Check the slack user confirm no send invoice to client
-            case 'Make Invoice Send No Confirm':
-              // Send invoice url to slack
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
+                // Check the slack user confirm no send invoice to client
+                case 'Make Invoice Send No Confirm':
+                  // Send invoice url to slack
                   Invoice.findOne({ user: user.id }).populate('user', 'displayName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
                     if (invoice) {
                       var response_speech = response.result.fulfillment.speech;
@@ -270,16 +245,10 @@ module.exports = function (token, config, isFirst) {
                       web.chat.postMessage(dm.id, response_speech);
                     }
                   });
-                }
-              });
-              break;
+                  break;
 
-            case 'Create Client Email':
-            case 'Create Client Email Same Name':
-              // Check if the slack user exists
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
-
+                case 'Create Client Email':
+                case 'Create Client Email Same Name':
                   // Check if the confirm parameters have business name and email
                   if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
                     var attachment = {
@@ -303,18 +272,10 @@ module.exports = function (token, config, isFirst) {
                     };
                     web.chat.postMessage(dm.id, response.result.fulfillment.speech, data);
                   }
-                } else {
-                  rtm.sendMessage("Sorry, you are not registered", dm.id);
-                }
-              });
-              break;
+                  break;
 
-            // Check the slack user confirm yes for create client
-            case 'Create Client Yes Confirm':
-              // Check if the slack user exists
-              User.findUserBySlackId(message.user, '', function(user) {
-                if (user) {
-
+                // Check the slack user confirm yes for create client
+                case 'Create Client Yes Confirm':
                   // Check if the confirm parameters have business name and email
                   if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
 
@@ -331,23 +292,23 @@ module.exports = function (token, config, isFirst) {
                       }
                     });
                   }
-                } else {
-                  rtm.sendMessage("Sorry, you are not registered", dm.id);
-                }
-              });
-              break;
-            default:
-              rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-              break;
-          }
+                  break;
+                default:
+                  rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                  break;
+              }
+            }
+          });
+
+          request.on('error', function(error) {
+            rtm.sendMessage('Oops! Something went wrong', dm.id);
+          });
+
+          request.end();
+        } else {
+          rtm.sendMessage("Oh, before we start. It looks like you haven't finished setting up your account. Please go to Nowdue and complete your registration. Also, don't forget connect your Stripe account once registration is complete", dm.id);
         }
       });
-
-      request.on('error', function(error) {
-        rtm.sendMessage('Oops! Something went wrong', dm.id);
-      });
-
-      request.end();
     }
   });
 };
