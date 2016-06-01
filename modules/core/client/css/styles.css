@@ -1019,7 +1019,7 @@ body .check-wr input {
 	width: 90%;
 }
 
-.notifications-form-wr form a {
+.notifications-form-wr form input[type="submit"] {
 	float: right;
 	margin: 7px 0 0 -30px;
 	padding: 0 0 0;

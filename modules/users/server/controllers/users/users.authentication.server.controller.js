@@ -50,6 +50,13 @@ exports.signup = function (req, res) {
           });
         } else {
 
+          var token = user.providerData.tokenSecret.bot.bot_access_token;
+          // if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
+          if (!user.runningStatus.isRunning) {
+            user.runningStatus.isRunning = true;
+            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 1, user);
+          }
+
           var postData = [{
             "email": user.email,
             "currency": user.currency,
@@ -73,7 +80,6 @@ exports.signup = function (req, res) {
               }
             }
           });
-
           req.login(user, function (err) {
             if (err) {
               res.status(400).send(err);
@@ -193,10 +199,6 @@ exports.oauthCallback = function (strategy) {
         return res.redirect('/authentication/signin');
       }
 
-      var token = user.providerData.tokenSecret.bot.bot_access_token;
-      if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 0);
-      }
       async.waterfall([
         // Generate random token
         function (done) {
@@ -279,10 +281,13 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
 
             User.findUserBySlackId('', providerUserProfile.providerData.team_id, function (existing_user) {
               if (existing_user) {
-                user.runningStatus = {};
-                user.runningStatus.isRunning = true;
-                user.runningStatus.token = user.providerData.tokenSecret.bot.bot_access_token;
+                // user.runningStatus = {};
+                // user.runningStatus.isRunning = true;
+                // user.runningStatus.token = user.providerData.tokenSecret.bot.bot_access_token;
               }
+
+              user.runningStatus = {};
+              user.runningStatus.isRunning = false;
               // And save the user
               user.save(function (err) {
                 return done(err, user);
