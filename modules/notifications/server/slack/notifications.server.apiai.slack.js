@@ -51,11 +51,11 @@ module.exports = function (token, config, isFirst, new_user) {
     if (isFirst === 1) {
       if (new_user) {
         var dm = rtm.dataStore.getDMByName(new_user.providerData.user);
-        var text = "Whoa!!! " + new_user.companyName + ", it's the future! How nice to finally meet you.";
-        text += "I'm ​*Jimmy*​ from Nowdue and I'm super excited about joining your team! I'm really good at creating invoices, tracking payments and chasing up late paying clients. I can also do other simple tasks, like adding customers to your client's list.";
-        text += "One of my goals is to help you get paid faster so I hope you don't mind that I take a modern approach to invoicing and like to do things a little different. You will notice Nowdue invoices are uniquely set, by default to be now due from the day it is sent! This means the invoice due date status will appear as now due for a period of ​_7 days_​ before becoming overdue. If you want to extend the due date allowance you can do so by changing the overdue date range from the ​*Invoicing Settings*​.";
-        text += "Now, this is super important. To get the absolute most out of Nowdue please connect your Stripe account so you can accept direct payments. Once that's done I'll securely link your invoices with your payment provider so clients to easily pay your invoices. I'll also track and report back to you when they do.";
-        text += "Please click to connect ​*Stripe*​";
+        var text = "Whoa!!! " + new_user.companyName + ", it's the future! How nice to finally meet you.\n\n";
+        text += "I'm ​*Jimmy*​ from Nowdue and I'm super excited about joining your team! I'm really good at creating invoices, tracking payments and chasing up late paying clients. I can also do other simple tasks, like adding customers to your client's list.\n\n";
+        text += "One of my goals is to help you get paid faster so I hope you don't mind that I take a modern approach to invoicing and like to do things a little different. You will notice Nowdue invoices are uniquely set, by default to be now due from the day it is sent! This means the invoice due date status will appear as now due for a period of ​_7 days_​ before becoming overdue. If you want to extend the due date allowance you can do so by changing the overdue date range from the ​*Invoicing Settings*​.\n\n";
+        text += "Now, this is super important. To get the absolute most out of Nowdue please connect your Stripe account so you can accept direct payments. Once that's done I'll securely link your invoices with your payment provider so clients to easily pay your invoices. I'll also track and report back to you when they do.\n\n";
+        text += "Please click to connect ​*Stripe*​\n\n";
         text += "To get started, my two main commands are `add client` to log a client and `create invoice` to send an invoice but more on that later. I'm dying to drop you a bomb of ​*must-know*​ ​_knowledge_​. Is that cool with you?";
         rtm.sendMessage(text, dm.id);
         isFirst = 0;
