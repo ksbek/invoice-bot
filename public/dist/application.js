@@ -1529,7 +1529,7 @@
       vm.messages.push(message);
       $http.post('/api/notifications/apiai', message).success(function (response) {
         // If successful we assign the response to the global user model
-        vm.messages[vm.messages.length - 1].responseText = response.result.fulfillment.speech;
+        $window.open(Authentication.user.providerData.url + 'messages/@nowdue/', '_blank');
         vm.isAnswered = true;
 
       }).error(function (response) {
