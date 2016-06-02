@@ -7,7 +7,7 @@
     <th>NOW DUE</th>
     <th>PAID</th>
   </tr>
-  <tr data-ng-repeat="client in vm.clients">
+  <tr data-ng-repeat="client in vm.clients | orderBy:'created':true">
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a></td>
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.name"></a></td>
     <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.email"></a></td>

@@ -8,7 +8,7 @@
     <th>STATUS</th>
     <th> </th>
   </tr>
-  <tr data-ng-repeat="invoice in vm.invoices">
+  <tr data-ng-repeat="invoice in vm.invoices | orderBy:'dateIssued':true">
     <td><a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
     <td><a data-ng-bind="invoice.invoice"></a></td>
     <td>
