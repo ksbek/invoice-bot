@@ -5,9 +5,9 @@
         <li ng-if="!vm.authentication.user.integrations.stripe">
           <a href="#" class="stripe-connect" ng-click="vm.callOauthProvider('/api/auth/stripe')"><span>Connect with Stripe</span></a>
         </li>
-        <li>
+        <li ng-click="vm.dropdownStyle={display: 'block', top: '100%', opacity: '1'};vm.dropdownOpen = !vm.dropdownOpen">
           <a href="javascript:void(0);"><img src="/modules/core/client/img/i-plus.png" alt=""></a>
-          <ul>
+          <ul ng-style="vm.dropdownOpen && vm.dropdownStyle">
             <li><a href="javascript:void(0);" ng-click="vm.createClient()">Add client</a></li>
             <li><a href="{{vm.authentication.user.providerData.url}}messages/@nowdue/" target="_blank">Create invoice</a></li>
             <li><a href="{{vm.authentication.user.providerData.url}}messages/@nowdue/" target="_blank">Ask something</a></li>

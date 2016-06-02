@@ -357,13 +357,6 @@ header h4 {
 	-o-transition: all .3s ease;
 	transition: all .3s ease;
 }
-
-.settings-nav-wr li:hover ul {
-	display: block;
-	top: 100%;
-	opacity: 1;
-}
-
 .settings-nav-wr li ul li {
 	display: block;
 }
