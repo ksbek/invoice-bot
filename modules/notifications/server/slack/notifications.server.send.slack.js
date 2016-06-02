@@ -11,6 +11,15 @@ module.exports = function (config, invoice, user, type) {
   var slack = new Slack();
 
   var slackDescription = "";
+
+  var currencySymbols = {
+    'USD': '$',
+    'AUD': 'A$',
+    'EUR': '€',
+    'GBP': '£',
+    'CAD': 'C$'
+  };
+
   // Make notification
   var notification = new Notification();
   notification.user = user;
@@ -20,7 +29,7 @@ module.exports = function (config, invoice, user, type) {
     case 1:
       notification.title = 'A successful request to issue an invoice to a client';
       notification.description = 'Created ' + '<a href="' + config.baseUrl + '/invoices/' + invoice.id + '">INV' + invoice.invoice + '</a>' + ' for ' + '<a href="' + config.baseUrl + '/clients/' + invoice.client.id + '">' + invoice.client.companyName + '</a>' + ' Amount $' + invoice.amountDue.amount;
-      slackDescription = 'Created ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> for ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' Amount $' + invoice.amountDue.amount;
+      slackDescription = 'Created ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> for ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' Amount ' + currencySymbols[user.currency] + invoice.amountDue.amount;
       break;
     case 8:
       notification.title = 'Successful integration with Stripe';
@@ -30,7 +39,7 @@ module.exports = function (config, invoice, user, type) {
     case 19:
       notification.title = 'Paid';
       notification.description = 'Totally my fav client. ' + '<a href="' + config.baseUrl + '/clients/' + invoice.client.id + '">' + invoice.client.companyName + '</a> paid ' + '<a href="' + config.baseUrl + '/invoices/' + invoice.id + '">INV' + invoice.invoice + '</a>' + ' $' + invoice.amountDue.amount;
-      slackDescription = 'Totally my fav client. ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '> paid ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' $' + invoice.amountDue.amount;
+      slackDescription = 'Totally my fav client. ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '> paid ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> ' + currencySymbols[user.currency] + invoice.amountDue.amount;
       break;
   }
 

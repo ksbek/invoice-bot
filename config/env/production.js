@@ -60,7 +60,7 @@ module.exports = {
     clientID: process.env.SLACK_ID || '36622746837.37185968785',
     clientSecret: process.env.SLACK_SECRET || 'f0e2f39e649fa97106d53e695561bdc1',
     callbackURL: '/api/auth/slack/callback',
-    scope: 'bot,incoming-webhook,chat:write:bot'
+    scope: 'bot,incoming-webhook,chat:write:bot,chat:write:user,users:read'
   },
   apiai: {
     clientAccessToken: process.env.APIAI_ACCESS_TOKEN || '33f92d3d56ec46a18047faecf0e23555'

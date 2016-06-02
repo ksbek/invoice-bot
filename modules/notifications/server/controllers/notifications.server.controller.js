@@ -112,30 +112,44 @@ exports.sendMessage = function (req, res) {
 
   request.end();
   */
-  /*
-  var token = 'xoxp-36622746837-36616158950-37259947571-0912136ef1';
+  var token = req.user.providerData.tokenSecret.access_token;
 
-  var Slack = require('slack-node');
+  var slack = new Slack(token);
 
-  slack = new Slack(token);
-
-  slack.api('chat.postMessage', {
-    text:'hello from nodejs',
-    channel:'#general'
-  }, function(err, response){
-    res.json(err);
+  slack.api('users.info', {
+    user: req.user.providerData.tokenSecret.bot.bot_user_id
+  }, function(err, response) {
+    if (err) {
+      res.status(400).send({
+        message: err
+      });
+    } else {
+      console.log(response);
+      if (response.user) {
+        slack.api('chat.postMessage', {
+          text: req.body.text,
+          channel: '@' + response.user.name,
+          as_user: req.user.providerData.user
+        }, function(err, response) {
+          res.json(response);
+        });
+      } else {
+        res.status(400).send({
+          message: "User not found"
+        });
+      }
+    }
   });
-  */
-
+/*
   if (req.user.providerData.tokenSecret.incoming_webhook) {
     var webhookUri = req.user.providerData.tokenSecret.incoming_webhook.url;
-    var channel = req.user.providerData.tokenSecret.incoming_webhook.channel;
     var slack = new Slack();
     slack.setWebhook(webhookUri);
 
     slack.webhook({
-      channel: channel,
-      username: "webhookbot",
+      channel: '@nowdueasd',
+      username: req.user.providerData.user,
+      as_user: true,
       text: req.body.text
     }, function(err, response) {
       res.json(response);
@@ -143,4 +157,5 @@ exports.sendMessage = function (req, res) {
   } else {
     res.json({ message: "No webhook url" });
   }
+  */
 };
