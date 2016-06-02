@@ -7,14 +7,14 @@
       <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.invoice.user.companyName}}.</div>
     </div>
     <span class="invoice-data-item color-light-blue">{{vm.invoice.dateIssued | date:'MMM dd'}}</span>
-    <div class="invoice-submenu" ng-if="vm.authentication && vm.authentication.user.id == vm.invoice.user.id">
+    <div class="invoice-submenu" ng-if="vm.authentication && vm.authentication.user.id == vm.invoice.user._id">
       <i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
       <ul>
         <li ng-if="vm.invoice.status != 'paid'"><a href="#" ui-sref="invoices.edit({ invoiceId: vm.invoice._id })">Edit Invoice</a></li>
         <li><a href="#" ng-click="vm.remove()">Delete Invoice</a></li>
       </ul>
     </div>
-    <div class="invoice-submenu" ng-if="!(vm.authentication && vm.authentication.user.id == vm.invoice.user.id)">
+    <div class="invoice-submenu" ng-if="!(vm.authentication.user.id == vm.invoice.user._id)">
       <i class="btn-dots"><img src="modules/core/client/img/i-dots.png" alt=""></i>
       <ul>
         <li><a href="mailto:hello@nowdue.ai">hello@nowdue.ai</a></li>
