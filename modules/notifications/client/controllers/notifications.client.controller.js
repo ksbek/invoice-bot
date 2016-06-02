@@ -46,7 +46,6 @@
       vm.messages.push(message);
       $http.post('/api/notifications/apiai', message).success(function (response) {
         // If successful we assign the response to the global user model
-        $window.open(Authentication.user.providerData.url + 'messages/@nowdue/', '_blank');
         vm.isAnswered = true;
 
       }).error(function (response) {
@@ -55,6 +54,8 @@
 
       // Clear the message text
       vm.messageText = '';
+
+      $window.open(Authentication.user.providerData.url + 'messages/@nowdue/', '_blank');
     }
 
     /*
