@@ -5,16 +5,10 @@
         <input name="invoice" type="text" ng-model="vm.invoice.invoice" id="invoice" placeholder="invoice" required disabled>
       </div>
       <div class="form-row form-group" show-errors>
-        <div class="select-wr select-lg">
-          <select ng-model="vm.invoice.client._id" name="companyName" ng-options="client._id as client.companyName for client in vm.clients">
-          </select>
-        </div>
-        <div ng-messages="vm.invoiceForm.companyName.$error" role="alert">
-          <p class="help-block error-text" ng-message="required">Company name is required.</p>
-        </div>
+        <input name="invoice" type="text" ng-model="vm.invoice.client.companyName" id="companyName" placeholder="companyName" required disabled>
       </div>
       <div class="form-row form-group" show-errors>
-        <input type="date" id="dateDue" name="dateDue" ng-model="vm.invoice.dateDue" placeholder="Date Due" required>
+        <input type="date" id="dateDue" name="dateDue" ng-model="vm.invoice.dateDue" placeholder="Date Due" required step="2">
         <div ng-messages="vm.invoiceForm.dateDue.$error" role="alert">
           <p class="help-block error-text" ng-message="required">DateDue is required.</p>
         </div>

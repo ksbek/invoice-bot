@@ -1,18 +1,33 @@
 <table class="table-wr">
   <tr>
+    <th></th>
     <th>CLIENT</th>
     <th>CONTACT</th>
     <th>EMAIL</th>
     <th>INVOICES</th>
     <th>NOW DUE</th>
     <th>PAID</th>
+    <th></th>
   </tr>
   <tr data-ng-repeat="client in vm.clients | orderBy:'created':true">
-    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a></td>
-    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.name"></a></td>
-    <td><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.email"></a></td>
-    <td><a data-ui-sref="invoices.list" data-ng-bind="client.invoices.length"></a></td>
-    <td><a data-ui-sref="invoices.list" data-ng-bind="client.invoices.length - (client.invoices | filter:{status:'paid'}).length"></a></td>
-    <td><a data-ui-sref="invoices.list" data-ng-bind="(client.invoices | filter:{status:'paid'}).length"></a></td>
+    <td><a href="#" ng-click="vm.edit(client, $index)" class="dots-btn"><div class="dot"></div><div class="dot"></div><div class="dot"></div></a></td>
+
+    <td ng-if="vm.editRow == $index"><input type="text" ng-model="client.companyName"></td>
+    <td ng-if="vm.editRow == $index"><input type="text" ng-model="client.name"></td>
+    <td ng-if="vm.editRow == $index"><input type="email" ng-model="client.email"></td>
+
+    <td ng-if="vm.editRow != $index"><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.companyName || client.name"></a></td>
+    <td ng-if="vm.editRow != $index"><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.name"></a></td>
+    <td ng-if="vm.editRow != $index"><a data-ui-sref="clients.edit({ clientId: client._id })" data-ng-bind="client.email"></a></td>
+
+    <td><a data-ui-sref="invoices.listByClient({ clientId: client._id })" data-ng-bind="client.invoices.length"></a></td>
+    <td><a data-ui-sref="invoices.listByClient({ clientId: client._id })" data-ng-bind="client.invoices.length - (client.invoices | filter:{status:'paid'}).length"></a></td>
+    <td><a data-ui-sref="invoices.listByClient({ clientId: client._id })" data-ng-bind="(client.invoices | filter:{status:'paid'}).length"></a></td>
+    <td ng-if="vm.editRow == $index">
+      <div>
+        <a href="#" ng-click="vm.saveClient(client)"  class="btn-edit-input btn-1">Save</a>
+        <a href="javascript:void(0);"  ng-click="vm.exitEdit(client, $index)" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
+      </div>
+    </td>
   </tr>
 </table>

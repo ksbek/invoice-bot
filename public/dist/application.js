@@ -290,6 +290,41 @@
     var vm = this;
 
     vm.clients = ClientsService.query();
+    vm.saveClient = saveClient;
+    vm.edit = edit;
+    vm.exitEdit = exitEdit;
+
+    // Save Client
+    function saveClient(client) {
+      // TODO: move create/update logic to service
+      if (client._id) {
+        client.$update(successCallback, errorCallback);
+      } else {
+        client.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        vm.editRow = -1;
+        vm.tempClient = null;
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+        vm.editRow = -1;
+        vm.tempClient = null;
+      }
+    }
+
+    function edit(client, row) {
+      vm.editRow = row;
+      vm.tempClient = angular.copy(client);
+    }
+
+    function exitEdit(client, row) {
+      vm.editRow = -1;
+      vm.clients[row] = vm.tempClient;
+      vm.tempClient = null;
+    }
   }
 }());
 
@@ -1123,6 +1158,21 @@
         templateUrl: 'modules/invoices/client/views/list-invoices.client.view.html',
         controller: 'InvoicesListController',
         controllerAs: 'vm',
+        resolve: {
+          invoices: getInvoices
+        },
+        data: {
+          pageTitle: 'Invoices List'
+        }
+      })
+      .state('invoices.listByClient', {
+        url: '/client/:clientId',
+        templateUrl: 'modules/invoices/client/views/list-invoices.client.view.html',
+        controller: 'InvoicesListByClientController',
+        controllerAs: 'vm',
+        resolve: {
+          invoices: getInvoiceByClient
+        },
         data: {
           pageTitle: 'Invoices List'
         }
@@ -1194,6 +1244,22 @@
   function newInvoice(InvoicesService) {
     return new InvoicesService();
   }
+
+  getInvoices.$inject = ['InvoicesService'];
+
+  function getInvoices(InvoicesService) {
+    return InvoicesService.query().$promise;
+  }
+
+  getInvoiceByClient.$inject = ['$stateParams', '$http'];
+
+  function getInvoiceByClient($stateParams, $http) {
+    return $http.post('/api/invoices/client/' + $stateParams.clientId, {
+      params: {
+        clientId: $stateParams.clientId
+      }
+    });
+  }
 }());
 
 (function () {
@@ -1213,6 +1279,7 @@
       vm.clients = ClientsService.query();
     }
 
+    // Initialize values
     vm.authentication = Authentication;
     vm.invoice = invoice;
     vm.error = null;
@@ -1220,9 +1287,10 @@
     vm.remove = remove;
     vm.save = save;
     vm.invoice.dateIssued = new Date(vm.invoice.dateIssued);
+    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
     var today = new Date();
     var timeDiff = today.getTime() - vm.invoice.dateIssued.getTime();
-    vm.dueDateAllowance = new Date(vm.invoice.dateIssued).getTime() - vm.invoice.dateIssued.getTime();
+    vm.dueDateAllowance = Math.floor((vm.invoice.dateDue.getTime() - vm.invoice.dateIssued.getTime()) / (1000 * 3600 * 24));
     vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
@@ -1237,6 +1305,7 @@
       vm.invoice.amountDue.currency = vm.authentication.user.currency || 'USD';
     if (vm.invoice.tax === undefined || vm.invoice.tax === 0)
       vm.invoice.tax = vm.authentication.user.tax || 0;
+
     vm.currencySymbols = {
       'USD': '$',
       'AUD': 'A$',
@@ -1357,56 +1426,169 @@
 
   angular
   .module('invoices')
-  .controller('InvoicesListController', InvoicesListController);
+  .controller('InvoicesListByClientController', InvoicesListByClientController);
 
-  InvoicesListController.$inject = ['InvoicesService', '$uibModal', 'Authentication'];
+  InvoicesListByClientController.$inject = ['InvoicesService', '$uibModal', '$http', 'Authentication', 'invoices'];
 
-  function InvoicesListController(InvoicesService, $uibModal, Authentication) {
+  function InvoicesListByClientController(InvoicesService, $uibModal, $http, Authentication, invoices) {
     var vm = this;
     vm.authentication = Authentication;
     vm.currencySymbols = {
-      USD: '$',
-      AUD: 'A$',
-      EURO: '€',
-      GBP: '£'
+      'USD': '$',
+      'AUD': 'A$',
+      'EUR': '€',
+      'GBP': '£',
+      'CAD': 'C$'
     };
 
-    vm.invoices = InvoicesService.query();
+    vm.invoices = invoices.data;
 
-    vm.invoices.$promise.then(function (invoices) {
-      vm.invoices = invoices;
-      for (var i = 0; i < vm.invoices.length; i ++) {
-        var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateDue).getTime()) / (1000 * 3600 * 24));
-        if (vm.invoices[i].status !== 'paid') {
-          if (dueDays < vm.authentication.user.dueDateAllowance || vm.authentication.user.dueDateAllowance === 0)
-            vm.invoices[i].status = "due";
+    for (var i = 0; i < vm.invoices.length; i ++) {
+      var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      var dueDateAllowance = Math.floor((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      if (vm.invoices[i].status !== 'paid') {
+        if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+          vm.invoices[i].status = "due";
+        else
+          vm.invoices[i].status = "overdue";
+        vm.invoices[i].dateDue = new Date(vm.invoices[i].dateDue);
+      }
+    }
+
+    vm.saveInvoice = saveInvoice;
+    vm.exitEdit = exitEdit;
+    vm.edit = edit;
+    vm.editRow = -1;
+
+    // Save Invoice
+    function saveInvoice(invoice) {
+      // TODO: move create/update logic to service
+      vm.editRow = -1;
+      vm.tempInvoice = null;
+
+      if (invoice._id) {
+        new InvoicesService(invoice).$update(successCallback, errorCallback);
+      } else {
+        new InvoicesService(invoice).$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        vm.editRow = -1;
+        var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        if (invoice.status !== 'paid') {
+          if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+            invoice.status = "due";
           else
-            vm.invoices[i].status = "overdue";
+            invoice.status = "overdue";
+          invoice.dateDue = new Date(invoice.dateDue);
         }
       }
-    });
-    /*
-    function payInvoice(invoice) {
-      var modalInstance = $uibModal.open({
-        templateUrl: 'modules/invoices/client/views/pay-invoice.client.view.html',
-        size: 'lg',
-        windowClass: 'invoice-modal',
-        controller: ['$state', 'Authentication', 'invoice', function($scope, Authentication, invoice) {
-          var vm = this;
-          vm.invoice = invoice;
-          vm.authentication = Authentication;
-          var dateDue = new Date(vm.invoice.dateDue);
-          var today = new Date();
-          var timeDiff = Math.abs(dateDue.getTime() - today.getTime());
-          vm.invoice.dateDueLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        }],
-        controllerAs: 'vm',
-        resolve: {
-          invoice: invoice
-        }
-      });
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
     }
-    */
+
+    function edit(invoice, row) {
+      vm.editRow = row;
+      invoice.dateDue = new Date(invoice.dateDue);
+      vm.tempInvoice = angular.copy(invoice);
+    }
+
+    function exitEdit(invoice, row) {
+      vm.editRow = -1;
+      vm.invoices[row] = vm.tempInvoice;
+      vm.tempInvoice = null;
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+  .module('invoices')
+  .controller('InvoicesListController', InvoicesListController);
+
+  InvoicesListController.$inject = ['InvoicesService', '$uibModal', 'Authentication', 'invoices'];
+
+  function InvoicesListController(InvoicesService, $uibModal, Authentication, invoices) {
+    var vm = this;
+    vm.authentication = Authentication;
+    vm.currencySymbols = {
+      'USD': '$',
+      'AUD': 'A$',
+      'EUR': '€',
+      'GBP': '£',
+      'CAD': 'C$'
+    };
+
+    vm.invoices = invoices;
+
+    for (var i = 0; i < vm.invoices.length; i ++) {
+      var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      var dueDateAllowance = Math.floor((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      if (vm.invoices[i].status !== 'paid') {
+        if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+          vm.invoices[i].status = "due";
+        else
+          vm.invoices[i].status = "overdue";
+        vm.invoices[i].dateDue = new Date(vm.invoices[i].dateDue);
+      }
+    }
+
+    vm.saveInvoice = saveInvoice;
+    vm.exitEdit = exitEdit;
+    vm.edit = edit;
+    vm.editRow = -1;
+
+    // Save Invoice
+    function saveInvoice(invoice) {
+      // TODO: move create/update logic to service
+      if (invoice._id) {
+        invoice.$update(successCallback, errorCallback);
+      } else {
+        invoice.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        vm.editRow = -1;
+        invoice = res;
+        vm.tempInvoice = null;
+        var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        if (invoice.status !== 'paid') {
+          if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+            invoice.status = "due";
+          else
+            invoice.status = "overdue";
+          invoice.dateDue = new Date(invoice.dateDue);
+        }
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+        vm.editRow = -1;
+        vm.tempInvoice = null;
+      }
+    }
+
+    function edit(invoice, row) {
+      vm.editRow = row;
+      invoice.dateDue = new Date(invoice.dateDue);
+      vm.tempInvoice = angular.copy(invoice);
+    }
+
+    function exitEdit(invoice, row) {
+      vm.editRow = -1;
+      var index = vm.invoices.findIndex(
+        function(inv) {
+          return inv._id === invoice._id;
+        });
+      vm.invoices[index] = vm.tempInvoice;
+      vm.tempInvoice = null;
+    }
   }
 }());
 
@@ -2291,9 +2473,13 @@ angular
     var vm = this;
 
     vm.user = Authentication.user;
+    vm.copyUser = angular.copy(vm.user);
     vm.updateUserProfile = updateUserProfile;
     vm.changePassword = changePassword;
     vm.editStatus = "";
+    vm.editField = editField;
+    vm.exitEditField = exitEditField;
+
     // Update a user profile
     function updateUserProfile(isValid) {
       vm.success = vm.error = null;
@@ -2311,6 +2497,7 @@ angular
 
         vm.success = true;
         vm.user = Authentication.user = response;
+        vm.copyUser = angular.copy(vm.user);
         vm.editStatus = "";
       }, function (response) {
         vm.error = response.data.message;
@@ -2318,6 +2505,8 @@ angular
     }
 
     function changePassword() {
+      if (!vm.userForm.$valid)
+        return false;
       if (vm.passwordDetails && vm.passwordDetails.password !== '') {
         $uibModal.open({
           templateUrl: 'modules/users/client/views/settings/confirm-original-password.client.view.html',
@@ -2332,6 +2521,17 @@ angular
       } else {
         vm.passwordError = true;
       }
+    }
+
+    function editField(editStatus) {
+      if (vm.userForm.$valid) {
+        vm.editStatus = editStatus;
+      }
+    }
+
+    function exitEditField(editStatus) {
+      vm.editStatus = '';
+      vm.user[editStatus] = vm.copyUser[editStatus];
     }
   }
 }());
@@ -2647,6 +2847,25 @@ angular
       element.css('text-transform', 'lowercase');
     }
   }
+
+  angular
+  .module('users')
+  .directive('focusMe', ["$timeout", "$parse", function($timeout, $parse) {
+    return {
+      link: function(scope, element, attrs) {
+        var model = $parse(attrs.focusMe);
+        scope.$watch(model, function(value) {
+          if (value === true) {
+            $timeout(function() {
+              element[0].focus();
+              element[0].selectionStart = 0;
+              element[0].selectionEnd = 0;
+            });
+          }
+        });
+      }
+    };
+  }]);
 }());
 
 (function () {

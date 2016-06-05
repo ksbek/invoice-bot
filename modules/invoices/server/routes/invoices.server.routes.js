@@ -19,6 +19,8 @@ module.exports = function(app) {
 
   app.route('/api/invoices/:invoiceId/paynow').post(invoices.paynow);
 
+  app.route('/api/invoices/client/:clientId').post(invoices.getListByClient);
+
   // Finish by binding the Invoice middleware
   app.param('invoiceId', invoices.invoiceByID);
 };

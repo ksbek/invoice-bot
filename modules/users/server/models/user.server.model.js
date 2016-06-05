@@ -49,6 +49,10 @@ var UserSchema = new Schema({
     trim: true,
     default: ''
   },
+  phoneNumber: {
+    type: String,
+    trim: true
+  },
   username: {
     type: String,
     lowercase: true,

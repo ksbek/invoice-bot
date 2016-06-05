@@ -3,11 +3,11 @@
 
   angular
   .module('invoices')
-  .controller('InvoicesListController', InvoicesListController);
+  .controller('InvoicesListByClientController', InvoicesListByClientController);
 
-  InvoicesListController.$inject = ['InvoicesService', '$uibModal', 'Authentication', 'invoices'];
+  InvoicesListByClientController.$inject = ['InvoicesService', '$uibModal', '$http', 'Authentication', 'invoices'];
 
-  function InvoicesListController(InvoicesService, $uibModal, Authentication, invoices) {
+  function InvoicesListByClientController(InvoicesService, $uibModal, $http, Authentication, invoices) {
     var vm = this;
     vm.authentication = Authentication;
     vm.currencySymbols = {
@@ -18,7 +18,7 @@
       'CAD': 'C$'
     };
 
-    vm.invoices = invoices;
+    vm.invoices = invoices.data;
 
     for (var i = 0; i < vm.invoices.length; i ++) {
       var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
@@ -40,16 +40,17 @@
     // Save Invoice
     function saveInvoice(invoice) {
       // TODO: move create/update logic to service
+      vm.editRow = -1;
+      vm.tempInvoice = null;
+
       if (invoice._id) {
-        invoice.$update(successCallback, errorCallback);
+        new InvoicesService(invoice).$update(successCallback, errorCallback);
       } else {
-        invoice.$save(successCallback, errorCallback);
+        new InvoicesService(invoice).$save(successCallback, errorCallback);
       }
 
       function successCallback(res) {
         vm.editRow = -1;
-        invoice = res;
-        vm.tempInvoice = null;
         var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
         var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
         if (invoice.status !== 'paid') {
@@ -63,8 +64,6 @@
 
       function errorCallback(res) {
         vm.error = res.data.message;
-        vm.editRow = -1;
-        vm.tempInvoice = null;
       }
     }
 
@@ -76,11 +75,7 @@
 
     function exitEdit(invoice, row) {
       vm.editRow = -1;
-      var index = vm.invoices.findIndex(
-        function(inv) {
-          return inv._id === invoice._id;
-        });
-      vm.invoices[index] = vm.tempInvoice;
+      vm.invoices[row] = vm.tempInvoice;
       vm.tempInvoice = null;
     }
   }

@@ -14,6 +14,7 @@ exports.renderIndex = function (req, res) {
       companyName: req.user.companyName,
       businessNumber: req.user.businessNumber,
       clientsName: req.user.clientsName,
+      phoneNumber: req.user.phoneNumber,
       address: req.user.address,
       website: req.user.website,
       conversationSettings: req.user.conversationSettings,

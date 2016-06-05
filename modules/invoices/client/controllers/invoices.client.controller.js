@@ -15,6 +15,7 @@
       vm.clients = ClientsService.query();
     }
 
+    // Initialize values
     vm.authentication = Authentication;
     vm.invoice = invoice;
     vm.error = null;
@@ -22,9 +23,10 @@
     vm.remove = remove;
     vm.save = save;
     vm.invoice.dateIssued = new Date(vm.invoice.dateIssued);
+    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
     var today = new Date();
     var timeDiff = today.getTime() - vm.invoice.dateIssued.getTime();
-    vm.dueDateAllowance = new Date(vm.invoice.dateIssued).getTime() - vm.invoice.dateIssued.getTime();
+    vm.dueDateAllowance = Math.floor((vm.invoice.dateDue.getTime() - vm.invoice.dateIssued.getTime()) / (1000 * 3600 * 24));
     vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
 
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
@@ -39,6 +41,7 @@
       vm.invoice.amountDue.currency = vm.authentication.user.currency || 'USD';
     if (vm.invoice.tax === undefined || vm.invoice.tax === 0)
       vm.invoice.tax = vm.authentication.user.tax || 0;
+
     vm.currencySymbols = {
       'USD': '$',
       'AUD': 'A$',

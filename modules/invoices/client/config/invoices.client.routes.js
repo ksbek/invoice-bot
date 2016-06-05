@@ -26,6 +26,21 @@
         templateUrl: 'modules/invoices/client/views/list-invoices.client.view.html',
         controller: 'InvoicesListController',
         controllerAs: 'vm',
+        resolve: {
+          invoices: getInvoices
+        },
+        data: {
+          pageTitle: 'Invoices List'
+        }
+      })
+      .state('invoices.listByClient', {
+        url: '/client/:clientId',
+        templateUrl: 'modules/invoices/client/views/list-invoices.client.view.html',
+        controller: 'InvoicesListByClientController',
+        controllerAs: 'vm',
+        resolve: {
+          invoices: getInvoiceByClient
+        },
         data: {
           pageTitle: 'Invoices List'
         }
@@ -96,5 +111,21 @@
 
   function newInvoice(InvoicesService) {
     return new InvoicesService();
+  }
+
+  getInvoices.$inject = ['InvoicesService'];
+
+  function getInvoices(InvoicesService) {
+    return InvoicesService.query().$promise;
+  }
+
+  getInvoiceByClient.$inject = ['$stateParams', '$http'];
+
+  function getInvoiceByClient($stateParams, $http) {
+    return $http.post('/api/invoices/client/' + $stateParams.clientId, {
+      params: {
+        clientId: $stateParams.clientId
+      }
+    });
   }
 }());

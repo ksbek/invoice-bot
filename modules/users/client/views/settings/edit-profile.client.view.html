@@ -1,14 +1,15 @@
 <div class="form-wr">
-  <form name="vm.userForm" class="signin" novalidate autocomplete="off">
+  <form name="vm.userForm" class="signin profile-form" novalidate autocomplete="off">
     <fieldset>
     <div class="form-row">
       <div class="row form-group" show-errors>
         <div class="col-xs-9">
-          <input type="text"  id="companyName" name="companyName" ng-model="vm.user.companyName" placeholder="Company name" required ng-disabled="vm.editStatus != 'companyName'">
+          <input type="text"  id="companyName" name="companyName" ng-model="vm.user.companyName" placeholder="Company name" required ng-disabled="vm.editStatus != 'companyName'" focus-me="vm.editStatus == 'companyName'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'companyName'" ng-click="vm.editStatus = 'companyName'" class="btn-edit-input">Edit</a>
-          <a href="#" ng-if="vm.editStatus == 'companyName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="#" ng-if="vm.editStatus != 'companyName'" ng-click="vm.editField('companyName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
+          <a href="#" ng-if="vm.editStatus == 'companyName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)" class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'companyName'" ng-click="vm.exitEditField('companyName')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
         <div ng-messages="vm.userForm.companyName.$error" role="alert">
           <p class="help-block error-text" ng-message="required">Company name is required.</p>
@@ -16,27 +17,29 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="row">
+      <div class="row form-group" show-errors>
         <div class="col-xs-9">
-          <input type="text"  id="businessNumber" name="businessNumber" ng-model="vm.user.businessNumber" placeholder="Business number" ng-disabled="vm.editStatus != 'businessNumber'">
+          <input type="text"  id="businessNumber" name="businessNumber" ng-model="vm.user.businessNumber" placeholder="Business Registration or Tax ID" ng-disabled="vm.editStatus != 'businessNumber'" focus-me="vm.editStatus == 'businessNumber'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'businessNumber'" ng-click="vm.editStatus = 'businessNumber'" class="btn-edit-input">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'businessNumber'" ng-click="vm.editField('businessNumber')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'businessNumber'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'businessNumber'" ng-click="vm.exitEditField('businessNumber')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
         <div ng-messages="vm.userForm.businessNumber.$error" role="alert">
-          <p class="help-block error-text" ng-message="required">Business number is required.</p>
+          <p class="help-block error-text" ng-message="required">Business Registration or Tax ID</p>
         </div>
       </div>
     </div>
     <div class="form-row">
-      <div class="row">
+      <div class="row form-group" show-errors>
         <div class="col-xs-9">
-          <input type="text" id="clientsName" name="clientsName" ng-model="vm.user.clientsName"  placeholder="Clients name" ng-disabled="vm.editStatus != 'clientsName'">
+          <input type="text" id="clientsName" name="clientsName" ng-model="vm.user.clientsName"  placeholder="Clients name" ng-disabled="vm.editStatus != 'clientsName'" focus-me="vm.editStatus == 'clientsName'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'clientsName'" ng-click="vm.editStatus = 'clientsName'" class="btn-edit-input">Edit</a>
-          <a href="#" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="#" ng-if="vm.editStatus != 'clientsName'" ng-click="vm.editField('clientsName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
+          <a href="#" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)" class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.exitEditField('clientsName')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
         <div ng-messages="vm.userForm.clientsName.$error" role="alert">
           <p class="help-block error-text" ng-message="required">Clients name is required.</p>
@@ -44,18 +47,34 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="row">
+      <div class="row form-group" show-errors>
         <div class="col-xs-9">
-          <input type="email" id="email" name=placeholder="Email address" ng-model="vm.user.email" required ng-disabled="vm.editStatus != 'email'">
+          <input type="email" id="email" name="email" placeholder="Email address" ng-model="vm.user.email" required ng-disabled="vm.editStatus != 'email'" focus-me="vm.editStatus == 'email'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'email'" ng-click="vm.editStatus = 'email'" class="btn-edit-input">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'email'" ng-click="vm.editField('email')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'email'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'email'" ng-click="vm.exitEditField('email')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
         <div ng-messages="vm.userForm.email.$error" role="alert">
           <p class="help-block error-text" ng-message="required">Email address is required.</p>
           <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
         </div>    
+      </div>
+    </div>
+        <div class="form-row">
+      <div class="row form-group" show-errors>
+        <div class="col-xs-9">
+          <input type="text"  id="phoneNumber" name="phoneNumber" ng-model="vm.user.phoneNumber" placeholder="Phone number" ng-disabled="vm.editStatus != 'phoneNumber'" focus-me="vm.editStatus == 'phoneNumber'">
+        </div>
+        <div class="col-xs-3 text-center">
+          <a href="#" ng-if="vm.editStatus != 'phoneNumber'" ng-click="vm.editField('phoneNumber')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
+          <a href="#" ng-if="vm.editStatus == 'phoneNumber'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'phoneNumber'" ng-click="vm.exitEditField('phoneNumber')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
+        </div>
+        <div ng-messages="vm.userForm.phoneNumber.$error" role="alert">
+          <p class="help-block error-text" ng-message="required">Phone Number</p>
+        </div>
       </div>
     </div>
     <div class="form-row">
@@ -64,7 +83,7 @@
           <input type="password" id="password" name="password" ng-model="vm.passwordDetails.password" placeholder="Password" ng-change="vm.passwordError = false">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-click="vm.changePassword()" class="btn-edit-input">Change password</a>
+          <a href="#" ng-click="vm.changePassword()" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Change password</a>
         </div>
         <div ng-if="vm.passwordError" role="alert">
           <p class="help-block error-text">Please fill this filed</p>
@@ -74,22 +93,24 @@
     <div class="form-row">
       <div class="row">
         <div class="col-xs-9">
-          <input type="text" id="address" name="address" ng-model="vm.user.address" placeholder="Address" ng-disabled="vm.editStatus != 'address'">
+          <input type="text" id="address" name="address" ng-model="vm.user.address" placeholder="Address" ng-disabled="vm.editStatus != 'address'" focus-me="vm.editStatus == 'address'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'address'" ng-click="vm.editStatus = 'address'" class="btn-edit-input">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'address'" ng-click="vm.editField('address')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'address'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'address'" ng-click="vm.exitEditField('address')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
       </div>
     </div>
     <div class="form-row">
       <div class="row">
         <div class="col-xs-9">
-          <input type="text" id="website" name="website" ng-model="vm.user.website" placeholder="Website" ng-disabled="vm.editStatus != 'website'">
+          <input type="text" id="website" name="website" ng-model="vm.user.website" placeholder="Website" ng-disabled="vm.editStatus != 'website'" focus-me="vm.editStatus == 'website'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'website'" ng-click="vm.editStatus = 'website'" class="btn-edit-input">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'website'" ng-click="vm.editField('website')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'website'" ng-click="vm.updateUserProfile(vm.userForm.$valid)"  class="btn-edit-input btn-1">Save</a>
+          <a href="javascript:void(0);" ng-if="vm.editStatus == 'website'" ng-click="vm.exitEditField('website')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
       </div>
     </div>

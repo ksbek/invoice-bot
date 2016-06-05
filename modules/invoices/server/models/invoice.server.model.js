@@ -44,6 +44,10 @@ var InvoiceSchema = new Schema({
     default: 'due',
     trim: true
   },
+  dueDateAllowance: {
+    type: Number,
+    default: 7
+  },
   description: {
     type: String,
     default: '',
@@ -111,7 +115,8 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, par
       amountDue: { amount: params.amount, currency: user.currency },
       dateDue: dueDate,
       description: params.description,
-      invoice: number
+      invoice: number,
+      dueDateAllowance: user.dueDateAllowance
     }, function (err, invoice) {
       if (!err) {
         if (!invoice) {

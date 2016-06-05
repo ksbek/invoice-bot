@@ -1,26 +1,39 @@
 <table class="table-wr">
   <tr>
+    <th> </th>
     <th>CLIENT</th>
     <th>INVOICE</th>
     <th>DATE ISSUED</th>
     <th>DATE  DUE</th>
     <th>AMOUNT DUE</th>
-    <th>STATUS</th>
+    <th ng-if="vm.editRow == -1">STATUS</th>
     <th> </th>
   </tr>
   <tr data-ng-repeat="invoice in vm.invoices | orderBy:'dateIssued':true">
-    <td><a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
+    <td><a href="#" ng-click="vm.edit(invoice, $index)" class="dots-btn"><div class="dot"></div><div class="dot"></div><div class="dot"></div></a></td>
+    <td>
+      <a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
     <td><a data-ng-bind="invoice.invoice"></a></td>
     <td>
       <span data-ng-bind="invoice.dateIssued | date:'dd.MM.yy'"></span>
     </td>
-    <td>
+    <td ng-if="vm.editRow == $index"><input type="date" class="date-input" ng-model="invoice.dateDue"></td>
+    <td ng-if="vm.editRow != $index">
       <span data-ng-bind="invoice.dateDue | date:'dd.MM.yy'"></span>
     </td>
-    <td>
+
+    <td ng-if="vm.editRow == $index">
+      <div class="select-wr">  
+        <select ng-model="invoice.amountDue.currency">
+          <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{symbol}}</option>
+        </select>
+      </div>
+      <input class="input-sm" type="number" ng-model="invoice.amountDue.amount">
+    </td>
+    <td ng-if="vm.editRow != $index">
       <span> {{invoice.amountDue.amount | currency:vm.currencySymbols[invoice.amountDue.currency]}}</span>
     </td>
-    <td>
+    <td ng-if="vm.editRow == -1">
       <div class="select-wr" ng-class="{'color-purple': invoice.status == 'due', 'color-red': invoice.status == 'overdue', 'color-green': invoice.status == 'paid'}">
         <select data-ng-model="invoice.status">
           <option value="due" class="color-purple">Nowdue</option>
@@ -29,6 +42,12 @@
         </select>
       </div>
     </td>
-    <td><a href="#" ui-sref="invoicesview({ invoiceId: invoice._id })"><img src="modules/core/client/img/i-file.png" alt=""></a></td>
+    <td ng-if="vm.editRow == -1"><a href="#" ui-sref="invoicesview({ invoiceId: invoice._id })"><img src="modules/core/client/img/i-file.png" alt=""></a></td>
+    <td ng-if="vm.editRow == $index">
+      <div>
+        <a href="#" ng-click="vm.saveInvoice(invoice)"  class="btn-edit-input btn-1">Save</a>
+        <a href="javascript:void(0);"  ng-click="vm.exitEdit(invoice, $index)" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
+      </div>
+    </td>
   </tr>
 </table>
