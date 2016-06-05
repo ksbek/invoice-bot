@@ -37,6 +37,8 @@
     }
 
     function edit(client, row) {
+      if (vm.editRow !== -1)
+        return;
       vm.editRow = row;
       vm.tempClient = angular.copy(client);
     }

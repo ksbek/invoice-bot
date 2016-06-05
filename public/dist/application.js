@@ -316,6 +316,8 @@
     }
 
     function edit(client, row) {
+      if (vm.editRow !== -1)
+        return;
       vm.editRow = row;
       vm.tempClient = angular.copy(client);
     }
@@ -1491,6 +1493,8 @@
     }
 
     function edit(invoice, row) {
+      if (vm.editRow !== -1)
+        return;
       vm.editRow = row;
       invoice.dateDue = new Date(invoice.dateDue);
       vm.tempInvoice = angular.copy(invoice);
@@ -1575,6 +1579,8 @@
     }
 
     function edit(invoice, row) {
+      if (vm.editRow !== -1)
+        return;
       vm.editRow = row;
       invoice.dateDue = new Date(invoice.dateDue);
       vm.tempInvoice = angular.copy(invoice);
