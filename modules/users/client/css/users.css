@@ -37,8 +37,14 @@
 .invoice-settings .tax-input input {
   width: 30%;
   min-width: 35px;
-  text-align: right;
+  text-align: left;
   padding-right: 0;
+}
+.invoice-settings p {
+  padding: 0;
+}
+.invoice-settings select, .invoice-settings input {
+  padding: 0;
 }
 .invoice-settings p span{
   display: inline;
