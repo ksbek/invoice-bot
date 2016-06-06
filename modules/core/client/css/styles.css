@@ -2076,10 +2076,6 @@ footer .btn-slack {
 	height: 100%;
 }
 
-.modal-dialog .modal-content {
-	padding: 0 20px;
-}
-
 /* * Stripe Connect Button */
 .stripe-connect {
   display: inline-block;
