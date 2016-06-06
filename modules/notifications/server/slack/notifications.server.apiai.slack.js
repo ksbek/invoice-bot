@@ -132,7 +132,7 @@ module.exports = function (token, config, isFirst, new_user) {
                             "text",
                             "pretext"
                           ],
-                          "text": "Invoice amount: " + currencySymbols[user.currency] + Math.round(response.result.parameters.amount * (1 + user.tax / 100) * 100) / 100 + ' `' + currencySymbols[user.currency] + response.result.parameters.amount + ' + ' + user.tax + '% Tax`',
+                          "text": "Invoice amount: " + currencySymbols[user.currency] + (Math.round(response.result.parameters.amount * (1 + user.tax / 100) * 100) / 100).toFixed(2) + ' `' + currencySymbols[user.currency] + response.result.parameters.amount + ' + ' + user.tax + '% Tax`',
                           "title": "Description: " + response.result.parameters.description,
                           "fields": [
                             {
