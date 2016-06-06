@@ -128,7 +128,7 @@ module.exports = function (token, config, isFirst, new_user) {
                           "fallback": "Required plain-text summary of the attachment.",
                           "color": "#f1d4fc",
                           "author_name": "Invoice: " + client.companyName,
-                          "title": "Invoice amount: " + currencySymbols[user.currency] + Math.ceil(response.result.parameters.amount * (1 + user.tax / 100)) + ' `' + response.result.parameters.amount + ' + ' + user.tax + '% Tax',
+                          "title": "Invoice amount: " + currencySymbols[user.currency] + Math.round(response.result.parameters.amount * (1 + user.tax / 100) * 100) / 100 + ' `' + response.result.parameters.amount + ' + ' + user.tax + '% Tax`',
                           "text": "Description: " + response.result.parameters.description,
                           "fields": [
                             {
