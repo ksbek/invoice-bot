@@ -14,6 +14,7 @@
     vm.saveClient = saveClient;
     vm.edit = edit;
     vm.exitEdit = exitEdit;
+    vm.editRow = -1;
 
     // Save Client
     function saveClient(client) {
