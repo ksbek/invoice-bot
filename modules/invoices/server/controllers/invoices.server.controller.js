@@ -85,7 +85,7 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
   var searchQuery = { };
-  if (req.user.roles === ['user'])
+  if (req.user.roles.indexOf('user') > -1)
     searchQuery = { user: req.user };
   Invoice.find(searchQuery).sort('-created').populate('user', 'companyName').populate('client', 'companyName').exec(function(err, invoices) {
     if (err) {

@@ -84,7 +84,7 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   var arrClients = [];
   var searchQuery = { };
-  if (req.user.roles === ['user'])
+  if (req.user.roles.indexOf('user') > -1)
     searchQuery = { user: req.user._id };
   Client.find(searchQuery).sort('-created').populate('user', 'companyName').exec(function(err, clients) {
     if (err) {
