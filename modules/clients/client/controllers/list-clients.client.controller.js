@@ -5,11 +5,11 @@
     .module('clients')
     .controller('ClientsListController', ClientsListController);
 
-  ClientsListController.$inject = ['ClientsService'];
+  ClientsListController.$inject = ['ClientsService', 'Authentication'];
 
-  function ClientsListController(ClientsService) {
+  function ClientsListController(ClientsService, Authentication) {
     var vm = this;
-
+    vm.authentication = Authentication;
     vm.clients = ClientsService.query();
     vm.saveClient = saveClient;
     vm.edit = edit;

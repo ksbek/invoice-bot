@@ -1,7 +1,7 @@
 <div  ng-controller="HeaderController as vm">
   <div class="container" ng-if="vm.authentication.user">
     <div class="settings-nav-wr">
-      <ul>
+      <ul ng-if="vm.authentication.user.roles.indexOf('admin') == -1">
         <li ng-if="!vm.authentication.user.integrations.stripe">
           <a href="#" class="stripe-connect" ng-click="vm.callOauthProvider('/api/auth/stripe')"><span>Connect with Stripe</span></a>
         </li>
@@ -15,6 +15,7 @@
         </li>
         <li><a ui-sref="settings.profile"><img src="/modules/core/client/img/i-settings.png" alt=""></a></li>
       </ul>
+      <a href="/api/auth/signout" target="_self" class="btn-sign-out" ng-if="vm.authentication.user.roles.indexOf('admin') > -1">SIGN OUT</a>
     </div>
     <h4 ng-bind="vm.authentication.user.companyName"></h4>
     <nav class="nav-wr" uib-collapse="!vm.isCollapsed" role="navigation">

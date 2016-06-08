@@ -12,7 +12,7 @@
     Menus.addMenuItem('topbar', {
       title: 'Clients',
       state: 'clients.list',
-      roles: ['user'],
+      roles: ['user', 'admin'],
       position: 3
     });
   }

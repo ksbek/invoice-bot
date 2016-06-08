@@ -34,12 +34,8 @@
 					<div class="tax-input text-left">
 						<div class="select-wr">
 						<select ng-model="vm.user.currency">
-							<option value="USD">USD</option>
-							<option value="AUD">AUD</option>
-							<option value="CAD">CAD</option>
-							<option value="EUR">EURO</option>
-							<option value="GBP">UK</option>
-						</select>
+			                <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{currency}}</option>
+			              </select>
 						</div>
 					</div>
 				</div>

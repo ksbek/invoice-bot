@@ -8,11 +8,5 @@
   menuConfig.$inject = ['Menus'];
 
   function menuConfig(Menus) {
-    Menus.addMenuItem('topbar', {
-      title: 'Admin',
-      state: 'admin',
-      type: 'dropdown',
-      roles: ['admin']
-    });
   }
 }());

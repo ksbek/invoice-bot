@@ -12,6 +12,7 @@
     Menus.addMenuItem('topbar', {
       title: 'Notifications',
       state: 'notifications',
+      roles: ['user'],
       position: 1
     });
   }

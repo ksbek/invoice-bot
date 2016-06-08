@@ -83,7 +83,10 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
   var arrClients = [];
-  Client.find({ user: req.user._id }).sort('-created').populate('user', 'companyName').exec(function(err, clients) {
+  var searchQuery = { };
+  if (req.user.roles === ['user'])
+    searchQuery = { user: req.user._id };
+  Client.find(searchQuery).sort('-created').populate('user', 'companyName').exec(function(err, clients) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

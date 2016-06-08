@@ -12,7 +12,7 @@
     Menus.addMenuItem('topbar', {
       title: 'Invoices',
       state: 'invoices.list',
-      roles: ['user'],
+      roles: ['user', 'admin'],
       position: 2
     });
   }
