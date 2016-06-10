@@ -33,7 +33,7 @@
       <input class="input-sm" type="number" ng-model="invoice.amountDue.amount">
     </td>
     <td ng-if="vm.editRow != $index">
-      <span> {{invoice.amountDue.amount | currency:vm.currencySymbols[invoice.amountDue.currency]}}</span>
+      <span> {{invoice.amountDue.amount | currency:vm.currencySymbols[invoice.amountDue.currency]}} {{invoice.amountDue.currency}}</span>
     </td>
     <td ng-if="vm.editRow == -1">
       <div class="select-wr" ng-class="{'color-purple': invoice.status == 'due', 'color-red': invoice.status == 'overdue', 'color-green': invoice.status == 'paid'}">

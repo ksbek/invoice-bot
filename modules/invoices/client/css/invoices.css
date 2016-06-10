@@ -13,7 +13,9 @@
 .invoice-modal .modal-dialog .form-row {
 	padding: 18px 0 18px 18px;
 }
-
+.invoice-modal .modal-dialog button {
+  margin: 22px 22px 0 0;
+}
 .invoice-modal .modal-dialog button:disabled {
 	border: none;
 	background: none;

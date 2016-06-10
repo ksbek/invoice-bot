@@ -33,7 +33,7 @@
     </div>
     <button type="submit" ng-disabled="vm.loading">
       <span ng-show="vm.loading"></i>Please Wait...</span>
-      <span ng-show="!vm.loading">Pay {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}}</span>
+      <span ng-show="!vm.loading">Pay {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} {{vm.invoice.amountDue.currency}}</span>
     </button>
   </form>
 </div>

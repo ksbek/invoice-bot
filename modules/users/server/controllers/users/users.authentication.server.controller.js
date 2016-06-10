@@ -407,6 +407,10 @@ exports.stripeCallback = function (req, res) {
       client_secret: config.stripe.apiKey
     }
   }, function(err, r, body) {
+    if (err) {
+      console.log(err);
+      return res.redirect('/');
+    }
     var user = req.user;
 
     if (user) {
