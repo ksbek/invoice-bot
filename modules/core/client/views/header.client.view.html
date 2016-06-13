@@ -1,4 +1,5 @@
 <div  ng-controller="HeaderController as vm">
+
   <div class="container" ng-if="vm.authentication.user">
     <div class="settings-nav-wr">
       <ul ng-if="vm.authentication.user.roles.indexOf('admin') == -1">
@@ -28,12 +29,7 @@
   </div><!-- END of .container -->
 
   <!-- home header -->
-  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name.indexOf('authentication') == -1">
-    <a href="/" class="logo"><img src="/modules/core/client/img/logo.png" alt=""></a>
-    <div class="logining-links-wr">
-      <a href="#" ui-sref="authentication.signin">SIGN IN</a>
-    </div>
-  </div><!-- END of .container -->
+
 
   <!-- account-setup header -->
   <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.accountSetup'">

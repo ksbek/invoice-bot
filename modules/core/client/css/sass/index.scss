@@ -1,0 +1,550 @@
+$color_back_1: #e3a5f8;
+$color_back_2: #f5fdb2;
+$color_back_3: #ffffff;
+$color_back_4: #f69769;
+$color_back_5: #f19266;
+
+$dim_screen_lg: 920px;
+$screen-sm-min: 768px;
+
+body {
+  font-family: 'Varela Round', sans-serif;
+}
+
+.headerWrapper {
+  background: $color_back_1 url(../data/images/background_top.png) repeat-x;
+
+  header {
+    height: 741px;
+    max-width: $dim_screen_lg;
+    .navbar {
+      margin-right: -16px;
+      padding-top: 38px;
+      
+      a {
+        color: $color_back_2;
+      }
+
+      .navbar-brand {
+        padding: 11px 12px;
+        letter-spacing: 0.4px;
+
+        img {
+          display: inline-block;
+          margin-right: 8px;
+        }
+
+      }
+
+      .nav {
+        padding-top: 10px;
+        letter-spacing: -0.3px;
+        font-size: 13px;
+        float: right;
+        margin-top: 0;
+
+        li {
+          display: inline-block;
+          a {
+            height: 33px;
+            width: 73px;
+            padding: 0 0 0 0;
+            border-radius: 49px;
+            line-height: 33px;
+
+            &:hover {
+              background: #d99fee;
+            }
+          }
+
+        }
+      }
+
+      .signIn {
+        margin-left: 18px;
+      }
+    }
+
+    .header__row {
+      margin-top: 97px;
+    }
+
+    .slogan {
+      display: inline-block;
+      width: 88%;
+      max-width: 782px;
+    }
+
+    h4 {
+      margin-top: 5px;
+
+    }
+
+    .slackBtn {
+      padding: 0 2px 4px 2px;
+      margin-top: 27px;
+      width: 241px;
+      height: 58px;
+      border: 2px black solid;
+      background-color: transparent;
+      div {
+        background: white url(../data/images/slack_button.png) no-repeat 50px 15px;
+        height: 100%;
+        width: 100%;
+        padding: 16px 0 0 32px;
+        letter-spacing: -0.2px;
+        font-size: 17px;
+      }
+      &:hover {
+        div {
+          margin-top: 1px;
+        }
+      }
+    }
+
+  }
+}
+
+.slackWrapper {
+  background: $color_back_2 url(../data/images/background_yellow.png) repeat-x 1px 165px;
+
+  .slack {
+    background: transparent url(../data/images/yellow_dot.png) no-repeat bottom center; /*585px 580px;*/
+    max-width: $dim_screen_lg;
+
+
+    .chat {
+      margin: -17.5% 0 0 0;
+      width: 85%;
+      max-width: 777px;
+      -webkit-box-shadow: -2px 4px 80px 0px rgba(1, 1, 1, 0.2);
+      -moz-box-shadow: -2px 4px 80px 0px rgba(1, 1, 1, 0.2);
+      box-shadow: -2px 4px 80px 0px rgba(1, 1, 1, 0.2);
+      border-radius: 12px;
+
+    }
+    .bot {
+      width: 85%;
+      max-width: 777px;
+      margin: 79px 0 120px;
+    }
+  }
+}
+
+.featureWrapper {
+  background: $color_back_3;
+  .feature {
+    max-width: $dim_screen_lg;
+    min-height: 1825px;
+    text-align: left;
+
+    .featureItem {
+
+      text-align: center;
+
+      .featureItem__img {
+        padding: 80px 10px 40px 10px;
+      }
+
+      .featureItem__text {
+        padding: 40px 10px 40px 10px;
+        max-width: 320px;
+        display: inline-block;
+        text-align: left;
+
+        h4 {
+          font-size: 24px;
+          margin-bottom: 21px;
+        }
+
+        p {
+          font-size: 18px;
+          line-height: 24px;
+          letter-spacing: 0.19px;
+        }
+      }
+    }
+  }
+}
+
+.invoiceWrapper {
+  background: $color_back_4 url(../data/images/background_invoice.png) repeat-x 1px center;
+
+  .invoice {
+    max-width: $dim_screen_lg;
+    min-height: 894px;
+    background: transparent url(../data/images/orange_dot.png) no-repeat bottom center; /*585px 580px;*/
+
+    .invoiceLogo {
+      margin: 127px 0 0 7px;
+    }
+
+    .invoiceSchema {
+      margin-top: 125px;
+      margin-bottom: 60px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+    }
+
+    .avatarWrapper {
+
+      .avatar {
+        display: inline-block;
+        position: relative;
+        width: 113px;
+        height: 113px;
+        border-radius: 60px;
+        box-shadow: 8px 10px 0 0 rgba(214, 127, 86, 1);
+
+        .avatar__icon {
+          position: absolute;
+          top: -4px;
+          right: -2px;
+          width: 34px;
+          height: 34px;
+          background-color: white;
+          border-radius: 25px;
+
+          &--pp1 {
+            top: -2px;
+            right: -1px;
+          }
+
+          &--slack {
+            background: white url('../data/images/slack_button.png') no-repeat center;
+          }
+
+          &--email {
+            background: white url('../data/images/email.png') no-repeat center;
+          }
+
+        }
+      }
+    }
+
+    .invoiceImg {
+      margin-bottom: 40px;
+      margin-top: 40px;
+
+      img {
+        width: 94%;
+        max-width: 387px;
+      }
+
+    }
+
+    .stripeLogo {
+      margin-top: 30px;
+    }
+
+    .startBtn {
+      padding: 0 2px 4px 2px;
+      margin-top: 78px;
+      margin-bottom: 50px;
+      width: 241px;
+      height: 58px;
+      border: 2px black solid;
+      background-color: transparent;
+
+      div {
+        background: white;
+        height: 100%;
+        width: 100%;
+        padding: 15px 0 0 0;
+        letter-spacing: -0.9px;
+      }
+
+      &:hover {
+        div {
+          margin-top: 1px;
+        }
+      }
+    }
+  }
+}
+
+.footerWrapper {
+  background: $color_back_5;
+  .footer {
+    min-height: 361px;
+    max-width: $dim_screen_lg;
+    color: #855741;
+    text-align: center;
+
+    a {
+      color: #855741;
+    }
+
+    a:hover {
+      color: #b2fcfd !important;
+      text-decoration: none;
+    }
+    a:visited {
+      text-decoration: none;
+      color: #855741;
+    }
+
+    .footerRow {
+      &--tm1 {
+        margin-top: 111px;
+      }
+
+      &--tm2 {
+        margin-top: 128px;
+      }
+    }
+
+    .footerMenu {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 40px;
+      li {
+        display: inline-block;
+        margin-left: 13px;
+        margin-right: 22px;
+      }
+    }
+
+    .under {
+      margin-right: -4px;
+      p {
+        letter-spacing: 0.2px;
+        margin-bottom: 12px;
+      }
+      img {
+        margin-top: -6px;
+        margin-right: 3px;
+      }
+      a {
+        margin-right: 3px;
+      }
+    }
+
+    .copyRight {
+      margin-left: 14px;
+      letter-spacing: 0.1px;
+    }
+
+    .social {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        display: inline-block;
+        margin-left: 22px;
+      }
+      li:first-child {
+        margin-right: 1px;
+      }
+
+    }
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+
+  .headerWrapper{
+    .header{
+      .slogan{
+        margin-left: 17px;
+      }
+
+      h4{
+        margin-left: 14px;
+      }
+
+      .slackBtn{
+        margin-left: 16px;
+      }
+    }
+  }
+
+  .slackWrapper{
+    .slack{
+
+      height: 707px;
+
+      .chat{
+        margin-left: 14px;
+      }
+      .bot{
+        margin-left: 14px;
+      }
+    }
+  }
+
+  .featureWrapper {
+    .feature {
+
+      .featureItem {
+
+        .featureItem__img {
+          padding: 80px 10px 40px 40px;
+          &--right {
+            float: right;
+          }
+        }
+
+        .featureItem__text {
+          padding: 80px 10px 40px 40px;
+        }
+      }
+    }
+  }
+
+  .invoiceWrapper {
+    background: $color_back_4 url(../data/images/background_invoice.png) repeat-x 1px 428px;
+
+    .invoice {
+      .invoiceSchema {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin-bottom: 0;
+      }
+
+      .avatarWrapper {
+
+        &--doc {
+          padding-left: 40px;
+          padding-top: 6px;
+        }
+
+        &--fox {
+          padding-left: 4px;
+          padding-top: 3px;
+        }
+
+        .avatar {
+
+          .avatar__icon {
+            &--pp1 {
+              top: -2px;
+              right: -1px;
+            }
+
+          }
+        }
+      }
+
+      .invoiceImg {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-left: 31px;
+      }
+
+      .stripeLogo {
+        margin-left: 15px;
+      }
+
+      .startBtn{
+        margin-right: -16px;
+      }
+    }
+  }
+
+  .footerWrapper {
+    background: $color_back_5;
+    .footer {
+      text-align: left;
+      .footerMenu {
+        margin-bottom: 10px;
+      }
+      .under {
+        text-align: right;
+      }
+      .smRight {
+        float: right;
+      }
+      .social {
+        text-align: right;
+        margin-right: -3px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+@media (min-width: 900px) {
+  .featureWrapper {
+
+    .feature {
+
+      padding-top: 186px;
+
+      .featureItem {
+
+        text-align: left;
+
+        .featureItem__img {
+          max-width: 450px;
+          max-height: 370px;
+
+          &--pp1 {
+            padding: 0 0 0 58px;
+          }
+
+          &--pp2 {
+            padding: 15px 0 0 80px;
+          }
+
+          &--pp3 {
+            padding: 39px 0 0 50px;
+          }
+
+          &--pp4 {
+            padding: 66px 0 0 89px;
+          }
+
+        }
+
+        .featureItem__text {
+          min-width: 450px;
+          min-height: 370px;
+          padding: 16px 0 0 95px;
+
+          &--pp2 {
+            padding: 36px 0 0 79px;
+            letter-spacing: .3px;
+
+            h4 {
+              margin-bottom: 26px;
+            }
+
+            p {
+              padding: 0 11px 0 0;
+              line-height: 22px;
+            }
+          }
+
+          &--pp3 {
+            padding: 93px 0 0 94px;
+            h4 {
+              margin-bottom: 18px;
+              letter-spacing: 0.3px;
+            }
+            p {
+              line-height: 22px;
+            }
+          }
+
+          &--pp4 {
+            padding: 102px 0 0 77px;
+            h4 {
+              margin-bottom: 20px;
+              letter-spacing: 0.3px;
+            }
+            p {
+              padding: 0 13px 0 0;
+              line-height: 22px;
+            }
+
+          }
+
+        }
+      }
+    }
+  }
+}

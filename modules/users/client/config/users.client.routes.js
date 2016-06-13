@@ -154,16 +154,19 @@
       })
       .state('password', {
         abstract: true,
-        url: '/password',
-        template: '<ui-view/>'
+        url: '/password'
       })
       .state('password.forgot', {
         url: '/forgot',
-        templateUrl: 'modules/users/client/views/password/forgot-password.client.view.html',
-        controller: 'PasswordController',
-        controllerAs: 'vm',
-        data: {
-          pageTitle: 'Password forgot'
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/password/forgot-password.client.view.html',
+            controller: 'PasswordController',
+            controllerAs: 'vm',
+            data: {
+              pageTitle: 'Password forgot'
+            }
+          }
         }
       })
       .state('password.reset', {
@@ -173,25 +176,37 @@
       })
       .state('password.reset.invalid', {
         url: '/invalid',
-        templateUrl: 'modules/users/client/views/password/reset-password-invalid.client.view.html',
-        data: {
-          pageTitle: 'Password reset invalid'
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/password/reset-password-invalid.client.view.html',
+            data: {
+              pageTitle: 'Password reset invalid'
+            }
+          }
         }
       })
       .state('password.reset.success', {
         url: '/success',
-        templateUrl: 'modules/users/client/views/password/reset-password-success.client.view.html',
-        data: {
-          pageTitle: 'Password reset success'
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/password/reset-password-success.client.view.html',
+            data: {
+              pageTitle: 'Password reset success'
+            }
+          }
         }
       })
       .state('password.reset.form', {
         url: '/:token',
-        templateUrl: 'modules/users/client/views/password/reset-password.client.view.html',
-        controller: 'PasswordController',
-        controllerAs: 'vm',
-        data: {
-          pageTitle: 'Password reset form'
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/password/reset-password.client.view.html',
+            controller: 'PasswordController',
+            controllerAs: 'vm',
+            data: {
+              pageTitle: 'Password reset form'
+            }
+          }
         }
       });
   }

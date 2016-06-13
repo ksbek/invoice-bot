@@ -8,11 +8,11 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  nodemailer = require('nodemailer'),
+  sendgrid = require("sendgrid")(config.sendgrid.apiKey),
   async = require('async'),
   crypto = require('crypto');
 
-var smtpTransport = nodemailer.createTransport(config.mailer.options);
+var email = new sendgrid.Email();
 
 /**
  * Forgot for reset password (forgot POST)
@@ -28,18 +28,18 @@ exports.forgot = function (req, res, next) {
     },
     // Lookup user by username
     function (token, done) {
-      if (req.body.username) {
+      if (req.body.email) {
         User.findOne({
-          username: req.body.username.toLowerCase()
+          email: req.body.email.toLowerCase()
         }, '-salt -password', function (err, user) {
           if (err || !user) {
             return res.status(400).send({
-              message: 'No account with that username has been found'
+              message: 'No account with that email has been found'
             });
-          } else if (user.provider !== 'local') {
-            return res.status(400).send({
-              message: 'It seems like you signed up using your ' + user.provider + ' account'
-            });
+          // } else if (user.provider !== 'local') {
+          //  return res.status(400).send({
+          //    message: 'It seems like you signed up using your ' + user.provider + ' account'
+          //  });
           } else {
             user.resetPasswordToken = token;
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
@@ -51,7 +51,7 @@ exports.forgot = function (req, res, next) {
         });
       } else {
         return res.status(400).send({
-          message: 'Username field must not be blank'
+          message: 'Email field must not be blank'
         });
       }
     },
@@ -71,13 +71,13 @@ exports.forgot = function (req, res, next) {
     },
     // If valid email, send reset email using service
     function (emailHTML, user, done) {
-      var mailOptions = {
-        to: user.email,
-        from: config.mailer.from,
-        subject: 'Password Reset',
-        html: emailHTML
-      };
-      smtpTransport.sendMail(mailOptions, function (err) {
+      email.html = emailHTML;
+      email.setFrom(config.sendgrid.from);
+      email.addTo(user.email);
+      email.setSubject("Nowdue Password Reset");
+
+
+      sendgrid.send(email, function (err, json) {
         if (!err) {
           res.send({
             message: 'An email has been sent to the provided email with further instructions.'
@@ -181,14 +181,22 @@ exports.reset = function (req, res, next) {
     },
     // If valid email, send reset email using service
     function (emailHTML, user, done) {
-      var mailOptions = {
-        to: user.email,
-        from: config.mailer.from,
-        subject: 'Your password has been changed',
-        html: emailHTML
-      };
+      email.html = emailHTML;
+      email.setFrom(config.sendgrid.from);
+      email.addTo(user.email);
+      email.setSubject("Nowdue Your password has been changed");
 
-      smtpTransport.sendMail(mailOptions, function (err) {
+      sendgrid.send(email, function (err, json) {
+        if (!err) {
+          res.send({
+            message: 'An email has been sent to the provided email with further instructions.'
+          });
+        } else {
+          return res.status(400).send({
+            message: 'Failure sending email'
+          });
+        }
+
         done(err, 'done');
       });
     }

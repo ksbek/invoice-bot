@@ -1,61 +1,161 @@
-<div class="text-center home-wr">
-	<div class="container text-center">
-		<div class="divider-item"></div>
-		<h2>Invoice like it is the future</h2>
-		<h4>Send your clients beautifully smart invoices designed for the minimalist age.</h4>
-		<!-- <div class="divider-item divider-md divider-blue"></div> -->
-		<div class="divider-item divider-blue"></div>
-		<a href="#" ng-click="vm.callOauthProvider('/api/auth/slack')" class="btn-slack">Add to <strong>Slack</strong></a>
-		<div class="divider-item divider-brown"></div>
-	</div><!-- END of .container -->
-	<div class="invoice-home-box">
-		<div class="container">
-			<div class="inner-box inner-box-first">
-				<div class="row">
-					<div class="col-sm-7">
-						<h3>Invoice Trump</h3>
-						<h3>For?</h3>
-						<h3>320 million <br> For wasting everyones time</h3>
-					</div>
-					<div class="col-sm-5 text-center">
-						<img src="modules/core/client/img/data/bg-trump.png" alt="">
-					</div>
-				</div>
-			</div>
-			<div class="inner-box">
-				<div class="row">
-					<div class="col-sm-7">
-						<h3>Here is your invoice for Trump!</h3>
-					</div>
-					<div class="col-sm-5 text-right">
-						<a href="javascript:void(0);" class="btn-2">nowdue</a>
-					</div>
-				</div>
-			</div>
-		</div><!-- END of .container -->
-	</div><!-- END of .invoice-home-box -->
-	<div class="future-home-box">
-		<div class="container">
-			<h2>Yes future, I’m ready!</h2>
-			<p>Generate smarter invoices on demand without leaving <strong>Slack</strong>. Connect invoices to your <strong>Stripe</strong> or <strong>PayPal</strong> account and accept seamless client payments. Let us chase payments with automated reminders and intelligently track and report on who’s paid and who hasn’t. We’ll handle your accounts, well... so you don’t have to.</p>
-			<div class="text-center">
-				<img src="modules/core/client/img/data/nowdue+stripe+paypal.png" alt="">
-			</div>
-		</div><!-- END of .container -->
-	</div><!-- END of .future-home-box -->
-	<footer>
-		<div class="container text-center">
-			<a href="account-setup.html" class="btn-slack">Add to <strong>Slack</strong></a>
-			<div class="footer-nav">
-				<a ui-sref="root.privacy">Privacy</a>
-				<span>•</span>
-				<a href="javascript:void(0);">Contact</a>
-				<span>•</span>
-				<a href="javascript:void(0);">@nowdue_ai</a>
-			</div>
-			<p>Made while peering out a little white wooden frame window</p>
-			<p>Copyright © 2016 Nowdue AI</p>
-			<p><i><img src="modules/core/client/img/i-footer.png" alt=""></i></p>
-		</div><!-- END of .container -->
-	</footer><!-- END of footer -->
-</div>
+  <div class="headerWrapper">
+    <header class="header text-center container-fluid">
+
+      <nav class="navbar navbar-static-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+
+          <a class="navbar-brand" href="http://www.nowdue.ai/">
+            <img alt="Brand" src="/modules/core/client/img/data/images/logo_top.png">nowdue
+          </a>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://medium.com/nowdue">BLOG</a></li>
+            <li class="signIn"><a href="#" ui-sref="authentication.signin">SIGN IN</a></li>
+          </ul>
+
+        </div><!-- /.container-fluid -->
+      </nav>
+      <div class="header__row row">
+        <img class="slogan" alt="invoice like it is the future" src="/modules/core/client/img/data/images/slogan.png">
+        <h4>Nowdue is a conversational way to create, send and manage invoices super fast</h4>
+        <a class="slackBtn btn btn-lg btn-default">
+          <div>Add to Slack</div>
+        </a>
+      </div>
+
+    </header>
+  </div>
+  <div class="slackWrapper">
+    <div class="slack text-center container-fluid">
+      <div class="row">
+        <img src="/modules/core/client/img/data/images/anim_chat.gif" loop=infinite alt="Slack chat" class="chat">
+      </div>
+      <div class="row">
+        <img src="/modules/core/client/img/data/images/bot.png" alt="Slack bot" class="bot">
+      </div>
+    </div>
+  </div>
+  <div class="featureWrapper">
+    <div class="feature text-center container-fluid">
+      <div class="featureItem row">
+        <div class="featureItem__img featureItem__img--pp1 col-sm-6"><img src="/modules/core/client/img/data/images/visibility.png"
+                                                                          alt="Visibility"></div>
+        <div class="featureItem__text col-sm-6"><h4>Visibility</h4>
+          <p>Strengthen common team goals with transparency across the business. Push
+            or pull client information, track sales revenue, and analysis cash flow data
+            right from Slack.</p>
+        </div>
+      </div>
+      <div class="featureItem row">
+        <div class="featureItem__img featureItem__img--right featureItem__img--pp2 col-sm-6"><img
+          src="/modules/core/client/img/data/images/conversational.png" alt="Conversational"></div>
+        <div class="featureItem__text featureItem__text--pp2 col-sm-6"><h4>Conversational</h4>
+          <p>Use basic commands to craft beautifully smart invoices through Jimmy, our highly organized chat bot. Jimmy
+            uses machine learning to automagically fetch client and sales data, chase overdue invoices and track
+            payments on demand.</p>
+        </div>
+      </div>
+      <div class="featureItem row">
+        <div class="featureItem__img featureItem__img--pp3 col-sm-6"><img src="/modules/core/client/img/data/images/automation.png"
+                                                                          alt="Automation"></div>
+        <div class="featureItem__text featureItem__text--pp3 col-sm-6"><h4>Automation</h4>
+          <p>Utilize a streamlined approach to bot invoicing. Monitor and manage your whole business pipeline with
+            intelligent insights. Proactively follow sales and accounting data to identify emerging revenue patterns.
+          </p>
+        </div>
+      </div>
+      <div class="featureItem row">
+        <div class="featureItem__img featureItem__img--right featureItem__img--pp4 col-sm-6"><img
+          src="/modules/core/client/img/data/images/idiosyncratic.png" alt="Idiosyncratic"></div>
+        <div class="featureItem__text featureItem__text--pp4 col-sm-6"><h4>Idiosyncratic</h4>
+          <p>Our goal is to help you get paid faster. As such, all invoices are uniquely set to be now due from the day
+            it is sent. This means the invoice due date status will appear as nowdue for a nominated period between 0 to
+            30+ days before becoming overdue.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="invoiceWrapper">
+    <div class="invoice text-center container-fluid">
+      <div class="row">
+        <div class="invoiceLogo col-sm-12">
+          <img src="/modules/core/client/img/data/images/logo_invoice.png" alt="Nowdue">
+        </div>
+      </div>
+      <div class="invoiceSchema row">
+        <div class="avatarWrapper avatarWrapper--doc col-sm-3">
+          <div class="avatar">
+            <div class="avatar__icon avatar__icon--slack"></div>
+            <img src="/modules/core/client/img/data/images/doc.png" alt="Doc">
+          </div>
+
+        </div>
+        <div class="invoiceImg col-sm-6">
+          <img src="/modules/core/client/img/data/images/invoice.png" alt="invoice">
+        </div>
+        <div class="avatarWrapper avatarWrapper--fox col-sm-3">
+          <div class="avatar">
+            <div class="avatar__icon avatar__icon--email avatar__icon--pp1"></div>
+            <img src="/modules/core/client/img/data/images/fox.png" alt="Mj Fox">
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <!--<div class="stripe">
+          <p>Powered by <span>stripe</span></p>
+        </div>-->
+        <div class="col-sm-12">
+          <img src="/modules/core/client/img/data/images/stripe.png" alt="powered by stripe" class="stripeLogo">
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <a class="startBtn btn btn-lg btn-default">
+            <div>Start Invoicing</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footerWrapper ">
+    <footer class="footer container-fluid">
+      <div class="footerRow footerRow--tm1 row">
+        <div class="col-sm-6">
+          <ul class="footerMenu">
+            <li><a href="/pricing">PRICING</a></li>
+            <li><a href="/privacy">LEGAL</a></li>
+            <li><a href="/authentication/signin">SIGN IN</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6">
+          <div class="under">
+            <p>Made with <img src="/modules/core/client/img/data/images/down_under.png" alt="Down Under">Down Under</p>
+            <a href="mailto:hello@nowdue.ai">hello@nowdue.ai</a>
+          </div>
+
+        </div>
+      </div>
+      <div class="footerRow footerRow--tm2 row">
+        <div class="smRight col-sm-6">
+          <ul class="social">
+            <li><a href="https://medium.com/nowdue"><img src="/modules/core/client/img/data/images/medium_logo.png" alt="Medium"></a></li>
+            <li><a href="https://www.facebook.com/nowdue"><img src="/modules/core/client/img/data/images/facebook_logo.png"
+                                                               alt="Facebook"></a></li>
+            <li><a href="https://twitter.com/nowdue_ai"><img src="/modules/core/client/img/data/images/twitter_logo.png" alt="Twitter"></a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-6">
+          <p class="copyRight">© 2016 Nowdue AI <img src="/modules/core/client/img/data/images/logo_footer.png" alt="Logo Nowdue"></p>
+        </div>
+
+      </div>
+    </footer>
