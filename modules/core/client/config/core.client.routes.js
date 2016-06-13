@@ -39,12 +39,9 @@
           }
         }
       })
-      .state('root.home', {
+      .state('home', {
         url: '/',
         views: {
-          'header': {
-            templateUrl: ''
-          },
           'home@': {
             templateUrl: 'modules/core/client/views/home.client.view.html',
             controller: 'HomeController',

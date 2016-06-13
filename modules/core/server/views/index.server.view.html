@@ -2,11 +2,13 @@
 
 {% block content %}
   <div ui-view="home"></div>
-  <div ui-view="header"></div>
-  <div class="content">
-    <div class="container">
+  <div>
+    <div ui-view="header"></div>
+    <div class="content">
+      <div class="container">
   		<section ui-view="container"></section>
+      </div>
     </div>
+    <footer ui-view="footer"></footer>
   </div>
-  <footer ui-view="footer"></footer>
 {% endblock %}

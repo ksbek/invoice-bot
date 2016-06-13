@@ -262,10 +262,11 @@ header {
 	top: 0;
 	right: 0;
 	padding: 28px 0 19px;
+	background: #FFF
 }
 
-.fixed-header + * {
-	padding-top: 105px;
+.header-bottom-padding {
+	padding-bottom: 105px;
 }
 
 header .container {

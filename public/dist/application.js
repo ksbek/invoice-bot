@@ -472,7 +472,7 @@
     function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
       // Record previous state
       if (Authentication.user) {
-        if (toState.name === 'root.home') {
+        if (toState.name === 'home') {
           $state.transitionTo('notifications').then(function () {
             // Record previous state
             storePreviousState(toState, toParams);
@@ -537,12 +537,9 @@
           }
         }
       })
-      .state('root.home', {
+      .state('home', {
         url: '/',
         views: {
-          'header': {
-            templateUrl: ''
-          },
           'home@': {
             templateUrl: 'modules/core/client/views/home.client.view.html',
             controller: 'HomeController',
@@ -2223,7 +2220,7 @@ angular
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'root.home', $state.previous.params);
+        $state.go($state.previous.state.name || 'home', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });

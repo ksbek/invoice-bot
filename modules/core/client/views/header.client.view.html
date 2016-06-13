@@ -1,3 +1,4 @@
+<header class="fixed-header">
 <div  ng-controller="HeaderController as vm">
 
   <div class="container" ng-if="vm.authentication.user">
@@ -44,7 +45,9 @@
   <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.signin'">
     <h4>SIGN IN</h4>
     <div class="logining-links-wr">
-      <a href="#" ui-sref="root.home">Back to home</a>
+      <a href="#" ui-sref="home">Back to home</a>
     </div>
   </div><!-- END of .container -->
 </div><!-- END of div -->
+</header>
+<div class="header-bottom-padding"></div>
