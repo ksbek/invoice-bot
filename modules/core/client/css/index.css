@@ -5,7 +5,7 @@ body {
 
 /* line 14, sass/index.scss */
 .headerWrapper {
-  background: #e3a5f8 url(../img/data/images/background_top.png) repeat-x;
+  background: #e3a5f8 url(/modules/core/client/img/data/images/background_top.png) repeat-x;
 }
 /* line 17, sass/index.scss */
 .headerWrapper header {
@@ -84,7 +84,7 @@ body {
 }
 /* line 90, sass/index.scss */
 .headerWrapper header .slackBtn div {
-  background: white url(../img/data/images/slack_button.png) no-repeat 50px 15px;
+  background: white url(/modules/core/client/img/data/images/slack_button.png) no-repeat 50px 15px;
   height: 100%;
   width: 100%;
   padding: 16px 0 0 32px;
@@ -98,11 +98,11 @@ body {
 
 /* line 108, sass/index.scss */
 .slackWrapper {
-  background: #f5fdb2 url(../img/data/images/background_yellow.png) repeat-x 1px 165px;
+  background: #f5fdb2 url(/modules/core/client/img/data/images/background_yellow.png) repeat-x 1px 165px;
 }
 /* line 111, sass/index.scss */
 .slackWrapper .slack {
-  background: transparent url(../img/data/images/yellow_dot.png) no-repeat bottom center;
+  background: transparent url(/modules/core/client/img/data/images/yellow_dot.png) no-repeat bottom center;
   /*585px 580px;*/
   max-width: 920px;
 }
@@ -162,13 +162,13 @@ body {
 
 /* line 170, sass/index.scss */
 .invoiceWrapper {
-  background: #f69769 url(../img/data/images/background_invoice.png) repeat-x 1px center;
+  background: #f69769 url(/modules/core/client/img/data/images/background_invoice.png) repeat-x 1px center;
 }
 /* line 173, sass/index.scss */
 .invoiceWrapper .invoice {
   max-width: 920px;
   min-height: 894px;
-  background: transparent url(../img/data/images/orange_dot.png) no-repeat bottom center;
+  background: transparent url(/modules/core/client/img/data/images/orange_dot.png) no-repeat bottom center;
   /*585px 580px;*/
 }
 /* line 178, sass/index.scss */
@@ -209,11 +209,11 @@ body {
 }
 /* line 215, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--slack {
-  background: white url("../img/data/images/slack_button.png") no-repeat center;
+  background: white url("/modules/core/client/img/data/images/slack_button.png") no-repeat center;
 }
 /* line 219, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--email {
-  background: white url("../img/data/images/email.png") no-repeat center;
+  background: white url("/modules/core/client/img/data/images/email.png") no-repeat center;
 }
 /* line 227, sass/index.scss */
 .invoiceWrapper .invoice .invoiceImg {
@@ -377,7 +377,7 @@ body {
 
   /* line 397, sass/index.scss */
   .invoiceWrapper {
-    background: #f69769 url(../img/data/images/background_invoice.png) repeat-x 1px 428px;
+    background: #f69769 url(/modules/core/client/img/data/images/background_invoice.png) repeat-x 1px 428px;
   }
   /* line 401, sass/index.scss */
   .invoiceWrapper .invoice .invoiceSchema {
