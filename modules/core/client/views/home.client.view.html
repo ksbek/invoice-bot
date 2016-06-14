@@ -20,7 +20,7 @@
       <div class="header__row row">
         <img class="slogan" alt="invoice like it is the future" src="/modules/core/client/img/data/images/slogan.png">
         <h4>Nowdue is a conversational way to create, send and manage invoices super fast</h4>
-        <a class="slackBtn btn btn-lg btn-default">
+        <a class="slackBtn btn btn-lg btn-default" ng-click="vm.callOauthProvider('/api/auth/slack')">
           <div>Add to Slack</div>
         </a>
       </div>
