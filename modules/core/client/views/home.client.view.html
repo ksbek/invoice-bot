@@ -12,16 +12,16 @@
 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="https://medium.com/nowdue">BLOG</a></li>
-            <li class="signIn"><a href="#" ui-sref="authentication.signin">SIGN IN</a></li>
+            <li class="signIn"><a href="http://www.nowdue.ai/authentication/signin" ui-sref="authentication.signin">SIGN IN</a></li>
           </ul>
 
         </div><!-- /.container-fluid -->
       </nav>
       <div class="header__row row">
         <img class="slogan" alt="invoice like it is the future" src="/modules/core/client/img/data/images/slogan.png">
-        <h4>Nowdue is a conversational way to create, send and manage invoices super fast</h4>
-        <a class="slackBtn btn btn-lg btn-default" ng-click="vm.callOauthProvider('/api/auth/slack')">
-          <div>Add to Slack</div>
+        <h4 class="headerText">Nowdue is a conversational way to create, send and manage invoices super fast</h4>
+        <a class="slackBtn btn btn-lg" ng-click="vm.callOauthProvider('/api/auth/slack')">
+          <div>Add to <strong>Slack</strong></div>
         </a>
       </div>
 
@@ -30,7 +30,7 @@
   <div class="slackWrapper">
     <div class="slack text-center container-fluid">
       <div class="row">
-        <img src="/modules/core/client/img/data/images/anim_chat.gif" loop=infinite alt="Slack chat" class="chat">
+        <img src="/modules/core/client/img/data/images/anim_chat.gif" loop="infinite" alt="Slack chat" class="chat">
       </div>
       <div class="row">
         <img src="/modules/core/client/img/data/images/bot.png" alt="Slack bot" class="bot">
@@ -40,8 +40,7 @@
   <div class="featureWrapper">
     <div class="feature text-center container-fluid">
       <div class="featureItem row">
-        <div class="featureItem__img featureItem__img--pp1 col-sm-6"><img src="/modules/core/client/img/data/images/visibility.png"
-                                                                          alt="Visibility"></div>
+        <div class="featureItem__img featureItem__img--pp1 col-sm-6"><img src="/modules/core/client/img/data/images/visibility.png" alt="Visibility"></div>
         <div class="featureItem__text col-sm-6"><h4>Visibility</h4>
           <p>Strengthen common team goals with transparency across the business. Push
             or pull client information, track sales revenue, and analysis cash flow data
@@ -49,8 +48,7 @@
         </div>
       </div>
       <div class="featureItem row">
-        <div class="featureItem__img featureItem__img--right featureItem__img--pp2 col-sm-6"><img
-          src="/modules/core/client/img/data/images/conversational.png" alt="Conversational"></div>
+        <div class="featureItem__img featureItem__img--right featureItem__img--pp2 col-sm-6"><img src="/modules/core/client/img/data/images/conversational.png" alt="Conversational"></div>
         <div class="featureItem__text featureItem__text--pp2 col-sm-6"><h4>Conversational</h4>
           <p>Use basic commands to craft beautifully smart invoices through Jimmy, our highly organized chat bot. Jimmy
             uses machine learning to automagically fetch client and sales data, chase overdue invoices and track
@@ -58,8 +56,7 @@
         </div>
       </div>
       <div class="featureItem row">
-        <div class="featureItem__img featureItem__img--pp3 col-sm-6"><img src="/modules/core/client/img/data/images/automation.png"
-                                                                          alt="Automation"></div>
+        <div class="featureItem__img featureItem__img--pp3 col-sm-6"><img src="/modules/core/client/img/data/images/automation.png" alt="Automation"></div>
         <div class="featureItem__text featureItem__text--pp3 col-sm-6"><h4>Automation</h4>
           <p>Utilize a streamlined approach to bot invoicing. Monitor and manage your whole business pipeline with
             intelligent insights. Proactively follow sales and accounting data to identify emerging revenue patterns.
@@ -67,8 +64,7 @@
         </div>
       </div>
       <div class="featureItem row">
-        <div class="featureItem__img featureItem__img--right featureItem__img--pp4 col-sm-6"><img
-          src="/modules/core/client/img/data/images/idiosyncratic.png" alt="Idiosyncratic"></div>
+        <div class="featureItem__img featureItem__img--right featureItem__img--pp4 col-sm-6"><img src="/modules/core/client/img/data/images/idiosyncratic.png" alt="Idiosyncratic"></div>
         <div class="featureItem__text featureItem__text--pp4 col-sm-6"><h4>Idiosyncratic</h4>
           <p>Our goal is to help you get paid faster. As such, all invoices are uniquely set to be now due from the day
             it is sent. This means the invoice due date status will appear as nowdue for a nominated period between 0 to
@@ -117,9 +113,9 @@
 
       <div class="row">
         <div class="col-sm-12">
-          <a class="startBtn btn btn-lg btn-default">
-            <div>Start Invoicing</div>
-          </a>
+	      <a class="slackBtn btn btn-lg" ng-click="vm.callOauthProvider('/api/auth/slack')">
+	        <div>Add to <strong>Slack</strong></div>
+	      </a>
         </div>
       </div>
     </div>
@@ -129,9 +125,9 @@
       <div class="footerRow footerRow--tm1 row">
         <div class="col-sm-6">
           <ul class="footerMenu">
-            <li><a href="/pricing">PRICING</a></li>
-            <li><a href="/privacy">LEGAL</a></li>
-            <li><a href="/authentication/signin">SIGN IN</a></li>
+            <li><a href="http://www.nowdue.ai/pricing">PRICING</a></li>
+            <li><a href="http://www.nowdue.ai/privacy">LEGAL</a></li>
+            <li><a href="http://www.nowdue.ai/authentication/signin">SIGN IN</a></li>
           </ul>
         </div>
         <div class="col-sm-6">
@@ -145,10 +141,9 @@
       <div class="footerRow footerRow--tm2 row">
         <div class="smRight col-sm-6">
           <ul class="social">
-            <li><a href="https://medium.com/nowdue"><img src="/modules/core/client/img/data/images/medium_logo.png" alt="Medium"></a></li>
-            <li><a href="https://www.facebook.com/nowdue"><img src="/modules/core/client/img/data/images/facebook_logo.png"
-                                                               alt="Facebook"></a></li>
-            <li><a href="https://twitter.com/nowdue_ai"><img src="/modules/core/client/img/data/images/twitter_logo.png" alt="Twitter"></a>
+            <li><a class="social__medium" href="https://medium.com/nowdue"></a></li>
+            <li><a class="social__facebook" href="https://www.facebook.com/nowdue"></a></li>
+            <li><a class="social__twitter" href="https://twitter.com/nowdue_ai"></a>
             </li>
           </ul>
         </div>
@@ -159,3 +154,4 @@
 
       </div>
     </footer>
+  </div>
