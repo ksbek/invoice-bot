@@ -1997,7 +1997,12 @@ angular
       })
       .state('password', {
         abstract: true,
-        url: '/password'
+        url: '/password',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          }
+        }
       })
       .state('password.forgot', {
         url: '/forgot',

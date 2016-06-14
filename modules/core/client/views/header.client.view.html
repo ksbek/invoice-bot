@@ -29,14 +29,18 @@
     </nav>
   </div><!-- END of .container -->
 
-  <!-- home header -->
-
-
   <!-- account-setup header -->
   <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'authentication.accountSetup'">
     <h4>Account set up</h4>
     <div class="logining-links-wr">
-      <span>or </span>
+      <a href="#" ui-sref="authentication.signin">SIGN IN</a>
+    </div>
+  </div><!-- END of .container -->
+
+  <!-- forgot password header -->
+  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name.indexOf('password') > -1">
+    <h4>Reset Password</h4>
+    <div class="logining-links-wr">
       <a href="#" ui-sref="authentication.signin">SIGN IN</a>
     </div>
   </div><!-- END of .container -->
