@@ -45,7 +45,6 @@ var UserSchema = new Schema({
   email: {
     type: String,
     lowercase: true,
-    unique: 'Email already exists',
     trim: true,
     default: ''
   },
