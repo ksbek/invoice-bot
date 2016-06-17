@@ -12,7 +12,8 @@
 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="https://medium.com/nowdue">BLOG</a></li>
-            <li class="signIn"><a href="http://www.nowdue.ai/authentication/signin" ui-sref="authentication.signin">SIGN IN</a></li>
+            <li class="signIn">
+            <li><a ui-sref="authentication.signin">SIGN IN</a></li>
           </ul>
 
         </div><!-- /.container-fluid -->
@@ -125,9 +126,9 @@
       <div class="footerRow footerRow--tm1 row">
         <div class="col-sm-6">
           <ul class="footerMenu">
-            <li><a href="http://www.nowdue.ai/pricing">PRICING</a></li>
-            <li><a href="http://www.nowdue.ai/privacy">LEGAL</a></li>
-            <li><a href="http://www.nowdue.ai/authentication/signin">SIGN IN</a></li>
+            <li><a ui-sref="root.pricing">PRICING</a></li>
+            <li><a ui-sref="root.privacy">LEGAL</a></li>
+            <li><a ui-sref="authentication.signin">SIGN IN</a></li>
           </ul>
         </div>
         <div class="col-sm-6">

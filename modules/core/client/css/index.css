@@ -1,5 +1,6 @@
 /* line 11, sass/index.scss */
 .slackBtn {
+  font-family: 'Lato', sans-serif;
   padding: 0 2px 4px 2px;
   width: 241px;
   height: 58px;
@@ -7,61 +8,65 @@
   background-color: transparent;
   color: black;
 }
-/* line 18, sass/index.scss */
+/* line 19, sass/index.scss */
 .slackBtn div {
   background: white url(/modules/core/client/img/data/images/slack_button.png) no-repeat 50px 15px;
   height: 100%;
   width: 100%;
   padding: 16px 0 0 32px;
-  letter-spacing: -0.2px;
+  letter-spacing: 0.5px;
   font-size: 17px;
 }
-/* line 26, sass/index.scss */
+/* line 28, sass/index.scss */
+.slackBtn strong {
+  font-weight: 700;
+}
+/* line 32, sass/index.scss */
 .slackBtn:hover {
   opacity: 1;
 }
-/* line 28, sass/index.scss */
+/* line 34, sass/index.scss */
 .slackBtn:hover div {
   margin-top: 1px;
 }
 
-/* line 34, sass/index.scss */
+/* line 42, sass/index.scss */
 .headerWrapper {
   font-family: 'Varela Round', sans-serif;
   color: #2a2d2f;
   background: #e3a5f8 url(/modules/core/client/img/data/images/background_top.png) repeat-x;
 }
-/* line 39, sass/index.scss */
+/* line 47, sass/index.scss */
 .headerWrapper header {
   height: 741px;
   max-width: 920px;
   line-height: normal;
 }
-/* line 44, sass/index.scss */
+/* line 52, sass/index.scss */
 .headerWrapper header .navbar {
   margin-right: 3px;
   padding-top: 10px;
 }
-/* line 48, sass/index.scss */
+/* line 56, sass/index.scss */
 .headerWrapper header .navbar a {
   color: #f5fdb2;
 }
-/* line 52, sass/index.scss */
+/* line 60, sass/index.scss */
 .headerWrapper header .navbar .navbar-brand {
   padding: 11px 30px;
   letter-spacing: 0.4px;
 }
-/* line 56, sass/index.scss */
+/* line 64, sass/index.scss */
 .headerWrapper header .navbar .navbar-brand img {
   display: inline;
   margin-right: 8px;
   vertical-align: middle;
 }
-/* line 62, sass/index.scss */
+/* line 70, sass/index.scss */
 .headerWrapper header .navbar .navbar-brand span {
   vertical-align: super;
 }
-/* line 69, sass/index.scss */
+/* line 77, sass/index.scss */
 .headerWrapper header .navbar .nav {
   padding-top: 10px;
   letter-spacing: 0.1px;
@@ -69,11 +74,11 @@
   float: right;
   margin-top: 0;
 }
-/* line 76, sass/index.scss */
+/* line 84, sass/index.scss */
 .headerWrapper header .navbar .nav li {
   display: inline-block;
 }
-/* line 79, sass/index.scss */
+/* line 87, sass/index.scss */
 .headerWrapper header .navbar .nav a {
   height: 33px;
   width: 73px;
@@ -81,35 +86,35 @@
   border-radius: 49px;
   line-height: 33px;
 }
-/* line 86, sass/index.scss */
+/* line 94, sass/index.scss */
 .headerWrapper header .navbar .nav a:hover {
   background: inherit;
   color: #b2fcfd;
   opacity: 1;
 }
-/* line 94, sass/index.scss */
+/* line 102, sass/index.scss */
 .headerWrapper header .navbar .signIn {
   margin-left: 18px;
 }
-/* line 97, sass/index.scss */
+/* line 105, sass/index.scss */
 .headerWrapper header .navbar .signIn a {
   background: #d99fee;
 }
-/* line 99, sass/index.scss */
+/* line 107, sass/index.scss */
 .headerWrapper header .navbar .signIn a:hover {
   background: #d99fee;
 }
-/* line 108, sass/index.scss */
+/* line 116, sass/index.scss */
 .headerWrapper header .header__row {
   margin-top: 97px;
 }
-/* line 112, sass/index.scss */
+/* line 120, sass/index.scss */
 .headerWrapper header .slogan {
   display: inline-block;
   width: 88%;
   max-width: 782px;
 }
-/* line 118, sass/index.scss */
+/* line 126, sass/index.scss */
 .headerWrapper header .headerText {
   line-height: 18px;
   padding: 0;
@@ -119,23 +124,23 @@
   letter-spacing: 0;
   vertical-align: baseline;
 }
-/* line 128, sass/index.scss */
+/* line 136, sass/index.scss */
 .headerWrapper header .slackBtn {
   margin-top: 38px;
 }
 
-/* line 135, sass/index.scss */
+/* line 143, sass/index.scss */
 .slackWrapper {
   font-family: 'Varela Round', sans-serif;
   background: #f5fdb2 url(/modules/core/client/img/data/images/background_yellow.png) repeat-x 1px 165px;
 }
-/* line 139, sass/index.scss */
+/* line 147, sass/index.scss */
 .slackWrapper .slack {
   background: transparent url(/modules/core/client/img/data/images/yellow_dot.png) no-repeat bottom center;
   /*585px 580px;*/
   max-width: 920px;
 }
-/* line 143, sass/index.scss */
+/* line 151, sass/index.scss */
 .slackWrapper .slack .chat {
   margin: -17.5% 0 0 0;
   width: 85%;
@@ -145,41 +150,41 @@
   box-shadow: -2px 4px 80px 0px rgba(1, 1, 1, 0.2);
   border-radius: 12px;
 }
-/* line 153, sass/index.scss */
+/* line 161, sass/index.scss */
 .slackWrapper .slack .bot {
   width: 85%;
   max-width: 777px;
   margin: 79px 0 120px;
 }
 
-/* line 161, sass/index.scss */
+/* line 169, sass/index.scss */
 .featureWrapper {
   font-family: 'Varela Round', sans-serif;
   color: #2a2d2f;
   background: #ffffff;
 }
-/* line 165, sass/index.scss */
+/* line 173, sass/index.scss */
 .featureWrapper .feature {
   max-width: 920px;
   min-height: 1825px;
   text-align: left;
 }
-/* line 170, sass/index.scss */
+/* line 178, sass/index.scss */
 .featureWrapper .feature .featureItem {
   text-align: center;
 }
-/* line 174, sass/index.scss */
+/* line 182, sass/index.scss */
 .featureWrapper .feature .featureItem .featureItem__img {
   padding: 80px 10px 40px 10px;
 }
-/* line 178, sass/index.scss */
+/* line 186, sass/index.scss */
 .featureWrapper .feature .featureItem .featureItem__text {
   padding: 40px 10px 40px 10px;
   max-width: 320px;
   display: inline-block;
   text-align: left;
 }
-/* line 184, sass/index.scss */
+/* line 192, sass/index.scss */
 .featureWrapper .feature .featureItem .featureItem__text h4 {
   font-size: 24px;
   margin-bottom: 9px;
@@ -188,31 +193,31 @@
   line-height: 2;
   color: inherit;
 }
-/* line 193, sass/index.scss */
+/* line 201, sass/index.scss */
 .featureWrapper .feature .featureItem .featureItem__text p {
   font-size: 18px;
   line-height: 24px;
   letter-spacing: 0.19px;
 }
 
-/* line 203, sass/index.scss */
+/* line 211, sass/index.scss */
 .invoiceWrapper {
   font-family: 'Varela Round', sans-serif;
   color: #2a2d2f;
   background: #f69769 url(/modules/core/client/img/data/images/background_invoice.png) repeat-x 1px center;
 }
-/* line 208, sass/index.scss */
+/* line 216, sass/index.scss */
 .invoiceWrapper .invoice {
   max-width: 920px;
   min-height: 894px;
   background: transparent url(/modules/core/client/img/data/images/orange_dot.png) no-repeat bottom center;
   /*585px 580px;*/
 }
-/* line 213, sass/index.scss */
+/* line 221, sass/index.scss */
 .invoiceWrapper .invoice .invoiceLogo {
   margin: 127px 0 0 7px;
 }
-/* line 217, sass/index.scss */
+/* line 225, sass/index.scss */
 .invoiceWrapper .invoice .invoiceSchema {
   margin-top: 121px;
   /* margin-right: 0px; */
@@ -223,7 +228,7 @@
   align-items: center;
   flex-direction: column;
 }
-/* line 231, sass/index.scss */
+/* line 239, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar {
   display: inline-block;
   position: relative;
@@ -232,7 +237,7 @@
   border-radius: 60px;
   box-shadow: 8px 10px 0 0 #d67f56;
 }
-/* line 239, sass/index.scss */
+/* line 247, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon {
   position: absolute;
   top: -4px;
@@ -242,44 +247,44 @@
   background-color: white;
   border-radius: 25px;
 }
-/* line 248, sass/index.scss */
+/* line 256, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--pp1 {
   top: -2px;
   right: -1px;
 }
-/* line 253, sass/index.scss */
+/* line 261, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--slack {
   background: white url("/modules/core/client/img/data/images/slack_button.png") no-repeat center;
 }
-/* line 257, sass/index.scss */
+/* line 265, sass/index.scss */
 .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--email {
   background: white url("/modules/core/client/img/data/images/email.png") no-repeat center;
 }
-/* line 265, sass/index.scss */
+/* line 273, sass/index.scss */
 .invoiceWrapper .invoice .invoiceImg {
   margin-bottom: 40px;
   margin-top: 40px;
 }
-/* line 269, sass/index.scss */
+/* line 277, sass/index.scss */
 .invoiceWrapper .invoice .invoiceImg img {
   width: 94%;
   max-width: 387px;
 }
-/* line 276, sass/index.scss */
+/* line 284, sass/index.scss */
 .invoiceWrapper .invoice .stripeLogo {
   margin-top: 26px;
 }
-/* line 280, sass/index.scss */
+/* line 288, sass/index.scss */
 .invoiceWrapper .invoice .slackBtn {
   margin-top: 73px;
   margin-bottom: 50px;
 }
 
-/* line 287, sass/index.scss */
+/* line 295, sass/index.scss */
 .footerWrapper {
   background: #f19266;
 }
-/* line 290, sass/index.scss */
+/* line 298, sass/index.scss */
 .footerWrapper .footer {
   font-family: 'Varela Round', sans-serif;
   font-size: 14px;
@@ -289,225 +294,225 @@
   color: #855741;
   text-align: center;
 }
-/* line 299, sass/index.scss */
+/* line 307, sass/index.scss */
 .footerWrapper .footer a {
   color: #855741;
 }
-/* line 303, sass/index.scss */
+/* line 311, sass/index.scss */
 .footerWrapper .footer a:hover {
   color: #b2fcfd !important;
   text-decoration: none;
 }
-/* line 307, sass/index.scss */
+/* line 315, sass/index.scss */
 .footerWrapper .footer a:visited {
   text-decoration: none;
   color: #855741;
 }
-/* line 312, sass/index.scss */
+/* line 320, sass/index.scss */
 .footerWrapper .footer .footerRow {
   /*margin-right: -15px;
   margin-left: -15px;*/
 }
-/* line 316, sass/index.scss */
+/* line 324, sass/index.scss */
 .footerWrapper .footer .footerRow--tm1 {
   margin-top: 111px;
 }
-/* line 320, sass/index.scss */
+/* line 328, sass/index.scss */
 .footerWrapper .footer .footerRow--tm2 {
   margin-top: 132px;
 }
-/* line 324, sass/index.scss */
+/* line 332, sass/index.scss */
 .footerWrapper .footer .footerRow .col-sm-6 {
   padding-right: 15px;
   padding-left: 15px;
 }
-/* line 330, sass/index.scss */
+/* line 338, sass/index.scss */
 .footerWrapper .footer .footerMenu {
   padding-left: 0;
   list-style: none;
   margin-bottom: 40px;
 }
-/* line 334, sass/index.scss */
+/* line 342, sass/index.scss */
 .footerWrapper .footer .footerMenu li {
   display: inline-block;
   margin-left: 13px;
   margin-right: 22px;
 }
-/* line 341, sass/index.scss */
+/* line 349, sass/index.scss */
 .footerWrapper .footer .under {
   margin-right: -4px;
 }
-/* line 343, sass/index.scss */
+/* line 351, sass/index.scss */
 .footerWrapper .footer .under p {
   letter-spacing: 1.2px;
   margin-bottom: 9px;
 }
-/* line 347, sass/index.scss */
+/* line 355, sass/index.scss */
 .footerWrapper .footer .under img {
   margin-top: -2px;
   margin-right: 5px;
 }
-/* line 351, sass/index.scss */
+/* line 359, sass/index.scss */
 .footerWrapper .footer .under a {
   margin-right: 3px;
 }
-/* line 356, sass/index.scss */
+/* line 364, sass/index.scss */
 .footerWrapper .footer .copyRight {
   margin-left: 14px;
   letter-spacing: 1.2px;
   line-height: 14px;
 }
-/* line 360, sass/index.scss */
+/* line 368, sass/index.scss */
 .footerWrapper .footer .copyRight img {
   vertical-align: middle;
 }
-/* line 365, sass/index.scss */
+/* line 373, sass/index.scss */
 .footerWrapper .footer .social {
   list-style: none;
   padding-left: 0;
 }
-/* line 369, sass/index.scss */
+/* line 377, sass/index.scss */
 .footerWrapper .footer .social li {
   display: inline-block;
   margin-left: 22px;
 }
-/* line 373, sass/index.scss */
+/* line 381, sass/index.scss */
 .footerWrapper .footer .social a {
   display: block;
   width: 18px;
   height: 16px;
 }
-/* line 378, sass/index.scss */
+/* line 386, sass/index.scss */
 .footerWrapper .footer .social li:first-child {
   margin-right: 1px;
 }
-/* line 382, sass/index.scss */
+/* line 390, sass/index.scss */
 .footerWrapper .footer .social__medium {
   background: transparent url("/modules/core/client/img/data/images/medium_logo.png") no-repeat;
 }
-/* line 384, sass/index.scss */
+/* line 392, sass/index.scss */
 .footerWrapper .footer .social__medium:hover {
   background: transparent url("/modules/core/client/img/data/images/medium_logo_hover.png") no-repeat;
 }
-/* line 388, sass/index.scss */
+/* line 396, sass/index.scss */
 .footerWrapper .footer .social__facebook {
   background: transparent url("/modules/core/client/img/data/images/facebook_logo.png") no-repeat;
 }
-/* line 390, sass/index.scss */
+/* line 398, sass/index.scss */
 .footerWrapper .footer .social__facebook:hover {
   background: transparent url("/modules/core/client/img/data/images/facebook_logo_hover.png") no-repeat;
 }
-/* line 394, sass/index.scss */
+/* line 402, sass/index.scss */
 .footerWrapper .footer .social__twitter {
   background: transparent url("/modules/core/client/img/data/images/twitter_logo.png") no-repeat;
 }
-/* line 396, sass/index.scss */
+/* line 404, sass/index.scss */
 .footerWrapper .footer .social__twitter:hover {
   background: transparent url("/modules/core/client/img/data/images/twitter_logo_hover.png") no-repeat;
 }
 
 @media (min-width: 768px) {
-  /* line 408, sass/index.scss */
+  /* line 416, sass/index.scss */
   .headerWrapper .header .slogan {
     margin-left: 17px;
   }
-  /* line 412, sass/index.scss */
+  /* line 420, sass/index.scss */
   .headerWrapper .header h4 {
     margin-left: 14px;
   }
-  /* line 416, sass/index.scss */
+  /* line 424, sass/index.scss */
   .headerWrapper .header .slackBtn {
     margin-left: 16px;
   }
 
-  /* line 423, sass/index.scss */
+  /* line 431, sass/index.scss */
   .slackWrapper .slack {
     height: 707px;
   }
-  /* line 427, sass/index.scss */
+  /* line 435, sass/index.scss */
   .slackWrapper .slack .chat {
     margin-left: 14px;
   }
-  /* line 430, sass/index.scss */
+  /* line 438, sass/index.scss */
   .slackWrapper .slack .bot {
     margin-left: 14px;
   }
 
-  /* line 441, sass/index.scss */
+  /* line 449, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img {
     padding: 80px 10px 40px 40px;
   }
-  /* line 443, sass/index.scss */
+  /* line 451, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img--right {
     float: right;
   }
-  /* line 448, sass/index.scss */
+  /* line 456, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text {
     padding: 80px 10px 40px 40px;
   }
 
-  /* line 455, sass/index.scss */
+  /* line 463, sass/index.scss */
   .invoiceWrapper {
     background: #f69769 url(/modules/core/client/img/data/images/background_invoice.png) repeat-x 1px 428px;
   }
-  /* line 459, sass/index.scss */
+  /* line 467, sass/index.scss */
   .invoiceWrapper .invoice .invoiceSchema {
     display: flex;
     align-items: center;
     flex-direction: row;
     margin-bottom: 0;
   }
-  /* line 468, sass/index.scss */
+  /* line 476, sass/index.scss */
   .invoiceWrapper .invoice .avatarWrapper--doc {
     padding-left: 35px;
     padding-top: 6px;
   }
-  /* line 473, sass/index.scss */
+  /* line 481, sass/index.scss */
   .invoiceWrapper .invoice .avatarWrapper--fox {
     padding-left: 11px;
     padding-top: 3px;
   }
-  /* line 481, sass/index.scss */
+  /* line 489, sass/index.scss */
   .invoiceWrapper .invoice .avatarWrapper .avatar .avatar__icon--pp1 {
     top: -2px;
     right: -1px;
   }
-  /* line 490, sass/index.scss */
+  /* line 498, sass/index.scss */
   .invoiceWrapper .invoice .invoiceImg {
     margin-bottom: 0;
     margin-top: 0;
     padding-left: 31px;
   }
-  /* line 496, sass/index.scss */
+  /* line 504, sass/index.scss */
   .invoiceWrapper .invoice .stripeLogo {
     margin-left: 15px;
   }
-  /* line 500, sass/index.scss */
+  /* line 508, sass/index.scss */
   .invoiceWrapper .invoice .slackBtn {
     margin-right: -16px;
   }
 
-  /* line 506, sass/index.scss */
+  /* line 514, sass/index.scss */
   .footerWrapper {
     background: #f19266;
   }
-  /* line 508, sass/index.scss */
+  /* line 516, sass/index.scss */
   .footerWrapper .footer {
     text-align: left;
   }
-  /* line 510, sass/index.scss */
+  /* line 518, sass/index.scss */
   .footerWrapper .footer .footerMenu {
     margin-bottom: 10px;
   }
-  /* line 513, sass/index.scss */
+  /* line 521, sass/index.scss */
   .footerWrapper .footer .under {
     text-align: right;
   }
-  /* line 516, sass/index.scss */
+  /* line 524, sass/index.scss */
   .footerWrapper .footer .smRight {
     float: right;
   }
-  /* line 519, sass/index.scss */
+  /* line 527, sass/index.scss */
   .footerWrapper .footer .social {
     text-align: right;
     margin-right: -3px;
@@ -515,78 +520,78 @@
   }
 }
 @media (min-width: 900px) {
-  /* line 531, sass/index.scss */
+  /* line 539, sass/index.scss */
   .featureWrapper .feature {
     padding-top: 186px;
   }
-  /* line 535, sass/index.scss */
+  /* line 543, sass/index.scss */
   .featureWrapper .feature .featureItem {
     text-align: left;
   }
-  /* line 539, sass/index.scss */
+  /* line 547, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img {
     max-width: 450px;
     max-height: 370px;
   }
-  /* line 543, sass/index.scss */
+  /* line 551, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img--pp1 {
     padding: 0 0 0 58px;
   }
-  /* line 547, sass/index.scss */
+  /* line 555, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img--pp2 {
     padding: 15px 0 0 80px;
   }
-  /* line 551, sass/index.scss */
+  /* line 559, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img--pp3 {
     padding: 39px 0 0 50px;
   }
-  /* line 555, sass/index.scss */
+  /* line 563, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__img--pp4 {
     padding: 66px 0 0 89px;
   }
-  /* line 561, sass/index.scss */
+  /* line 569, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text {
     min-width: 450px;
     min-height: 370px;
     padding: 16px 0 0 95px;
   }
-  /* line 566, sass/index.scss */
+  /* line 574, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp2 {
     padding: 36px 0 0 79px;
     letter-spacing: .3px;
   }
-  /* line 570, sass/index.scss */
+  /* line 578, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp2 h4 {
     margin-bottom: 14px;
   }
-  /* line 574, sass/index.scss */
+  /* line 582, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp2 p {
     padding: 0 11px 0 0;
     line-height: 22px;
   }
-  /* line 580, sass/index.scss */
+  /* line 588, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp3 {
     padding: 93px 0 0 94px;
   }
-  /* line 582, sass/index.scss */
+  /* line 590, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp3 h4 {
     margin-bottom: 7px;
     letter-spacing: 0.3px;
   }
-  /* line 586, sass/index.scss */
+  /* line 594, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp3 p {
     line-height: 22px;
   }
-  /* line 591, sass/index.scss */
+  /* line 599, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp4 {
     padding: 102px 0 0 77px;
   }
-  /* line 593, sass/index.scss */
+  /* line 601, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp4 h4 {
     margin-bottom: 7px;
     letter-spacing: 0.3px;
   }
-  /* line 597, sass/index.scss */
+  /* line 605, sass/index.scss */
   .featureWrapper .feature .featureItem .featureItem__text--pp4 p {
     padding: 0 13px 0 0;
     line-height: 22px;
