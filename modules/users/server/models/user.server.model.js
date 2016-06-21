@@ -67,6 +67,10 @@ var UserSchema = new Schema({
     default: 0.0,
     trim: true
   },
+  includeTaxesOnInvoice: {
+    type: Boolean,
+    trim: true
+  },
   dueDateAllowance: {
     type: Number,
     default: 7,

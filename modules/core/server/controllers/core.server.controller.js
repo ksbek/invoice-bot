@@ -20,6 +20,7 @@ exports.renderIndex = function (req, res) {
       conversationSettings: req.user.conversationSettings,
       currency: req.user.currency,
       tax: req.user.tax,
+      includeTaxesOnInvoice: req.user.includeTaxesOnInvoice,
       dueDateAllowance: req.user.dueDateAllowance,
       plan: req.user.plan,
       integrations: req.user.integrations,

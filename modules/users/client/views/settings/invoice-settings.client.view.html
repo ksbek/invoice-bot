@@ -1,66 +1,82 @@
 <div class="form-wr">
-	<form name="vm.userForm" class="signin" ng-submit="vm.update()" novalidate autocomplete="off">
+	<form name="vm.userForm" ng-submit="vm.update()" novalidate autocomplete="off">
+		<div class="form-row">
+			<div class="row">
+				<div class="col-xs-9">
+					<p>Include taxes on invoice</p>
+				</div>
+				<div class="col-xs-3 text-left">
+					<label class="check-wr">
+						<input type="checkbox" ng-model="vm.user.includeTaxesOnInvoice">
+						<span>
+							<span class="ch-disabled-text">Disabled</span>
+							<span class="ch-checked-text">Active</span>
+						</span>
+					</label>
+				</div>
+			</div>
+		</div>
 		<div class="form-row invoice-settings">
 			<div class="row">
 				<div class="col-xs-8">
 					<p>VAT or GST</p>
-				</div>				
+				</div>		
 				<div class="col-xs-2">
-					<p class="tax-input text-center">
-						<span>Tax</span>
-					</p>
-				</div>
-				<div class="col-xs-2">
-					<div class="tax-input text-left">
-						<span>+</span>
-						<input type="number" ng-model="vm.user.tax" placeholder="0" min="0" max="100">
-						<span>%</span>
-					</div>
-				</div>
-			</div>
-
-		</div>
-		<div class="form-row invoice-settings">
-			<div class="row">
-				<div class="col-xs-8">
-					<p>Currency</p>
-				</div>				
-				<div class="col-xs-2">
-					<p class="tax-input text-center">
-						<span>{{vm.currencySymbols[vm.user.currency]}}</span>
-					</p>
-				</div>
-				<div class="col-xs-2">
-					<div class="tax-input text-left">
-						<div class="select-wr">
-						<select ng-model="vm.user.currency">
-			                <option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{currency}}</option>
-			              </select>
-						</div>
-					</div>
-				</div>
+                    <p class="tax-input text-center">
+                        <select ng-model="vm.tax" ng-change="vm.changeTax()">
+                            <option ng-repeat="n in vm.range(100) track by $index" value="{{n}}">{{n}}%</option>
+                        </select>
+                     </p>
+                </div>
+                <div class="col-xs-2">
+                    <div class="tax-input text-left tax-value">
+                        <span>Tax, %</span>
+                        <input type="number" ng-model="vm.user.tax" ng-change="vm.changeUserTax()" placeholder="0.0" min="0" max="100">
+                    </div>
+                </div>
 			</div>
 		</div>
 		<div class="form-row invoice-settings">
-			<div class="row">
-				<div class="col-xs-8">
-					<p>Due date allowance</p>
-				</div>
-				<div class="col-xs-2">
-					<p class="tax-input text-center">
-						<span>Due</span>
-					</p>
-				</div>
-				<div class="col-xs-2">
-					<div class="tax-input text-left">
-						<input type="number" ng-model="vm.user.dueDateAllowance" placeholder="0">
-						<span>days</span>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div class="row">
+              	<div class="col-xs-8">
+                	<p>Currency</p>
+              	</div>
+              	<div class="col-xs-2">
+                	<p class="tax-input text-center">
+                  		<select ng-model="vm.user.currency" class="selectCurrency">
+                    		<option ng-repeat="(currency, symbol) in vm.currencySymbols" value="{{currency}}">{{currency}}</option>
+                  		</select>
+                	</p>
+              	</div>
+              	<div class="col-xs-2">
+                	<div class="tax-input text-left tax-value">
+                 		<span>{{vm.currencySymbols[vm.user.currency]}}</span>
+                	</div>
+              	</div>
+            </div>
+        </div>
+        <div class="form-row invoice-settings">
+            <div class="row">
+              	<div class="col-xs-8">
+                	<p>Due date allowance</p>
+              	</div>
+              	<div class="col-xs-2">
+                	<p class="tax-input text-center">
+                  		<select ng-model="vm.dueDateAllowance" ng-change="vm.changeDueDateAllowance()">
+                    		<option ng-repeat="n in vm.range(31) track by $index">{{n}}</option>
+                  		</select>
+                	</p>
+              	</div>
+              	<div class="col-xs-2">
+                	<div class="tax-input text-left tax-value">
+                  		<span>Days</span>
+                  		<input type="number" ng-change="vm.changeUserDueDateAllowance()" ng-model="vm.user.dueDateAllowance" placeholder="0">
+                	</div>
+              	</div>
+            </div>
+        </div>
 		<div class="text-center form-row form-group">
         	<button type="submit">Save</button>
-      </div>
+      	</div>
 	</form>
 </div><!-- END of .form-wr -->

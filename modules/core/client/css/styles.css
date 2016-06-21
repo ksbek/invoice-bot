@@ -1182,6 +1182,20 @@ header .alignright h4 {
 	font-size: 18px;
 }
 
+.invoice-btn {
+	max-width: 306px;
+	margin: 0 auto 0;
+	padding: 0 35px 0 0;
+	text-align: right;
+}
+.invoice-btn .btn-1 {
+	display: block;
+	width: 100%;
+	margin: 3px 0 0;
+	padding: 13px 10px 14px;
+	font-size: 18px;
+}
+
 .color-violet {
 	color: #cb7cb4;
 }
@@ -1676,6 +1690,20 @@ header h4 + .invoice-data-item {
 /* ----------------------------------------------------------------------------------- */
 
 @media screen and (max-width: 550px) {
+.hidden-550{
+	display: none;
+}
+.col-550-12{
+	width: 100%;
+	padding: 0;
+}
+.invoice-btn {
+	max-width: 100%;
+	padding: 0 0 0 0;
+}
+.btn-1{
+	border-radius: 0;
+}
 header h4 {
 	margin: 0 5px 0 0;
 	display: block;

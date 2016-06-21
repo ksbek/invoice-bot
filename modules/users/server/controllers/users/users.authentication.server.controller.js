@@ -42,6 +42,7 @@ exports.signup = function (req, res) {
       }
       user = _.extend(existing_user, req.body);
       user.updated = Date.now();
+      user.integrations.slack = true;
       // Then save the user
       user.save(function (err) {
         if (err) {
@@ -56,7 +57,7 @@ exports.signup = function (req, res) {
             user.runningStatus.isRunning = true;
             require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 1, user);
           }
-
+          /*
           var postData = [{
             "email": user.email,
             "currency": user.currency,
@@ -80,6 +81,7 @@ exports.signup = function (req, res) {
               }
             }
           });
+          */
           req.login(user, function (err) {
             if (err) {
               res.status(400).send(err);
