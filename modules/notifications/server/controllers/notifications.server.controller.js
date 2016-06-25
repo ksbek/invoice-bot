@@ -159,3 +159,13 @@ exports.sendMessage = function (req, res) {
   }
   */
 };
+
+/**
+ * Get slack button msg
+ */
+exports.receiveSlackMsg = function (req, res) {
+  console.log(req);
+  res.status(200).send({
+    message: "Ok"
+  });
+};

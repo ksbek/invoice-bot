@@ -12,4 +12,7 @@ module.exports = function (app) {
   // Define send message
   app.route('/api/notifications/apiai').post(notifications.sendMessage);
 
+  app.route('/api/notifications/receiveslackmsg')
+    .post(notifications.receiveSlackMsg)
+    .get(notifications.receiveSlackMsg);
 };

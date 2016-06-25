@@ -37,7 +37,7 @@ module.exports = {
       }
     }
   },
-  baseUrl: 'http://www.nowdue.ai',
+  baseUrl: 'https://www.nowdue.ai',
   stripe: {
     apiKey: 'sk_live_4YXldnXlwst5j1FWza4Di37q',
     apiPubKey: 'pk_live_4YXlSIEysOA7ERb61H32Kl3C',
