@@ -5,9 +5,11 @@
  */
 var mongoose = require('mongoose'),
   Notification = mongoose.model('Notification'),
+  User = mongoose.model('User'),
   apiai = require('apiai'),
   Slack = require('slack-node'),
   path = require('path'),
+  config = require(path.resolve('./config/config')),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 
@@ -164,8 +166,187 @@ exports.sendMessage = function (req, res) {
  * Get slack button msg
  */
 exports.receiveSlackMsg = function (req, res) {
-  console.log(req);
-  res.status(200).send({
-    message: "Ok"
+  var params = JSON.parse(req.body.payload);
+
+  var attachment = params.original_message.attachments[0];
+  delete attachment.actions;
+
+  var searchQuery = {};
+  searchQuery.provider = 'slack';
+  searchQuery['providerData.user_id'] = params.user.id;
+
+  var WebClient = require('@slack/client').WebClient;
+
+  var apiai = require('apiai')(config.apiai.clientAccessToken);
+
+  var request;
+  var data;
+
+  User.findOne(searchQuery, function (err, user) {
+    if (err) {
+      console.log(err);
+      res.json({ message: 'Something went wrong.' });
+    } else {
+      var web = new WebClient(user.providerData.tokenSecret.access_token);
+      switch (params.callback_id) {
+        case 'confirm_invoice':
+
+          if (params.actions[0].value === "yes")
+            attachment.fields.push({
+              'title': 'You' + ' confirm this invoice'
+            });
+          else
+            attachment.fields.push({
+              'title': 'You' + ' do not confirm this invoice'
+            });
+
+          request = apiai.textRequest(params.actions[0].value);
+
+          request.on('response', function(response) {
+            if (params.actions[0].value === "yes")
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_invoice.js"))(response, user, params.channel.id, web, config);
+            else
+              web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
+            console.log(response);
+          });
+
+          request.on('error', function(error) {
+            console.log(error);
+          });
+
+          request.end();
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+        case 'invoice_created':
+          if (params.actions[0].value === "yes")
+            attachment.text = 'You click yes';
+          else
+            attachment.text = 'You click no';
+
+          request = apiai.textRequest(params.actions[0].value);
+
+          request.on('response', function(response) {
+            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, params.channel.id, web, config);
+            console.log(response);
+          });
+
+          request.on('error', function(error) {
+            console.log(error);
+          });
+
+          request.end();
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+        case 'create_client_business_name':
+          if (params.actions[0].value === "yes")
+            attachment.text = 'Same Name';
+          else
+            attachment.text = 'New Contact Name';
+          request = apiai.textRequest(params.actions[0].value);
+
+          request.on('response', function(response) {
+            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client.js"))(response, user, params.channel.id, web, config);
+            console.log(response);
+          });
+
+          request.on('error', function(error) {
+            console.log(error);
+          });
+
+          request.end();
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+        case 'confirm_client':
+          if (params.actions[0].value === "yes")
+            attachment.text = 'You confirm client';
+          else {
+            attachment.callback_id = 'create_client_no_confirm';
+            attachment.actions = [
+              {
+                "name": "bussiness_name",
+                "text": "Business Name",
+                "type": "button",
+                "value": "business name"
+              },
+              {
+                "name": "contact_name",
+                "text": "Contact Name",
+                "type": "button",
+                "value": "contact name"
+              },
+              {
+                "name": "email",
+                "text": "Email",
+                "type": "button",
+                "value": "email"
+              }
+            ];
+          }
+          request = apiai.textRequest(params.actions[0].value);
+
+          request.on('response', function(response) {
+            web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
+            console.log(response);
+          });
+
+          request.on('error', function(error) {
+            console.log(error);
+          });
+
+          request.end();
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+        case 'create_client_no_confirm':
+          attachment.text = 'Change' + params.actions[0].value;
+
+          request = apiai.textRequest(params.actions[0].value);
+
+          request.on('response', function(response) {
+            web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
+            console.log(response);
+          });
+
+          request.on('error', function(error) {
+            console.log(error);
+          });
+
+          request.end();
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+        default:
+          res.json({ message: "Ok" });
+          break;
+      }
+    }
   });
 };

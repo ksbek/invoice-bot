@@ -51,7 +51,46 @@ module.exports = function (token, config, isFirst, new_user) {
         var newrequest = apiai.textRequest('onboarding', { 'contexts': [context] });
         newrequest.on('response', function(response) {
           console.log(response);
-          rtm.sendMessage(response.result.fulfillment.speech.replace('User_Name', new_user.companyName), dm.id);
+
+          var attachment = {
+            "text": "To get started, please connect Stripe to accept online :credit_card: payments!",
+            "fallback": "You are unable to connect stripe",
+            "callback_id": "stripe",
+            "color": "#e2a5f8",
+            "attachment_type": "default",
+            "token": "VOOjorjRck77mNR33HD1Eux4",
+            "actions": [
+              {
+                "name": "info",
+                "text": "Learn more",
+                "type": "button",
+                "value": "info"
+              },
+              {
+                "name": "stripe",
+                "text": "Connect with Stripe",
+                "style": "danger",
+                "type": "button",
+                "value": "stripe",
+                "confirm": {
+                  "title": "Are you sure?",
+                  "text": "",
+                  "ok_text": "Yes",
+                  "dismiss_text": "No"
+                }
+              }
+            ],
+            "response_url": config.baseUrl + "/api/notifications/receiveslackmsg"
+          };
+
+          var data = {
+            attachments: [attachment]
+          };
+
+          web.chat.postMessage(dm.id, response.result.fulfillment.speech.replace('$funuser', new_user.companyName), data, function(err, response) {
+            console.log(response);
+          });
+          // rtm.sendMessage(response.result.fulfillment.speech.replace('User_Name', new_user.companyName), dm.id);
         });
 
         newrequest.on('error', function(error) {
@@ -120,173 +159,31 @@ module.exports = function (token, config, isFirst, new_user) {
                   break;
 
                 case 'Invoice Description':
-                  if (response.result.parameters.name !== '') {
-
-                    // Check if user have client
-                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
-                      if (client) {
-                        var attachment = {
-                          "fallback": "Required plain-text summary of the attachment.",
-                          "color": "#f1d4fc",
-                          "author_name": "Invoice: " + client.companyName,
-                          "mrkdwn_in": [
-                            "text",
-                            "pretext"
-                          ],
-                          "text": "Invoice amount: " + config.currencies[user.currency] + (Math.round(response.result.parameters.amount * (1 + user.tax / 100) * 100) / 100).toFixed(2) + ' `' + config.currencies[user.currency] + response.result.parameters.amount + ' + ' + user.tax + '% Tax`',
-                          "title": "Description: " + response.result.parameters.description,
-                          "fields": [
-                            {
-                              "title": "Nowdue allowance: " + user.dueDateAllowance + " days",
-                              "value": "Send to: " + client.name + " at " + client.email,
-                              "short": false
-                            }
-                          ],
-                          "footer": "Nowdue AI",
-                          "footer_icon": "https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png",
-                          "ts": new Date().getTime() / 1000
-                        };
-
-                        var data = {
-                          attachments: [attachment]
-                        };
-                        // rtm.sendMessage(response.result.fulfillment.speech, dm.id, data);
-
-                        web.chat.postMessage(dm.id, response.result.fulfillment.speech, data, function(err, response) {
-                          console.log(response);
-                        });
-                      } else {
-                        var context = {
-                          "name": "invoice-name-not-found"
-                        };
-                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
-                        newrequest.on('response', function(response) {
-                          rtm.sendMessage(response, dm.id);
-                        });
-
-                        newrequest.on('error', function(error) {
-                          console.log(error);
-                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
-                        });
-                      }
-                    });
-                  }
+                case 'Make Invoice No Confirm Wrong Description Given':
+                case 'Make Invoice No Confirm Wrong Name Given':
+                case 'Make Invoice No Confirm Wrong Amount Given':
+                case 'Make Invoice with Name, Amount & Description':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_invoice.js"))(response, user, dm.id, web, config);
                   break;
 
                 // Check the slack user confirm yes for make invoice
                 case 'Make Invoice Yes Confirm':
-                  // Check if the confirm parameters have client name
-                  if (response.result.parameters.name !== '') {
-
-                    // Check if user have client
-                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
-                      if (client) {
-
-                        // Check if the confirm parameters have amount
-                        if (response.result.parameters.amount !== '') {
-
-                          // Create invoice with confirm parameters
-                          Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {
-                            if (invoice) {
-                              var response_speech = response.result.fulfillment.speech;
-                              if (invoice.user.currency === 'AUD') {
-                                response_speech.replace('[CurrencySymbol]', 'A$');
-                              } else if (invoice.user.currency === 'EURO') {
-                                response_speech.replace('[CurrencySymbol]', '€');
-                              } else {
-                                response_speech.replace('[CurrencySymbol]', '$');
-                              }
-
-                              // response_speech = response_speech.replace('INV000', config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
-                              response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
-                              console.log(response_speech);
-                              // rtm.sendMessage(response_speech, dm.id);
-                              web.chat.postMessage(dm.id, response_speech);
-                              console.log(invoice);
-                              invoice.client = client;
-                              invoice.user = user;
-
-                              // Send invoice created notification to notifications page
-                              require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, invoice, user, 1);
-                            }
-                          });
-                        } else {
-                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-                        }
-                      } else {
-                        var context = {
-                          "name": "invoice-name-not-found"
-                        };
-                        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
-                        newrequest.on('response', function(response) {
-                          rtm.sendMessage(response, dm.id);
-                        });
-
-                        newrequest.on('error', function(error) {
-                          console.log(error);
-                          // rtm.sendMessage("Sorry, something went wrong", dm.id);
-                        });
-                      }
-                    });
-                  } else {
-                    rtm.sendMessage(response.result.fulfillment.speech, dm.id);
-                  }
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_invoice.js"))(response, user, dm.id, web, config);
                   break;
 
                 // Check the slack user confirm send invoice to client
                 case 'Make Invoice Send Yes Confirm':
-                  Invoice.findOne({ user: user.id }).populate('user', 'companyName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
-                    if (invoice) {
-                      var response_speech = response.result.fulfillment.speech;
-                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
-                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
-                      // rtm.sendMessage(response_speech, dm.id);
-                      web.chat.postMessage(dm.id, response_speech);
-                      // Send transaction email to user
-                      require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 1);
-                    }
-                  });
+                case 'Make Invoice Send No Confirm':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, dm.id, web, config);
                   break;
 
-                // Check the slack user confirm no send invoice to client
-                case 'Make Invoice Send No Confirm':
-                  // Send invoice url to slack
-                  Invoice.findOne({ user: user.id }).populate('user', 'companyName').populate('client').sort({ $natural: -1 }).limit(1).exec(function (err, invoice) {
-                    if (invoice) {
-                      var response_speech = response.result.fulfillment.speech;
-                      // response_speech = response_speech.replace('PAGE LINK', '<' + config.baseUrl + '/invoices/' + invoice._id + '|Invoice ' + invoice.invoice + '>');
-                      response_speech = response_speech.replace('INV000', '<' + config.baseUrl + '/invoices/' + invoice._id + '|INV' + invoice.invoice + '>');
-                      // rtm.sendMessage(response_speech, dm.id);
-                      web.chat.postMessage(dm.id, response_speech);
-                    }
-                  });
+                case 'Create Client Business Name':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client_business_name.js"))(response, user, dm.id, web, config);
                   break;
 
                 case 'Create Client Email':
                 case 'Create Client Email Same Name':
-                  // Check if the confirm parameters have business name and email
-                  if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
-                    var attachment = {
-                      "fallback": "Required plain-text summary of the attachment.",
-                      "color": "#f1d4fc",
-                      "author_name": "Client: " + response.result.parameters.name,
-                      "title": "Contact: " + response.result.parameters.contactname,
-                      "fields": [
-                        {
-                          "value": "Email address: " + response.result.parameters.email,
-                          "short": false
-                        }
-                      ],
-                      "footer": "Nowdue AI",
-                      "footer_icon": "https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png",
-                      "ts": new Date().getTime() / 1000
-                    };
-
-                    var data = {
-                      attachments: [attachment]
-                    };
-                    web.chat.postMessage(dm.id, response.result.fulfillment.speech, data);
-                  }
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_client.js"))(response, user, dm.id, web, config);
                   break;
 
                 // Check the slack user confirm yes for create client
