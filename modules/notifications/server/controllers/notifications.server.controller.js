@@ -276,7 +276,9 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
         case 'confirm_client':
           if (params.actions[0].value === "yes")
-            attachment.text = 'You confirm client';
+            attachment.fields.push({
+              'title': 'You' + ' confirm this client'
+            });
           else {
             attachment.callback_id = 'create_client_no_confirm';
             attachment.actions = [
@@ -304,7 +306,7 @@ exports.receiveSlackMsg = function (req, res) {
 
           request.on('response', function(response) {
             if (params.actions[0].value === "yes")
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, params.channel.id, web, config);
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client.js"))(response, user, params.channel.id, web, config);
             else
               web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
             console.log(response);
