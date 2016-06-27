@@ -9,9 +9,6 @@ module.exports = function (token, config, isFirst, new_user) {
   var Client = mongoose.model('Client');
   var Invoice = mongoose.model('Invoice');
 
-  var Jsdom = require("jsdom");
-  var fs = require("fs");
-
   var RtmClient = require('@slack/client').RtmClient;
   var WebClient = require('@slack/client').WebClient;
   var MemoryDataStore = require('@slack/client').MemoryDataStore;
