@@ -284,19 +284,19 @@ exports.receiveSlackMsg = function (req, res) {
                 "name": "bussiness_name",
                 "text": "Business Name",
                 "type": "button",
-                "value": "business name"
+                "value": "Business Name"
               },
               {
                 "name": "contact_name",
                 "text": "Contact Name",
                 "type": "button",
-                "value": "contact name"
+                "value": "Contact Name"
               },
               {
                 "name": "email",
                 "text": "Email",
                 "type": "button",
-                "value": "email"
+                "value": "Email"
               }
             ];
           }
@@ -324,7 +324,9 @@ exports.receiveSlackMsg = function (req, res) {
           };
           return res.json(data);
         case 'create_client_no_confirm':
-          attachment.text = 'Change' + params.actions[0].value;
+          attachment.fields.push({
+            'title': 'Change' + params.actions[0].value
+          });
 
           request = apiai.textRequest(params.actions[0].value);
 

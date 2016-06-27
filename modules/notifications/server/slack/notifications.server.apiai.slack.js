@@ -183,6 +183,9 @@ module.exports = function (token, config, isFirst, new_user) {
 
                 case 'Create Client Email':
                 case 'Create Client Email Same Name':
+                case 'Create Client No Confirm Wrong Email Given':
+                case 'Create Client No Confirm Wrong Business Name Given':
+                case 'Create Client No Confirm Wrong Contact Name Given':
                   require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_client.js"))(response, user, dm.id, web, config);
                   break;
 
