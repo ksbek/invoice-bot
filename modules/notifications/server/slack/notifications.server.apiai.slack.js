@@ -9,6 +9,9 @@ module.exports = function (token, config, isFirst, new_user) {
   var Client = mongoose.model('Client');
   var Invoice = mongoose.model('Invoice');
 
+  var Jsdom = require("jsdom");
+  var fs = require("fs");
+
   var RtmClient = require('@slack/client').RtmClient;
   var WebClient = require('@slack/client').WebClient;
   var MemoryDataStore = require('@slack/client').MemoryDataStore;
@@ -64,6 +67,7 @@ module.exports = function (token, config, isFirst, new_user) {
                 "name": "info",
                 "text": "Learn more",
                 "type": "button",
+                "style": "primary",
                 "value": "Learn more"
               },
               {
@@ -248,6 +252,21 @@ module.exports = function (token, config, isFirst, new_user) {
                       }
                     }
                   ], function(err, result) {
+                    /*
+                    var jsdom = Jsdom.jsdom;
+                    var document = jsdom(fs.readFileSync(require('path').resolve("modules/notifications/server/views/revenue_chart.server.html")));
+                    var window = document.defaultView;
+                    var chartData = [];
+                    for (var i = 0; i < 7; i++)
+                      chartData.push(Math.random() * 50);
+                    window.__myObject = { chartData: chartData };
+
+                    console.log(window.document.documentElement.outerHTML);
+
+                    console.log(window.innerWidth);
+
+                    console.log(typeof window.document.getElementsByClassName);
+                    */
                     if (err) {
                       console.log(err);
                       rtm.sendMessage("Sorry, Something went wrong.", dm.id);

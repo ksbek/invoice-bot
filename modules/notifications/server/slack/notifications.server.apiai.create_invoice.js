@@ -46,6 +46,7 @@ module.exports = function (response, user, channel, web, config) {
                     "name": "no",
                     "text": "No",
                     "type": "button",
+                    "style": "primary",
                     "value": "no"
                   },
                   {

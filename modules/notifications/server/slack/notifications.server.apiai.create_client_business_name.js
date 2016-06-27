@@ -26,13 +26,14 @@ module.exports = function (response, user, channel, web, config) {
           "actions": [
             {
               "name": "no",
-              "text": "New Contact Name",
+              "text": "Add contact name",
               "type": "button",
+              "style": "primary",
               "value": "no"
             },
             {
               "name": "yes",
-              "text": "Same Name",
+              "text": "Same name",
               "type": "button",
               "style": "primary",
               "value": "yes"

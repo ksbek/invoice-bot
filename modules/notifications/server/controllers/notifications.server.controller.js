@@ -287,13 +287,13 @@ exports.receiveSlackMsg = function (req, res) {
             attachment.actions = [
               {
                 "name": "bussiness_name",
-                "text": "Business Name",
+                "text": "Business name",
                 "type": "button",
                 "value": "Business Name"
               },
               {
                 "name": "contact_name",
-                "text": "Contact Name",
+                "text": "Contact name",
                 "type": "button",
                 "value": "Contact Name"
               },
@@ -331,7 +331,7 @@ exports.receiveSlackMsg = function (req, res) {
 
         case 'create_client_no_confirm':
           attachment.fields.push({
-            'title': 'Change' + params.actions[0].value
+            'title': 'Change ' + params.actions[0].value
           });
 
           request = apiai.textRequest(params.actions[0].value);

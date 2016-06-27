@@ -31,12 +31,7 @@ module.exports = function (response, user, channel, web, config) {
           "text": "No",
           "type": "button",
           "value": "no",
-          "confirm": {
-            "title": "Are you sure?",
-            "text": "",
-            "ok_text": "Yes",
-            "dismiss_text": "No"
-          }
+          "style": "primary"
         },
         {
           "name": "yes",
@@ -49,7 +44,7 @@ module.exports = function (response, user, channel, web, config) {
       "action_ts": new Date().getTime() / 1000,
       "message_ts": new Date().getTime() / 1000,
       "footer": "Nowdue AI",
-      "footer_icon": "https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png",
+      "footer_icon": "https://www.nowdue.ai/modules/core/client/img/i-nowdue.png",
       "ts": new Date().getTime() / 1000
     };
 

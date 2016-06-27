@@ -165,7 +165,7 @@
         <header>
             <div class="container" lang="container">
                 <a href="#" class="logo left" lang="logo left"><%= invoice.client.companyName %></a>
-                <a href="https://nowdue.herokuapp.com/invoices/<%= invoice.id %>" class="logo right" lang="logo right">View this email in your browser</a>
+                <a href="https://www.nowdue.ai/invoices/<%= invoice.id %>" class="logo right" lang="logo right">View this email in your browser</a>
             </div><!-- END of .container -->
         </header><!-- END of header -->
 
@@ -173,9 +173,9 @@
             <div class="text-center container" lang="text-center container">
                 <div class="divider-item" lang="divider-item"></div>
                 <h2>nowdue</h2>
-                <a href="https://nowdue.herokuapp.com/invoices/<%= invoice.id %>" class="btn-invoice" lang="btn-invoice">Invoice <strong><%= invoice.invoice %></strong></a>
+                <a href="https://www.nowdue.ai/invoices/<%= invoice.id %>" class="btn-invoice" lang="btn-invoice">Invoice <strong><%= invoice.invoice %></strong></a>
                 <p>$<%= invoice.amountDue.amount %></p>
-                <img src="https://nowdue.herokuapp.com/modules/core/client/img/i-nowdue.png">
+                <img src="https://www.nowdue.ai/modules/core/client/img/i-nowdue.png">
             </div><!-- END of .container -->
         </div><!-- END of .content -->
 
