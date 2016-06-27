@@ -189,8 +189,8 @@ exports.receiveSlackMsg = function (req, res) {
     } else {
       var web = new WebClient(user.providerData.tokenSecret.access_token);
       switch (params.callback_id) {
-        case 'confirm_invoice':
 
+        case 'confirm_invoice':
           if (params.actions[0].value === "yes")
             attachment.fields.push({
               'title': ':ok_hand: You confirmed as correct'
@@ -223,6 +223,7 @@ exports.receiveSlackMsg = function (req, res) {
             attachments: [attachment]
           };
           return res.json(data);
+
         case 'invoice_created':
           if (params.actions[0].value === "yes")
             attachment.text = ':stuck_out_tongue_winking_eye: You approved';
@@ -249,6 +250,7 @@ exports.receiveSlackMsg = function (req, res) {
             attachments: [attachment]
           };
           return res.json(data);
+
         case 'create_client_business_name':
           if (params.actions[0].value === "yes")
             attachment.text = 'Same Name';
@@ -274,6 +276,7 @@ exports.receiveSlackMsg = function (req, res) {
             attachments: [attachment]
           };
           return res.json(data);
+
         case 'confirm_client':
           if (params.actions[0].value === "yes")
             attachment.fields.push({
@@ -325,6 +328,7 @@ exports.receiveSlackMsg = function (req, res) {
             attachments: [attachment]
           };
           return res.json(data);
+
         case 'create_client_no_confirm':
           attachment.fields.push({
             'title': 'Change' + params.actions[0].value
@@ -350,6 +354,40 @@ exports.receiveSlackMsg = function (req, res) {
             attachments: [attachment]
           };
           return res.json(data);
+
+        case 'onboarding':
+          if (params.actions[0].value === 'Learn More')
+            attachment.fields.push({
+              'title': params.actions[0].value
+            });
+          else
+            attachment.fields.push({
+              'title': 'Please click ' + config.baseUrl + '/api/auth/stripe' + ' to connect with stripe'
+            });
+
+          if (params.actions[0].value === 'Learn More') {
+            request = apiai.textRequest('yes');
+
+            request.on('response', function(response) {
+              web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
+              console.log(response);
+            });
+
+            request.on('error', function(error) {
+              console.log(error);
+            });
+
+            request.end();
+          }
+
+          console.log(attachment);
+
+          data = {
+            text: params.original_message.text,
+            attachments: [attachment]
+          };
+          return res.json(data);
+
         default:
           res.json({ message: "Ok" });
           break;

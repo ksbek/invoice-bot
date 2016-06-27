@@ -52,7 +52,7 @@ module.exports = function (response, user, channel, web, config) {
                     "name": "yes",
                     "text": "Yes",
                     "type": "button",
-                    "style": "danger",
+                    "style": "primary",
                     "value": "yes"
                   }
                 ],

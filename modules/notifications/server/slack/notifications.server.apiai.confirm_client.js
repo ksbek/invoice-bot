@@ -43,7 +43,7 @@ module.exports = function (response, user, channel, web, config) {
           "text": "Looks good",
           "type": "button",
           "value": "yes",
-          "style": "danger"
+          "style": "primary"
         }
       ],
       "action_ts": new Date().getTime() / 1000,

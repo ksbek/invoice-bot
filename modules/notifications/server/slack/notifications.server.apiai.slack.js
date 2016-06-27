@@ -55,7 +55,7 @@ module.exports = function (token, config, isFirst, new_user) {
           var attachment = {
             "text": "To get started, please connect Stripe to accept online :credit_card: payments!",
             "fallback": "You are unable to connect stripe",
-            "callback_id": "stripe",
+            "callback_id": "onboarding",
             "color": "#e2a5f8",
             "attachment_type": "default",
             "token": "VOOjorjRck77mNR33HD1Eux4",
@@ -64,20 +64,14 @@ module.exports = function (token, config, isFirst, new_user) {
                 "name": "info",
                 "text": "Learn more",
                 "type": "button",
-                "value": "info"
+                "value": "Learn more"
               },
               {
                 "name": "stripe",
                 "text": "Connect with Stripe",
-                "style": "danger",
+                "style": "primary",
                 "type": "button",
-                "value": "stripe",
-                "confirm": {
-                  "title": "Are you sure?",
-                  "text": "",
-                  "ok_text": "Yes",
-                  "dismiss_text": "No"
-                }
+                "value": "Connect with Stripe"
               }
             ],
             "response_url": config.baseUrl + "/api/notifications/receiveslackmsg"
@@ -87,7 +81,7 @@ module.exports = function (token, config, isFirst, new_user) {
             attachments: [attachment]
           };
 
-          web.chat.postMessage(dm.id, response.result.fulfillment.speech.replace('$funuser', new_user.companyName), data, function(err, response) {
+          web.chat.postMessage(dm.id, response.result.fulfillment.speech.replace('@funuser', '@' + user.name), data, function(err, response) {
             console.log(response);
           });
           // rtm.sendMessage(response.result.fulfillment.speech.replace('User_Name', new_user.companyName), dm.id);
