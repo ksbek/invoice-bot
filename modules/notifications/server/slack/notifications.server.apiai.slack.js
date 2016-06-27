@@ -191,22 +191,7 @@ module.exports = function (token, config, isFirst, new_user) {
 
                 // Check the slack user confirm yes for create client
                 case 'Create Client Yes Confirm':
-                  // Check if the confirm parameters have business name and email
-                  if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
-
-                    // Create Client
-                    Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
-                      console.log(client);
-                      if (client) {
-                        // var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit |' + client.companyName + '>');
-                        var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');
-                        // rtm.sendMessage(response_speech, dm.id);
-                        web.chat.postMessage(dm.id, response_speech);
-                      } else {
-                        rtm.sendMessage("Sorry, Something went wrong.", dm.id);
-                      }
-                    });
-                  }
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client.js"))(response, user, dm.id, web, config);
                   break;
 
                 case 'Lookup Revenue Client':

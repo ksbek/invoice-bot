@@ -193,11 +193,11 @@ exports.receiveSlackMsg = function (req, res) {
 
           if (params.actions[0].value === "yes")
             attachment.fields.push({
-              'title': 'You' + ' confirm this invoice'
+              'title': ':ok_hand: You confirmed as correct'
             });
           else
             attachment.fields.push({
-              'title': 'You' + ' do not confirm this invoice'
+              'title': ':confused: You marked as incorrect'
             });
 
           request = apiai.textRequest(params.actions[0].value);
@@ -225,9 +225,9 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
         case 'invoice_created':
           if (params.actions[0].value === "yes")
-            attachment.text = 'You click yes';
+            attachment.text = ':stuck_out_tongue_winking_eye: You approved';
           else
-            attachment.text = 'You click no';
+            attachment.text = ':+1: You marked as send later';
 
           request = apiai.textRequest(params.actions[0].value);
 
@@ -277,7 +277,7 @@ exports.receiveSlackMsg = function (req, res) {
         case 'confirm_client':
           if (params.actions[0].value === "yes")
             attachment.fields.push({
-              'title': 'You' + ' confirm this client'
+              'title': ':ok_hand: You confirmed as correct'
             });
           else {
             attachment.callback_id = 'create_client_no_confirm';
