@@ -257,7 +257,7 @@ exports.receiveSlackMsg = function (req, res) {
           request = apiai.textRequest(params.actions[0].value);
 
           request.on('response', function(response) {
-            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client.js"))(response, user, params.channel.id, web, config);
+            web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
             console.log(response);
           });
 
@@ -303,7 +303,10 @@ exports.receiveSlackMsg = function (req, res) {
           request = apiai.textRequest(params.actions[0].value);
 
           request.on('response', function(response) {
-            web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
+            if (params.actions[0].value === "yes")
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, params.channel.id, web, config);
+            else
+              web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
             console.log(response);
           });
 
