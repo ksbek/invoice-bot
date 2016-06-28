@@ -5,8 +5,8 @@
         <div class="col-xs-2">
           <h4 class="color-light-gray">To</h4>
         </div>
-        <div class="col-xs-8">
-          <h4>{{vm.invoice.client.companyName}}</h4>
+        <div class="col-xs-8 invoice-info-firm">
+          <h4 class="color-dark">{{vm.invoice.client.companyName}}</h4>
           <h4 class="color-violet">We appreciate your business</h4>
           <p>{{vm.invoice.description}}</p>
         </div>
@@ -18,13 +18,13 @@
         </div>
         <div class="col-xs-8 col-sm-12">
           <div class="invoice-info">
-            <h2><i>Total</i> {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} {{vm.invoice.amountDue.currency}}</h2>
-            <h4><i>Tax</i>{{vm.invoice.tax}}%</h4>
-            <h4><i>Subtotal</i> {{vm.invoice.amountDue.amount/(1+vm.invoice.tax/100) | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} {{vm.invoice.amountDue.currency}}</h4>
+            <h2 class="color-dark"><i class="color-light-gray">Total</i> {{vm.invoice.amountDue.amount | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} {{vm.invoice.amountDue.currency}}</h2>
+            <h4 class="color-dark"><i class="color-light-gray">Tax</i>{{vm.invoice.tax}}%</h4>
+            <h4 class="color-dark"><i class="color-light-gray">Subtotal</i> {{vm.invoice.amountDue.amount/(1+vm.invoice.tax/100) | currency:vm.currencySymbols[vm.invoice.amountDue.currency]}} {{vm.invoice.amountDue.currency}}</h4>
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row hidden-550">
         <div class="col-xs-2 hidden-550">
         </div>
         <div class="col-550-12 col-xs-8 col-sm-12">

@@ -1,8 +1,8 @@
 <div class="fixed-btm-wr fixed-btm-invoice">
   <div class="container">
     <h4 class="color-light-gray">From</h4>
-    <h4>{{vm.invoice.user.companyName}}</h4>
-    <div class="tooltip-wr">
+    <h4 class="invoice_from_btm color-dark">{{vm.invoice.user.companyName}}</h4>
+    <div class="tooltip-wr hidden-550">
       <img src="modules/core/client/img/i-info.png" alt="">
       <div class="tool-tip slideIn top">This invoice was sent by a verified representative from  {{vm.invoice.user.companyName}}.</div>
     </div>
@@ -21,7 +21,10 @@
       </ul>
     </div>
     <div class="invoice-by">
-      Invoice powered by <a href="http://www.nowdue.ai">Nowdue <i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
+      <span class="hidden-550">Invoice powered by</span> <a href="http://nowdue.ai"><span class="hidden-550">Nowdue</span><i><img src="modules/core/client/img/i-nowdue.png" alt=""></i></a>
     </div>
   </div><!-- END of .container -->
+  <div class="invoice-btn">
+    <a href="#" ng-click="vm.payNow(vm.invoice)" class="btn-1" ng-if="vm.invoice.status != 'paid'">Pay Now</a>
+  </div>
 </div><!-- END of .fixed-btm-wr -->
