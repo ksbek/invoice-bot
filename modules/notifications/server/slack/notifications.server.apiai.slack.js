@@ -82,7 +82,7 @@ module.exports = function (token, config, isFirst, new_user) {
             attachments: [attachment]
           };
 
-          web.chat.postMessage(dm.id, response.result.fulfillment.speech.replace('@funuser', '@' + user.name), data, function(err, response) {
+          web.chat.postMessage(dm.id, response.result.fulfillment.speech.replace('@funuser', '@' + new_user.providerData.user), data, function(err, response) {
             console.log(response);
           });
           // rtm.sendMessage(response.result.fulfillment.speech.replace('User_Name', new_user.companyName), dm.id);
