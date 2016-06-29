@@ -366,7 +366,7 @@ exports.receiveSlackMsg = function (req, res) {
               "value": "Please click <" + config.baseUrl + "/api/auth/stripe|Connect with Stripe>"
             });
 
-          if (params.actions[0].value === 'Learn More') {
+          if (params.actions[0].value === 'Learn more') {
             request = apiai.textRequest('yes');
 
             request.on('response', function(response) {
