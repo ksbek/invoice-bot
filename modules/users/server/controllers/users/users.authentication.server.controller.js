@@ -389,11 +389,15 @@ exports.getUserInfoFromToken = function (req, res) {
 };
 
 exports.authStripe = function (req, res) {
-  res.redirect('https://connect.stripe.com/oauth/authorize' + "?" + qs.stringify({
-    response_type: "code",
-    scope: "read_write",
-    client_id: config.stripe.clientID
-  }));
+  if (req.user) {
+    res.redirect('https://connect.stripe.com/oauth/authorize' + "?" + qs.stringify({
+      response_type: "code",
+      scope: "read_write",
+      client_id: config.stripe.clientID
+    }));
+  } else {
+    return res.redirect('/authentication/signin');
+  }
 };
 
 exports.stripeCallback = function (req, res) {

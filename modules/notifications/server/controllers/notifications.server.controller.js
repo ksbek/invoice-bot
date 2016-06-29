@@ -357,7 +357,7 @@ exports.receiveSlackMsg = function (req, res) {
 
         case 'onboarding':
           attachment.fields = [];
-          if (params.actions[0].value === 'Learn More')
+          if (params.actions[0].value === 'Learn more')
             attachment.fields.push({
               'title': params.actions[0].value
             });
