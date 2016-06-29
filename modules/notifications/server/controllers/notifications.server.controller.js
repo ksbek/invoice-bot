@@ -363,7 +363,7 @@ exports.receiveSlackMsg = function (req, res) {
             });
           else
             attachment.fields.push({
-              'title': 'Please click ' + config.baseUrl + '/api/auth/stripe' + ' to connect with stripe'
+              "value": "Please click <" + config.baseUrl + "/api/auth/stripe|Connect with Stripe>"
             });
 
           if (params.actions[0].value === 'Learn More') {
