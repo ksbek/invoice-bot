@@ -96,14 +96,13 @@ exports.signup = function (req, res) {
 
         var postData = [{
           "email": user.email,
-          "currency": user.currency,
           "company_name": user.companyName,
           "provider": user.provider
         }];
 
         request.post('https://api.sendgrid.com/v3/contactdb/recipients', {
           headers: {
-            'Authorization': 'Bearer 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'
+            'Authorization': 'Bearer ' + config.sendgrid.apiKey
           },
           form: JSON.stringify(postData)
         }, function (error, response, body) {
@@ -206,10 +205,14 @@ exports.oauthCallback = function (strategy) {
             console.log(err);
           } else {
             if (response.ok === true) {
+              console.log(response);
               var dm = response.ims.filter(function(im) {
-                return im.user === user.providerData.tokenSecret.bot.bot_user_id;
+                return im.user === user.providerData.user_id;
               });
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding.js"))('', user, dm.id, web, config);
+              if (dm.length > 0) {
+                console.log(dm[0]);
+                require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding.js"))('', user, dm[0].id, web, config);
+              }
             }
           }
         });

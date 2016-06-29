@@ -43,8 +43,7 @@ module.exports = function (token, config, isFirst, new_user) {
     if (isFirst === 1) {
       if (new_user) {
         var dm = rtm.dataStore.getDMByName(new_user.providerData.user);
-
-        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_invoice.js"))('', new_user, dm.id, web, config);
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding.js"))('', new_user, dm.id, web, config);
         isFirst = 0;
       }
     }
