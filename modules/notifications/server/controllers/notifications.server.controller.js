@@ -187,7 +187,7 @@ exports.receiveSlackMsg = function (req, res) {
       console.log(err);
       res.json({ message: 'Something went wrong.' });
     } else {
-      var web = new WebClient(user.providerData.tokenSecret.access_token);
+      var web = new WebClient(user.providerData.tokenSecret.bot.bot_access_token);
       switch (params.callback_id) {
 
         case 'confirm_invoice':

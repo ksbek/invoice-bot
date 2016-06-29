@@ -50,10 +50,9 @@ exports.signup = function (req, res) {
             message: errorHandler.getErrorMessage(err)
           });
         } else {
-          /*
+
           var postData = [{
             "email": user.email,
-            "currency": user.currency,
             "company_name": user.companyName,
             "slack_user": user.providerData.user,
             "slack_team": user.providerData.team,
@@ -62,7 +61,7 @@ exports.signup = function (req, res) {
 
           request.post('https://api.sendgrid.com/v3/contactdb/recipients', {
             headers: {
-              'Authorization': 'Bearer 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'
+              'Authorization': 'Bearer ' + config.sendgrid.apiKey
             },
             form: JSON.stringify(postData)
           }, function (error, response, body) {
@@ -74,7 +73,7 @@ exports.signup = function (req, res) {
               }
             }
           });
-          */
+
           req.login(user, function (err) {
             if (err) {
               res.status(400).send(err);
@@ -199,7 +198,23 @@ exports.oauthCallback = function (strategy) {
       if (!user.runningStatus.isRunning) {
         user.runningStatus.isRunning = true;
         require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
+      } else {
+        var WebClient = require('@slack/client').WebClient;
+        var web = new WebClient(bottoken);
+        web.im.list(function(err, response) {
+          if (err) {
+            console.log(err);
+          } else {
+            if (response.ok === true) {
+              var dm = response.ims.filter(function(im) {
+                return im.user === user.providerData.tokenSecret.bot.bot_user_id;
+              });
+              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding.js"))('', user, dm.id, web, config);
+            }
+          }
+        });
       }
+
 
       async.waterfall([
         // Generate random token
