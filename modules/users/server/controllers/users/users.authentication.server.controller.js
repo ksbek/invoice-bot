@@ -50,13 +50,6 @@ exports.signup = function (req, res) {
             message: errorHandler.getErrorMessage(err)
           });
         } else {
-
-          var token = user.providerData.tokenSecret.bot.bot_access_token;
-          // if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-          if (!user.runningStatus.isRunning) {
-            user.runningStatus.isRunning = true;
-            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(token, config, 1, user);
-          }
           /*
           var postData = [{
             "email": user.email,
@@ -199,6 +192,13 @@ exports.oauthCallback = function (strategy) {
       }
       if (!user) {
         return res.redirect('/authentication/signin');
+      }
+
+      var bottoken = user.providerData.tokenSecret.bot.bot_access_token;
+      // if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
+      if (!user.runningStatus.isRunning) {
+        user.runningStatus.isRunning = true;
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
       }
 
       async.waterfall([
