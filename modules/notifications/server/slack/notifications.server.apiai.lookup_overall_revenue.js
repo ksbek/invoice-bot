@@ -46,7 +46,8 @@ module.exports = function (response, user, channel, web, config) {
                 "short": true
               },
               {
-                "value": result[i].totalAmount
+                "value": user.currency + result[i].totalAmount,
+                "short": true
               }
             );
             // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
