@@ -141,93 +141,13 @@ module.exports = function (token, config, isFirst, new_user) {
                   break;
 
                 case 'Lookup Revenue Client':
-                  // Check if user have client
-                  Client.findClientByName(response.result.parameters.clientname, user.id, function(client) {
-                    if (client) {
-                      console.log(client);
-                      Invoice.aggregate([
-                        {
-                          $match: {
-                            client: client._id
-                          }
-                        },
-                        {
-                          $group: {
-                            _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-                            totalAmount: { $sum: "$amountDue.amount" }
-                          }
-                        },
-                        {
-                          $sort: {
-                            totalAmount: -1
-                          }
-                        }
-                      ], function(err, result) {
-                        if (err) {
-                          console.log(err);
-                          rtm.sendMessage("Sorry, Something went wrong.", dm.id);
-                        } else {
-                          console.log(result);
-                          var text = "";
-                          for (var i = 0; i < result.length; i++) {
-                            text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
-                          }
-                          rtm.sendMessage(text, dm.id);
-                        }
-                      });
-                    } else {
-                      rtm.sendMessage("Sorry, No client.", dm.id);
-                    }
-                  });
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_revenue_client.js"))(response, user, dm.id, web, config);
                   break;
 
                 case 'Lookup Overall Revenue':
-                  Invoice.aggregate([
-                    {
-                      $match: {
-                        user: user._id
-                      }
-                    },
-                    {
-                      $group: {
-                        _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-                        totalAmount: { $sum: "$amountDue.amount" }
-                      }
-                    },
-                    {
-                      $sort: {
-                        totalAmount: -1
-                      }
-                    }
-                  ], function(err, result) {
-                    /*
-                    var jsdom = Jsdom.jsdom;
-                    var document = jsdom(fs.readFileSync(require('path').resolve("modules/notifications/server/views/revenue_chart.server.html")));
-                    var window = document.defaultView;
-                    var chartData = [];
-                    for (var i = 0; i < 7; i++)
-                      chartData.push(Math.random() * 50);
-                    window.__myObject = { chartData: chartData };
-
-                    console.log(window.document.documentElement.outerHTML);
-
-                    console.log(window.innerWidth);
-
-                    console.log(typeof window.document.getElementsByClassName);
-                    */
-                    if (err) {
-                      console.log(err);
-                      rtm.sendMessage("Sorry, Something went wrong.", dm.id);
-                    } else {
-                      console.log(result);
-                      var text = "";
-                      for (var i = 0; i < result.length; i++) {
-                        text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
-                      }
-                      rtm.sendMessage(text, dm.id);
-                    }
-                  });
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_overall_revenue.js"))(response, user, dm.id, web, config);
                   break;
+
                 default:
                   rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                   break;
