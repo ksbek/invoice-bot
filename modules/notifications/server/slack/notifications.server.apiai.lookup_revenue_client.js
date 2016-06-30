@@ -70,7 +70,7 @@ module.exports = function (response, user, channel, web, config) {
         }
       });
     } else {
-      web.chat.postMessage(channel, "Sorry, No client.");
+      web.chat.postMessage(channel, "I'm sorry, I can't seem to find the information you requested. Could you check over that the information you gave me is correct and try again? I really appreciate it.");
     }
   });
 };

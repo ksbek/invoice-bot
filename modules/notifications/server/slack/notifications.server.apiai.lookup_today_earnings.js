@@ -23,47 +23,50 @@ module.exports = function (response, user, channel, web, config) {
       web.chat.postMessage(channel, "Sorry, Something went wrong.");
     } else {
       console.log(result);
-      var text = "";
-      var fields = [];
-      var totalAmount = 0;
-      for (var i = 0; i < result.length; i ++) {
-        totalAmount += result[i].amountDue.amount;
-        fields.push(
+      if (result.length > 0) {
+        var fields = [];
+        var totalAmount = 0;
+        for (var i = 0; i < result.length; i ++) {
+          totalAmount += result[i].amountDue.amount;
+          fields.push(
+            {
+              "title": result[i].invoice + "        " + result[i].client.companyName,
+              "short": true
+            },
+            {
+              "value": config.currencies[user.currency] + result[i].amountDue.amount,
+              "short": true
+            }
+          );
+          // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+        }
+
+        fields.unshift(
           {
-            "title": result[i].invoice + "        " + result[i].client.companyName,
+            "title": start + "          Total earning",
             "short": true
           },
           {
-            "value": config.currencies[user.currency] + result[i].amountDue.amount,
+            "value": config.currencies[user.currency] + totalAmount,
             "short": true
           }
         );
-        // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+        var attachment = {
+          "fallback": "",
+          "callback_id": "create_client_business_name",
+          "color": "#e2a5f8",
+          "attachment_type": "default",
+          "fields": fields
+        };
+
+        var data = {
+          attachments: [attachment]
+        };
+
+        web.chat.postMessage(channel, "Todays earnings", data);
+      } else {
+        web.chat.postMessage(channel, "You have no paid invoices today.");
       }
-
-      fields.unshift(
-        {
-          "title": start + "          Total earning",
-          "short": true
-        },
-        {
-          "value": config.currencies[user.currency] + totalAmount,
-          "short": true
-        }
-      );
-      var attachment = {
-        "fallback": "",
-        "callback_id": "create_client_business_name",
-        "color": "#e2a5f8",
-        "attachment_type": "default",
-        "fields": fields
-      };
-
-      var data = {
-        attachments: [attachment]
-      };
-
-      web.chat.postMessage(channel, "Todays earnings", data);
     }
   });
 };

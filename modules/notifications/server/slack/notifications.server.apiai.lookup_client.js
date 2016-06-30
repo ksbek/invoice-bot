@@ -8,10 +8,10 @@ module.exports = function (response, user, channel, web, config) {
   var User = mongoose.model('User');
   var Client = mongoose.model('Client');
   var Invoice = mongoose.model('Invoice');
-  if (response.result.parameters.name !== '') {
+  if (response.result.parameters.any !== '') {
 
     // Check if user have client
-    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+    Client.findClientByName(response.result.parameters.any, user.id, function(client) {
       if (client) {
         Invoice.find({ client: client.id }, function (err, invoices) {
           if (err) {
@@ -114,7 +114,7 @@ module.exports = function (response, user, channel, web, config) {
                   "short": true
                 },
                 {
-                  "title": 'overdue',
+                  "title": 'Overdue',
                   "short": true
                 },
                 {
@@ -135,11 +135,11 @@ module.exports = function (response, user, channel, web, config) {
               attachments: [attachment]
             };
 
-            web.chat.postMessage(channel, "Client", data);
+            web.chat.postMessage(channel, "Here's all we have on the client!", data);
           }
         });
       } else {
-        web.chat.postMessage(channel, "No Client");
+        web.chat.postMessage(channel, "I'm sorry, I can't seem to find the information you requested. Could you check over that the information you gave me is correct and try again? I really appreciate it.");
       }
     });
   }

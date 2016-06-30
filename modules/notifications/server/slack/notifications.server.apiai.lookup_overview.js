@@ -11,58 +11,82 @@ module.exports = function (response, user, channel, web, config) {
   var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
-  Invoice.aggregate([
-    {
-      $match: {
-        user: user._id
-      }
-    },
-    {
-      $group: {
-        _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-        totalAmount: { $sum: "$amountDue.amount" }
-      }
-    },
-    {
-      $sort: {
-        totalAmount: -1
-      }
-    }
-  ], function(err, result) {
+  Invoice.find({ user: user.id }).exec(function(err, invoices) {
     if (err) {
       console.log(err);
       web.chat.postMessage(channel, "Sorry, Something went wrong.");
     } else {
-      console.log(result);
       var text = "";
       var fields = [];
-      for (var i = 0; i < result.length; i++) {
+
+      if (invoices.length > 0) {
+        var paidInvoices = invoices.filter(function(invoice) { return invoice.status === 'paid'; });
+        var paidAmount = 0;
+        var i;
+        for (i = 0; i < paidInvoices.length; i++)
+          paidAmount += paidInvoices[i].amountDue.amount;
+
+        var nowdueInvoices = invoices.filter(function(invoice) {
+          var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+          var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+          return invoice.status !== 'paid' && (dueDays < dueDateAllowance || dueDateAllowance === 0);
+        });
+        var nowdueAmount = 0;
+        for (i = 0; i < nowdueInvoices.length; i++)
+          nowdueAmount += nowdueInvoices[i].amountDue.amount;
+
+        var overdueInvoices = invoices.filter(function(invoice) {
+          var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+          var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+          return invoice.status !== 'paid' && !(dueDays < dueDateAllowance || dueDateAllowance === 0);
+        });
+        var overdueAmount = 0;
+        for (i = 0; i < overdueInvoices.length; i++)
+          overdueAmount += overdueInvoices[i].amountDue.amount;
+
         fields.push(
           {
-            "title": mS[result[i]._id.month] + " " + result[i]._id.year,
+            "title": 'Paid',
             "short": true
           },
           {
-            "value": config.currencies[user.currency] + result[i].totalAmount,
+            "value": paidInvoices.length + " " + config.currencies[user.currency] + paidAmount,
+            "short": true
+          },
+          {
+            "title": 'Nowdue',
+            "short": true
+          },
+          {
+            "value": nowdueInvoices.length + " " + config.currencies[user.currency] + nowdueAmount,
+            "short": true
+          },
+          {
+            "title": 'Overdue',
+            "short": true
+          },
+          {
+            "value": overdueInvoices.length + " " + config.currencies[user.currency] + overdueAmount,
             "short": true
           }
         );
-        // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+
+        var attachment = {
+          "fallback": "",
+          "callback_id": "create_client_business_name",
+          "color": "#e2a5f8",
+          "attachment_type": "default",
+          "fields": fields
+        };
+
+        var data = {
+          attachments: [attachment]
+        };
+
+        web.chat.postMessage(channel, "Here is the current status on invoices", data);
+      } else {
+        web.chat.postMessage(channel, "You have no invoices.");
       }
-
-      var attachment = {
-        "fallback": "",
-        "callback_id": "create_client_business_name",
-        "color": "#e2a5f8",
-        "attachment_type": "default",
-        "fields": fields
-      };
-
-      var data = {
-        attachments: [attachment]
-      };
-
-      web.chat.postMessage(channel, "All Revenue", data);
     }
   });
 };

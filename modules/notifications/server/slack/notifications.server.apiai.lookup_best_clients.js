@@ -45,34 +45,38 @@ module.exports = function (response, user, channel, web, config) {
     } else {
       console.log(result);
       var text = "";
-      var fields = [];
-      for (var i = 0; i < result.length; i++) {
-        fields.push(
-          {
-            "title": (i + 1) + result[i].client.companyName,
-            "short": true
-          },
-          {
-            "value": result[i].count + "invoices paid" + "        " + config.currencies[user.currency] + result[i].totalAmount,
-            "short": true
-          }
-        );
-        // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+      if (result.length > 0) {
+        var fields = [];
+        for (var i = 0; i < result.length; i++) {
+          fields.push(
+            {
+              "title": (i + 1) + result[i].client.companyName,
+              "short": true
+            },
+            {
+              "value": result[i].count + "invoices paid" + "        " + config.currencies[user.currency] + result[i].totalAmount,
+              "short": true
+            }
+          );
+          // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+        }
+
+        var attachment = {
+          "fallback": "",
+          "callback_id": "create_client_business_name",
+          "color": "#e2a5f8",
+          "attachment_type": "default",
+          "fields": fields
+        };
+
+        var data = {
+          attachments: [attachment]
+        };
+
+        web.chat.postMessage(channel, "Here is the order of your top clients", data);
+      } else {
+        web.chat.postMessage(channel, "You have no invoices.");
       }
-
-      var attachment = {
-        "fallback": "",
-        "callback_id": "create_client_business_name",
-        "color": "#e2a5f8",
-        "attachment_type": "default",
-        "fields": fields
-      };
-
-      var data = {
-        attachments: [attachment]
-      };
-
-      web.chat.postMessage(channel, "Here is the order of your top clients", data);
     }
   });
 };

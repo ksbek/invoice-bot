@@ -153,6 +153,18 @@ module.exports = function (token, config, isFirst, new_user) {
                   require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_client.js"))(response, user, dm.id, web, config);
                   break;
 
+                case 'Lookup Earnings':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.today_earnings.js"))(response, user, dm.id, web, config);
+                  break;
+
+                case 'Lookup Invoice Overview':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_overview.js"))(response, user, dm.id, web, config);
+                  break;
+
+                case 'Lookup Best Clients':
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_best_clients.js"))(response, user, dm.id, web, config);
+                  break;
+
                 default:
                   rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                   break;
