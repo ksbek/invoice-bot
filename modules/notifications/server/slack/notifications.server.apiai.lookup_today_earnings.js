@@ -11,24 +11,13 @@ module.exports = function (response, user, channel, web, config) {
   var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
-  Invoice.aggregate([
-    {
-      $match: {
-        user: user._id
-      }
-    },
-    {
-      $group: {
-        _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-        totalAmount: { $sum: "$amountDue.amount" }
-      }
-    },
-    {
-      $sort: {
-        totalAmount: -1
-      }
-    }
-  ], function(err, result) {
+  var start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  var end = new Date();
+  end.setHours(23, 59, 59, 999);
+
+  Invoice.find({ user: user._id, datePaid: { $gte: start, $lt: end } }, function(err, result) {
     if (err) {
       console.log(err);
       web.chat.postMessage(channel, "Sorry, Something went wrong.");
@@ -36,20 +25,32 @@ module.exports = function (response, user, channel, web, config) {
       console.log(result);
       var text = "";
       var fields = [];
-      for (var i = 0; i < result.length; i++) {
+      var totalAmount = 0;
+      for (var i = 0; i < result.length; i ++) {
+        totalAmount += result[i].amountDue.amount;
         fields.push(
           {
-            "title": mS[result[i]._id.month] + " " + result[i]._id.year,
+            "title": result[i].invoice + "        " + result[i].client.companyName,
             "short": true
           },
           {
-            "value": config.currencies[user.currency] + result[i].totalAmount,
+            "value": config.currencies[user.currency] + result[i].amountDue.amount,
             "short": true
           }
         );
         // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
       }
 
+      fields.unshift(
+        {
+          "title": start + "          Total earning",
+          "short": true
+        },
+        {
+          "value": config.currencies[user.currency] + totalAmount,
+          "short": true
+        }
+      );
       var attachment = {
         "fallback": "",
         "callback_id": "create_client_business_name",
@@ -62,7 +63,7 @@ module.exports = function (response, user, channel, web, config) {
         attachments: [attachment]
       };
 
-      web.chat.postMessage(channel, "All Revenue", data);
+      web.chat.postMessage(channel, "Todays earnings", data);
     }
   });
 };

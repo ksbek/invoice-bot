@@ -47,7 +47,7 @@ module.exports = function (response, user, channel, web, config) {
                 "short": true
               },
               {
-                "value": user.currency + result[i].totalAmount,
+                "value": config.currencies[user.currency] + result[i].totalAmount,
                 "short": true
               }
             );
@@ -66,7 +66,7 @@ module.exports = function (response, user, channel, web, config) {
             attachments: [attachment]
           };
 
-          web.chat.postMessage(channel, "Revenue", data);
+          web.chat.postMessage(channel, "Here is your " + client.companyName + " reveune", data);
         }
       });
     } else {

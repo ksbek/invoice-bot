@@ -14,18 +14,28 @@ module.exports = function (response, user, channel, web, config) {
   Invoice.aggregate([
     {
       $match: {
-        user: user._id
+        user: user._id,
+        status: 'paid'
       }
     },
     {
       $group: {
-        _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-        totalAmount: { $sum: "$amountDue.amount" }
+        _id: { client: "$client_id" },
+        totalAmount: { $sum: "$amountDue.amount" },
+        count: { $sum: 1 }
       }
     },
     {
       $sort: {
         totalAmount: -1
+      }
+    },
+    {
+      $lookup: {
+        from: "clients",
+        localField: "client_id",
+        foreignField: "_id",
+        as: "client"
       }
     }
   ], function(err, result) {
@@ -39,11 +49,11 @@ module.exports = function (response, user, channel, web, config) {
       for (var i = 0; i < result.length; i++) {
         fields.push(
           {
-            "title": mS[result[i]._id.month] + " " + result[i]._id.year,
+            "title": (i + 1) + result[i].client.companyName,
             "short": true
           },
           {
-            "value": config.currencies[user.currency] + result[i].totalAmount,
+            "value": result[i].count + "invoices paid" + "        " + config.currencies[user.currency] + result[i].totalAmount,
             "short": true
           }
         );
@@ -62,7 +72,7 @@ module.exports = function (response, user, channel, web, config) {
         attachments: [attachment]
       };
 
-      web.chat.postMessage(channel, "All Revenue", data);
+      web.chat.postMessage(channel, "Here is the order of your top clients", data);
     }
   });
 };
