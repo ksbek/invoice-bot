@@ -42,7 +42,8 @@ module.exports = function (response, user, channel, web, config) {
           for (var i = 0; i < result.length; i++) {
             fields.push(
               {
-                "title": mS[result[i]._id.month] + " " + result[i]._id.year
+                "title": mS[result[i]._id.month] + " " + result[i]._id.year,
+                "short": true
               },
               {
                 "value": result[i].totalAmount
