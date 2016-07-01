@@ -65,7 +65,7 @@ module.exports = function (response, user, channel, web, config) {
 
         web.chat.postMessage(channel, "Alright, here we go! Here's all of our revenue!", data);
       } else {
-        web.chat.postMessage(channel, "You have no invoices.");
+        web.chat.postMessage(channel, "You have no paid invoices.");
       }
     }
   });
