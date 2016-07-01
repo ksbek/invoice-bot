@@ -10,60 +10,42 @@ module.exports = function (response, user, channel, web, config) {
   var Invoice = mongoose.model('Invoice');
   var mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+  var _ = require('lodash');
 
-  Invoice.aggregate([
-    {
-      $match: {
-        user: user._id,
-        status: 'paid'
-      }
-    },
-    {
-      $group: {
-        _id: { client: "$client_id" },
-        totalAmount: { $sum: "$amountDue.amount" },
-        count: { $sum: 1 }
-      }
-    },
-    {
-      $sort: {
-        totalAmount: -1
-      }
-    },
-    {
-      $lookup: {
-        from: "clients",
-        localField: "client_id",
-        foreignField: "_id",
-        as: "client"
-      }
-    }
-  ], function(err, result) {
+  Invoice.find({ user: user._id, status: 'paid' }).populate('client', 'companyName').exec(function(err, result) {
     if (err) {
       console.log(err);
       web.chat.postMessage(channel, "Sorry, Something went wrong.");
     } else {
-      console.log(result);
-      var text = "";
       if (result.length > 0) {
+        var groupByClient = _.groupBy(result, 'client._id');
+        var newResult = _.sortBy(groupByClient, function(o) { return (-1) * _.sumBy(o, 'amountDue.amount'); });
+
+        console.log(newResult);
         var fields = [];
-        for (var i = 0; i < result.length; i++) {
+        var i = 0;
+        _.forEach(newResult, function(invoices, key) {
+          i = i + 1;
+          var paidStr = "";
+          if (invoices.length > 1)
+            paidStr = " invoices paid";
+          else
+            paidStr = " invoice paid";
           fields.push(
             {
-              "title": (i + 1) + result[i].client.companyName,
+              "value": i + "          " + '<' + config.baseUrl + '/clients/' + invoices[0].client._id + '/edit' + '|' + invoices[0].client.companyName + '>',
               "short": true
             },
             {
-              "value": result[i].count + "invoices paid" + "        " + config.currencies[user.currency] + result[i].totalAmount,
+              "value": invoices.length + paidStr + "        " + config.currencies[user.currency] + _.sumBy(invoices, 'amountDue.amount'),
               "short": true
             }
           );
           // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
-        }
+        });
 
         var attachment = {
           "fallback": "",
-          "callback_id": "create_client_business_name",
           "color": "#e2a5f8",
           "attachment_type": "default",
           "fields": fields
@@ -75,7 +57,7 @@ module.exports = function (response, user, channel, web, config) {
 
         web.chat.postMessage(channel, "Here is the order of your top clients", data);
       } else {
-        web.chat.postMessage(channel, "You have no invoices.");
+        web.chat.postMessage(channel, "You have no paid invoices.");
       }
     }
   });

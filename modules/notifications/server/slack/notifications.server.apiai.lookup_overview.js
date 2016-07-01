@@ -50,7 +50,7 @@ module.exports = function (response, user, channel, web, config) {
             "short": true
           },
           {
-            "value": paidInvoices.length + " " + config.currencies[user.currency] + paidAmount,
+            "value": paidInvoices.length + "         " + config.currencies[user.currency] + paidAmount,
             "short": true
           },
           {
@@ -58,7 +58,7 @@ module.exports = function (response, user, channel, web, config) {
             "short": true
           },
           {
-            "value": nowdueInvoices.length + " " + config.currencies[user.currency] + nowdueAmount,
+            "value": nowdueInvoices.length + "         " + config.currencies[user.currency] + nowdueAmount,
             "short": true
           },
           {
@@ -66,7 +66,7 @@ module.exports = function (response, user, channel, web, config) {
             "short": true
           },
           {
-            "value": overdueInvoices.length + " " + config.currencies[user.currency] + overdueAmount,
+            "value": overdueInvoices.length + "         " + config.currencies[user.currency] + overdueAmount,
             "short": true
           }
         );

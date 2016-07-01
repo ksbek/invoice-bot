@@ -81,7 +81,7 @@ module.exports = function (response, user, channel, web, config) {
         var context = {
           "name": "invoice-name-not-found"
         };
-        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context] });
+        var newrequest = apiai.textRequest("invoice-name-not-found", { 'contexts': [context], 'sessionId': user.id });
         newrequest.on('response', function(response) {
           web.chat.postMessage(channel, response);
         });

@@ -65,7 +65,7 @@ module.exports = function (token, config, isFirst, new_user) {
       // rtm.sendTyping(dm.id);
       User.findUserBySlackId(message.user, '', function(user) {
         if (user) {
-          var request = apiai.textRequest(message.text);
+          var request = apiai.textRequest(message.text, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             console.log(response);
@@ -87,7 +87,7 @@ module.exports = function (token, config, isFirst, new_user) {
                           "name": "invoice-name-not-found"
                         };
                       }
-                      var newrequest = apiai.textRequest(response.result.parameters.name, { 'contexts': [context] });
+                      var newrequest = apiai.textRequest(response.result.parameters.name, { 'contexts': [context], 'sessionId': user.id });
                       newrequest.on('response', function(response) {
                         // rtm.sendMessage("asDF", dm.id);
                         console.log(response);
@@ -154,7 +154,7 @@ module.exports = function (token, config, isFirst, new_user) {
                   break;
 
                 case 'Lookup Earnings':
-                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.today_earnings.js"))(response, user, dm.id, web, config);
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.lookup_today_earnings.js"))(response, user, dm.id, web, config);
                   break;
 
                 case 'Lookup Invoice Overview':

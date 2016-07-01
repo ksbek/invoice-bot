@@ -11,7 +11,7 @@ module.exports = function (response, user, channel, web, config) {
     "name": "onboarding"
   };
 
-  var newrequest = apiai.textRequest('onboarding', { 'contexts': [context] });
+  var newrequest = apiai.textRequest('onboarding', { 'contexts': [context], 'sessionId': user.id });
   newrequest.on('response', function(response) {
     console.log(response);
 

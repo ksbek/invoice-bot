@@ -14,7 +14,8 @@ module.exports = function (response, user, channel, web, config) {
   Invoice.aggregate([
     {
       $match: {
-        user: user._id
+        user: user._id,
+        status: 'paid'
       }
     },
     {

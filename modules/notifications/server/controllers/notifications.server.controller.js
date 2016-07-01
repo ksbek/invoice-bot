@@ -200,7 +200,7 @@ exports.receiveSlackMsg = function (req, res) {
               'title': ':confused: You marked as incorrect'
             });
 
-          request = apiai.textRequest(params.actions[0].value);
+          request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             if (params.actions[0].value === "yes")
@@ -230,7 +230,7 @@ exports.receiveSlackMsg = function (req, res) {
           else
             attachment.text = ':+1: You marked as send later';
 
-          request = apiai.textRequest(params.actions[0].value);
+          request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, params.channel.id, web, config);
@@ -256,7 +256,7 @@ exports.receiveSlackMsg = function (req, res) {
             attachment.text = 'Same Name';
           else
             attachment.text = 'New Contact Name';
-          request = apiai.textRequest(params.actions[0].value);
+          request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
@@ -305,7 +305,7 @@ exports.receiveSlackMsg = function (req, res) {
               }
             ];
           }
-          request = apiai.textRequest(params.actions[0].value);
+          request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             if (params.actions[0].value === "yes")
@@ -334,7 +334,7 @@ exports.receiveSlackMsg = function (req, res) {
             'title': 'Change ' + params.actions[0].value
           });
 
-          request = apiai.textRequest(params.actions[0].value);
+          request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
@@ -367,7 +367,7 @@ exports.receiveSlackMsg = function (req, res) {
             });
 
           if (params.actions[0].value === 'Learn more') {
-            request = apiai.textRequest('yes');
+            request = apiai.textRequest('yes', { 'sessionId': user.id });
 
             request.on('response', function(response) {
               web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);

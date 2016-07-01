@@ -16,8 +16,7 @@ module.exports = function (response, user, channel, web, config) {
 
   var end = new Date();
   end.setHours(23, 59, 59, 999);
-
-  Invoice.find({ user: user._id, datePaid: { $gte: start, $lt: end } }, function(err, result) {
+  Invoice.find({ user: user._id, datePaid: { $gte: start, $lt: end } }).populate('client', 'companyName').exec(function(err, result) {
     if (err) {
       console.log(err);
       web.chat.postMessage(channel, "Sorry, Something went wrong.");
@@ -30,7 +29,7 @@ module.exports = function (response, user, channel, web, config) {
           totalAmount += result[i].amountDue.amount;
           fields.push(
             {
-              "title": result[i].invoice + "        " + result[i].client.companyName,
+              "value": "<" + config.baseUrl + '/invoices/' + result[i]._id + '|INV' + result[i].invoice + '>' + "        " + '<' + config.baseUrl + '/clients/' + result[i].client._id + '/edit' + '|' + result[i].client.companyName + '>',
               "short": true
             },
             {
@@ -43,7 +42,7 @@ module.exports = function (response, user, channel, web, config) {
 
         fields.unshift(
           {
-            "title": start + "          Total earning",
+            "title": new Date().getDate() + "." + (new Date().getMonth() + 1) + "." + new Date().getFullYear() + "          Total earning",
             "short": true
           },
           {
