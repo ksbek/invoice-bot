@@ -229,7 +229,7 @@ exports.paynow = function(req, res) {
         });
       } else {
         return res.status(400).send({
-          message: err
+          message: 'Sorry, something went wrong'
         });
       }
     } else {

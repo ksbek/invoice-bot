@@ -62,6 +62,9 @@ var InvoiceSchema = new Schema({
     type: Number,
     default: 0
   },
+  token: {
+    type: String
+  },
   client: {
     type: Schema.ObjectId,
     ref: 'Client'

@@ -11,7 +11,7 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     'GBP': '£',
     'CAD': '$'
   };
-
+  console.log(user);
   email.html = '<h1>Hi There</h1>';
   email.setFrom(config.sendgrid.from);
   email.addFilter('templates', 'enable', 1);
@@ -24,7 +24,7 @@ module.exports = function (config, invoice, user, mail_type, callback) {
 
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.token);
+      email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
@@ -38,7 +38,7 @@ module.exports = function (config, invoice, user, mail_type, callback) {
 
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      email.addSubstitution("&lt;%= invoice.id %&gt;", '/token/' + invoice.user.accountSetupToken + invoice.token);
+      email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
