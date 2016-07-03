@@ -114,6 +114,37 @@ exports.getListByClient = function(req, res) {
 };
 
 /**
+ * Invoice opend by client
+ */
+exports.getInvoiceFromToken = function(req, res) {
+  var userToken = req.params.token.substr(0, 40);
+  var invoiceToken = req.params.token.substr(40, 40);
+
+  console.log(req.params.token);
+  console.log(invoiceToken);
+  console.log(userToken);
+  Invoice.findOne({ token: invoiceToken }).populate('user', 'providerData').populate('client', 'companyName').exec(function(err, invoice) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      if (invoice) {
+        invoice.isRead = 1;
+        invoice.save();
+        User.findOne({
+          accountSetupToken: userToken
+        }, function (err, user) {
+          if (user)
+            require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, user, 11);
+        });
+        res.jsonp(invoice);
+      }
+    }
+  });
+};
+
+/**
  * Pay Invoice
  */
 exports.paynow = function(req, res) {

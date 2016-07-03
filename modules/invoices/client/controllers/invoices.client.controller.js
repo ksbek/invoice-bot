@@ -6,9 +6,9 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window'];
+  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window', 'isClient'];
 
-  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window) {
+  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window, isClient) {
     var vm = this;
 
     if ($state.current.name !== 'invoicesview') {
@@ -17,7 +17,11 @@
 
     // Initialize values
     vm.authentication = Authentication;
-    vm.invoice = invoice;
+    if (isClient)
+      vm.invoice = invoice.data;
+    else
+      vm.invoice = invoice;
+
     vm.error = null;
     vm.form = {};
     vm.remove = remove;

@@ -21,6 +21,8 @@ module.exports = function(app) {
 
   app.route('/api/invoices/client/:clientId').post(invoices.getListByClient);
 
+  app.route('/api/invoices/token/:token').post(invoices.getInvoiceFromToken);
+
   // Finish by binding the Invoice middleware
   app.param('invoiceId', invoices.invoiceByID);
 };

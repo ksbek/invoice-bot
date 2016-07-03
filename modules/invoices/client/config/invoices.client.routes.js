@@ -91,7 +91,39 @@
           }
         },
         resolve: {
-          invoiceResolve: getInvoice
+          invoiceResolve: getInvoice,
+          isClient: [
+            function() { return false; }
+          ]
+        },
+        data: {
+          pageTitle: 'Invoice View'
+        }
+      })
+      .state('invoicesviewbyclient', {
+        url: '/invoices/token/:token',
+        views: {
+          'container@': {
+            templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'header': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-header.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'footer': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-footer.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          }
+        },
+        resolve: {
+          invoiceResolve: getInvoiceFromClient,
+          isClient: [
+            function() { return true; }
+          ]
         },
         data: {
           pageTitle: 'Invoice View'
@@ -105,6 +137,12 @@
     return InvoicesService.get({
       invoiceId: $stateParams.invoiceId
     }).$promise;
+  }
+
+  getInvoiceFromClient.$inject = ['$stateParams', '$http'];
+
+  function getInvoiceFromClient($stateParams, $http) {
+    return $http.post('/api/invoices/token/' + $stateParams.token);
   }
 
   newInvoice.$inject = ['InvoicesService'];

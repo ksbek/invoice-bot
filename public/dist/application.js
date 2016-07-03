@@ -1224,7 +1224,39 @@
           }
         },
         resolve: {
-          invoiceResolve: getInvoice
+          invoiceResolve: getInvoice,
+          isClient: [
+            function() { return false; }
+          ]
+        },
+        data: {
+          pageTitle: 'Invoice View'
+        }
+      })
+      .state('invoicesviewbyclient', {
+        url: '/invoices/token/:token',
+        views: {
+          'container@': {
+            templateUrl: 'modules/invoices/client/views/view-invoice.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'header': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-header.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          },
+          'footer': {
+            templateUrl: 'modules/invoices/client/views/invoice-view-footer.client.view.html',
+            controller: 'InvoicesController',
+            controllerAs: 'vm'
+          }
+        },
+        resolve: {
+          invoiceResolve: getInvoiceFromClient,
+          isClient: [
+            function() { return true; }
+          ]
         },
         data: {
           pageTitle: 'Invoice View'
@@ -1238,6 +1270,12 @@
     return InvoicesService.get({
       invoiceId: $stateParams.invoiceId
     }).$promise;
+  }
+
+  getInvoiceFromClient.$inject = ['$stateParams', '$http'];
+
+  function getInvoiceFromClient($stateParams, $http) {
+    return $http.post('/api/invoices/token/' + $stateParams.token);
   }
 
   newInvoice.$inject = ['InvoicesService'];
@@ -1271,9 +1309,9 @@
     .module('invoices')
     .controller('InvoicesController', InvoicesController);
 
-  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window'];
+  InvoicesController.$inject = ['$scope', '$state', '$http', 'Authentication', 'invoiceResolve', 'ClientsService', '$uibModal', '$window', 'isClient'];
 
-  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window) {
+  function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window, isClient) {
     var vm = this;
 
     if ($state.current.name !== 'invoicesview') {
@@ -1282,7 +1320,11 @@
 
     // Initialize values
     vm.authentication = Authentication;
-    vm.invoice = invoice;
+    if (isClient)
+      vm.invoice = invoice.data;
+    else
+      vm.invoice = invoice;
+
     vm.error = null;
     vm.form = {};
     vm.remove = remove;

@@ -5,7 +5,8 @@
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  SchemaTypes = mongoose.Schema.Types;
+  SchemaTypes = mongoose.Schema.Types,
+  crypto = require('crypto');
 /**
  * Invoice Schema
  */
@@ -54,6 +55,10 @@ var InvoiceSchema = new Schema({
     trim: true
   },
   tax: {
+    type: Number,
+    default: 0
+  },
+  isRead: {
     type: Number,
     default: 0
   },
@@ -108,26 +113,30 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, par
   var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
   var dueDate = new Date(new Date().setTime(new Date().getTime() + (user.dueDateAllowance * 24 * 60 * 60 * 1000)));
   // var dueDate = new Date;
-  _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
-    _this.create({
-      user: user.id,
-      client: client_id,
-      amountDue: { amount: Math.round(params.amount * (1 + user.tax / 100) * 100) / 100, currency: user.currency },
-      dateDue: dueDate,
-      description: params.description,
-      invoice: number,
-      dueDateAllowance: user.dueDateAllowance,
-      tax: user.tax
-    }, function (err, invoice) {
-      if (!err) {
-        if (!invoice) {
-          callback(null);
+  crypto.randomBytes(20, function (err, buffer) {
+    var token = buffer.toString('hex');
+    _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
+      _this.create({
+        user: user.id,
+        client: client_id,
+        amountDue: { amount: Math.round(params.amount * (1 + user.tax / 100) * 100) / 100, currency: user.currency },
+        dateDue: dueDate,
+        description: params.description,
+        invoice: number,
+        dueDateAllowance: user.dueDateAllowance,
+        tax: user.tax,
+        token: token
+      }, function (err, invoice) {
+        if (!err) {
+          if (!invoice) {
+            callback(null);
+          } else {
+            callback(invoice);
+          }
         } else {
-          callback(invoice);
+          callback(null);
         }
-      } else {
-        callback(null);
-      }
+      });
     });
   });
 };
