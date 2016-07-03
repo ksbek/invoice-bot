@@ -1,7 +1,7 @@
 'use strict';
 
 // Create the notifications configuration
-module.exports = function (config, invoice, user, mail_type) {
+module.exports = function (config, invoice, user, mail_type, callback) {
   var sendgrid = require("sendgrid")(config.sendgrid.apiKey);
   var email = new sendgrid.Email();
   var currencySymbols = {
@@ -28,6 +28,20 @@ module.exports = function (config, invoice, user, mail_type) {
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      email.addTo(invoice.client.email);
+      email.setSubject("Invoice Overdue Email");
+
+      email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
+      email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
+      email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
+      email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
+      email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
+      break;
     case 2:
       // Invoice Paid
       email.addTo(user.email);
@@ -41,6 +55,14 @@ module.exports = function (config, invoice, user, mail_type) {
   }
 
   sendgrid.send(email, function (err, json) {
-    console.log(err);
+    if (err) {
+      if (callback) {
+        callback(false);
+      }
+    } else {
+      if (callback) {
+        callback(true, invoice);
+      }
+    }
   });
 };

@@ -443,7 +443,7 @@ exports.stripeCallback = function (req, res) {
       user.stripe = JSON.parse(body);
       user.integrations.stripe = true;
       user.save(function (err) {
-        require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, user, 8);
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 5);
         return res.redirect('/');
       });
     }

@@ -18,28 +18,28 @@ module.exports = function (response, user, channel, web, config) {
         web.chat.postMessage(channel, 'Client already exists');
       } else {
         var attachment = {
-          "fallback": "",
-          "callback_id": "create_client_business_name",
-          "color": "#e2a5f8",
-          "attachment_type": "default",
-          "token": "VOOjorjRck77mNR33HD1Eux4",
-          "actions": [
+          'fallback': '',
+          'callback_id': 'create_client_business_name',
+          'color': '#e2a5f8',
+          'attachment_type': 'default',
+          'token': 'VOOjorjRck77mNR33HD1Eux4',
+          'actions': [
             {
-              "name": "no",
-              "text": "Add contact name",
-              "type": "button",
-              "style": "primary",
-              "value": "no"
+              'name': 'no',
+              'text': 'Add contact name',
+              'type': 'button',
+              'style': 'primary',
+              'value': 'no'
             },
             {
-              "name": "yes",
-              "text": "Same name",
-              "type": "button",
-              "style": "primary",
-              "value": "yes"
+              'name': 'yes',
+              'text': 'Same name',
+              'type': 'button',
+              'style': 'primary',
+              'value': 'yes'
             }
           ],
-          "response_url": config.baseUrl + "/api/notifications/receiveslackmsg"
+          'response_url': config.baseUrl + '/api/notifications/receiveslackmsg'
         };
 
         var data = {

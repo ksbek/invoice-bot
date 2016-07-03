@@ -22,15 +22,18 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
-    vm.invoice.dateIssued = new Date(vm.invoice.dateIssued);
-    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
-    var today = new Date();
-    var timeDiff = today.getTime() - vm.invoice.dateIssued.getTime();
-    vm.dueDateAllowance = Math.floor((vm.invoice.dateDue.getTime() - vm.invoice.dateIssued.getTime()) / (1000 * 3600 * 24));
-    vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
+    var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(vm.invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+    var dueDateAllowance = Math.ceil((new Date(vm.invoice.dateDue).getTime() - new Date(vm.invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+    if (vm.invoice.status !== 'paid') {
+      if (dueDays <= dueDateAllowance)
+        vm.invoice.status = "due";
+      else
+        vm.invoice.status = "overdue";
+    }
 
+    vm.invoice.dueDays = dueDays;
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
-      timeDiff = Math.floor(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
+      var timeDiff = Math.floor(Math.abs(new Date().setHours(0, 0, 0, 0) - new Date(vm.invoice.datePaid).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
       if (timeDiff >= 1)
         vm.invoice.paidDate = timeDiff + "d ago";
       else

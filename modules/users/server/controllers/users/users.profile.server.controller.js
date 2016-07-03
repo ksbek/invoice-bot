@@ -34,6 +34,12 @@ exports.update = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
+        // Send Notificatin to notification page and slack
+        if (req.user.changedTax)
+          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 3);
+        if (req.user.changedDueDateAllowance)
+          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 4);
+
         req.login(user, function (err) {
           if (err) {
             res.status(400).send(err);

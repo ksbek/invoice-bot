@@ -24,8 +24,8 @@ module.exports = function (response, user, channel, web, config) {
         },
         {
           $group: {
-            _id: { month: { $month: "$dateDue" }, year: { $year: "$dateDue" } },
-            totalAmount: { $sum: "$amountDue.amount" }
+            _id: { month: { $month: '$dateDue' }, year: { $year: '$dateDue' } },
+            totalAmount: { $sum: '$amountDue.amount' }
           }
         },
         {
@@ -36,45 +36,45 @@ module.exports = function (response, user, channel, web, config) {
       ], function(err, result) {
         if (err) {
           console.log(err);
-          web.chat.postMessage(channel, "Sorry, Something went wrong.");
+          web.chat.postMessage(channel, 'Sorry, Something went wrong.');
         } else {
           if (result.length > 0) {
-            var text = "";
+            var text = '';
             var fields = [];
             for (var i = 0; i < result.length; i++) {
               fields.push(
                 {
-                  "title": mS[result[i]._id.month] + " " + result[i]._id.year,
-                  "short": true
+                  'title': mS[result[i]._id.month] + ' ' + result[i]._id.year,
+                  'short': true
                 },
                 {
-                  "value": config.currencies[user.currency] + result[i].totalAmount,
-                  "short": true
+                  'value': config.currencies[user.currency] + result[i].totalAmount,
+                  'short': true
                 }
               );
-              // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+              // text += result[i]._id.month + ', ' + result[i]._id.year + ' ' + result[i].totalAmount + '\n';
             }
 
             var attachment = {
-              "fallback": "",
-              "callback_id": "create_client_business_name",
-              "color": "#e2a5f8",
-              "attachment_type": "default",
-              "fields": fields
+              'fallback': '',
+              'callback_id': 'create_client_business_name',
+              'color': '#e2a5f8',
+              'attachment_type': 'default',
+              'fields': fields
             };
 
             var data = {
               attachments: [attachment]
             };
 
-            web.chat.postMessage(channel, "Here is your " + '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>' + " reveune", data);
+            web.chat.postMessage(channel, 'Here is your ' + '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>' + ' reveune', data);
           } else {
-            web.chat.postMessage(channel, "You have no paid invocies from " + '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');
+            web.chat.postMessage(channel, 'You have no paid invocies from ' + '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');
           }
         }
       });
     } else {
-      web.chat.postMessage(channel, "I'm sorry, I can't seem to find the information you requested. Could you check over that the information you gave me is correct and try again? I really appreciate it.");
+      web.chat.postMessage(channel, 'I\'m sorry, I can\'t seem to find the information you requested. Could you check over that the information you gave me is correct and try again? I really appreciate it.');
     }
   });
 };

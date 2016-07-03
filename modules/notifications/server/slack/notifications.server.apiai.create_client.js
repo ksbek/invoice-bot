@@ -17,8 +17,9 @@ module.exports = function (response, user, channel, web, config) {
         var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');
 
         web.chat.postMessage(channel, response_speech);
+        require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, null, client, user, 2);
       } else {
-        web.chat.postMessage(channel, "Sorry, Something went wrong.");
+        web.chat.postMessage(channel, 'Sorry, Something went wrong.');
       }
     });
   }

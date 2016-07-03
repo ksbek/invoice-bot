@@ -15,7 +15,7 @@ module.exports = function (response, user, channel, web, config) {
   Invoice.find({ user: user._id, status: 'paid' }).populate('client', 'companyName').exec(function(err, result) {
     if (err) {
       console.log(err);
-      web.chat.postMessage(channel, "Sorry, Something went wrong.");
+      web.chat.postMessage(channel, 'Sorry, Something went wrong.');
     } else {
       if (result.length > 0) {
         var groupByClient = _.groupBy(result, 'client._id');
@@ -26,38 +26,38 @@ module.exports = function (response, user, channel, web, config) {
         var i = 0;
         _.forEach(newResult, function(invoices, key) {
           i = i + 1;
-          var paidStr = "";
+          var paidStr = '';
           if (invoices.length > 1)
-            paidStr = " invoices paid";
+            paidStr = ' invoices paid';
           else
-            paidStr = " invoice paid";
+            paidStr = ' invoice paid';
           fields.push(
             {
-              "value": i + "          " + '<' + config.baseUrl + '/clients/' + invoices[0].client._id + '/edit' + '|' + invoices[0].client.companyName + '>',
-              "short": true
+              'value': i + '          ' + '<' + config.baseUrl + '/clients/' + invoices[0].client._id + '/edit' + '|' + invoices[0].client.companyName + '>',
+              'short': true
             },
             {
-              "value": invoices.length + paidStr + "        " + config.currencies[user.currency] + _.sumBy(invoices, 'amountDue.amount'),
-              "short": true
+              'value': invoices.length + paidStr + '        ' + config.currencies[user.currency] + _.sumBy(invoices, 'amountDue.amount'),
+              'short': true
             }
           );
-          // text += result[i]._id.month + ", " + result[i]._id.year + " " + result[i].totalAmount + "\n";
+          // text += result[i]._id.month + ', ' + result[i]._id.year + ' ' + result[i].totalAmount + '\n';
         });
 
         var attachment = {
-          "fallback": "",
-          "color": "#e2a5f8",
-          "attachment_type": "default",
-          "fields": fields
+          'fallback': '',
+          'color': '#e2a5f8',
+          'attachment_type': 'default',
+          'fields': fields
         };
 
         var data = {
           attachments: [attachment]
         };
 
-        web.chat.postMessage(channel, "Here is the order of your top clients", data);
+        web.chat.postMessage(channel, 'Here is the order of your top clients', data);
       } else {
-        web.chat.postMessage(channel, "You have no paid invoices.");
+        web.chat.postMessage(channel, 'You have no paid invoices.');
       }
     }
   });

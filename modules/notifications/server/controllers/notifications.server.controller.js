@@ -38,7 +38,7 @@ exports.read = function(req, res) {
   // convert mongoose document to JSON
   var notification = req.notification ? req.notification.toJSON() : {};
 
-  // Add a custom field to the Article, for determining if the current User is the "owner".
+  // Add a custom field to the Article, for determining if the current User is the 'owner'.
   // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
   notification.isCurrentUserOwner = req.user && notification.user && notification.user._id.toString() === req.user._id.toString();
 
@@ -101,7 +101,7 @@ exports.list = function(req, res) {
  */
 exports.sendMessage = function (req, res) {
   /*
-  var app = apiai("6375b46d78ac45c1a0813498b1789c46");
+  var app = apiai('6375b46d78ac45c1a0813498b1789c46');
 
   var request = app.textRequest(req.body.text);
   request.on('response', function(response) {
@@ -137,7 +137,7 @@ exports.sendMessage = function (req, res) {
         });
       } else {
         res.status(400).send({
-          message: "User not found"
+          message: 'User not found'
         });
       }
     }
@@ -157,7 +157,7 @@ exports.sendMessage = function (req, res) {
       res.json(response);
     });
   } else {
-    res.json({ message: "No webhook url" });
+    res.json({ message: 'No webhook url' });
   }
   */
 };
@@ -191,7 +191,7 @@ exports.receiveSlackMsg = function (req, res) {
       switch (params.callback_id) {
 
         case 'confirm_invoice':
-          if (params.actions[0].value === "yes")
+          if (params.actions[0].value === 'yes')
             attachment.fields.push({
               'title': ':ok_hand: You confirmed as correct'
             });
@@ -203,8 +203,8 @@ exports.receiveSlackMsg = function (req, res) {
           request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
-            if (params.actions[0].value === "yes")
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_invoice.js"))(response, user, params.channel.id, web, config);
+            if (params.actions[0].value === 'yes')
+              require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.create_invoice.js'))(response, user, params.channel.id, web, config);
             else
               web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
             console.log(response);
@@ -225,7 +225,7 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
 
         case 'invoice_created':
-          if (params.actions[0].value === "yes")
+          if (params.actions[0].value === 'yes')
             attachment.text = ':stuck_out_tongue_winking_eye: You approved';
           else
             attachment.text = ':+1: You marked as send later';
@@ -233,7 +233,7 @@ exports.receiveSlackMsg = function (req, res) {
           request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
-            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.send_invoice.js"))(response, user, params.channel.id, web, config);
+            require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.send_invoice.js'))(response, user, params.channel.id, web, config);
             console.log(response);
           });
 
@@ -252,7 +252,7 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
 
         case 'create_client_business_name':
-          if (params.actions[0].value === "yes")
+          if (params.actions[0].value === 'yes')
             attachment.text = 'Same Name';
           else
             attachment.text = 'New Contact Name';
@@ -278,7 +278,7 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
 
         case 'confirm_client':
-          if (params.actions[0].value === "yes")
+          if (params.actions[0].value === 'yes')
             attachment.fields.push({
               'title': ':ok_hand: You confirmed as correct'
             });
@@ -286,30 +286,30 @@ exports.receiveSlackMsg = function (req, res) {
             attachment.callback_id = 'create_client_no_confirm';
             attachment.actions = [
               {
-                "name": "bussiness_name",
-                "text": "Business name",
-                "type": "button",
-                "value": "Business Name"
+                'name': 'bussiness_name',
+                'text': 'Business name',
+                'type': 'button',
+                'value': 'Business Name'
               },
               {
-                "name": "contact_name",
-                "text": "Contact name",
-                "type": "button",
-                "value": "Contact Name"
+                'name': 'contact_name',
+                'text': 'Contact name',
+                'type': 'button',
+                'value': 'Contact Name'
               },
               {
-                "name": "email",
-                "text": "Email",
-                "type": "button",
-                "value": "Email"
+                'name': 'email',
+                'text': 'Email',
+                'type': 'button',
+                'value': 'Email'
               }
             ];
           }
           request = apiai.textRequest(params.actions[0].value, { 'sessionId': user.id });
 
           request.on('response', function(response) {
-            if (params.actions[0].value === "yes")
-              require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.create_client.js"))(response, user, params.channel.id, web, config);
+            if (params.actions[0].value === 'yes')
+              require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.create_client.js'))(response, user, params.channel.id, web, config);
             else
               web.chat.postMessage(params.channel.id, response.result.fulfillment.speech);
             console.log(response);
@@ -363,7 +363,7 @@ exports.receiveSlackMsg = function (req, res) {
             });
           else
             attachment.fields.push({
-              "value": "Please click <" + config.baseUrl + "/api/auth/stripe|Connect with Stripe>"
+              'value': 'Please click <' + config.baseUrl + '/api/auth/stripe|Connect with Stripe>'
             });
 
           if (params.actions[0].value === 'Learn more') {
@@ -390,7 +390,7 @@ exports.receiveSlackMsg = function (req, res) {
           return res.json(data);
 
         default:
-          res.json({ message: "Ok" });
+          res.json({ message: 'Ok' });
           break;
       }
     }

@@ -137,13 +137,15 @@ exports.paynow = function(req, res) {
             });
           } else {
             var application_fee = Math.ceil(req.invoice.amountDue.amount * 100 * config.stripe.application_fee);
-
+            console.log(req.invoice);
+            console.log(req.invoice.amountDue.amount * 100);
+            console.log(application_fee);
             stripe.customers.create({
               email: req.invoice.client.email,
               source: token.id
             }).then(function(customer) {
               stripe.charges.create({
-                amount: req.invoice.amountDue.amount * 100,
+                amount: Math.ceil(req.invoice.amountDue.amount * 100),
                 currency: req.invoice.amountDue.currency,
                 customer: customer.id,
                 application_fee: application_fee,
@@ -161,11 +163,21 @@ exports.paynow = function(req, res) {
                       message: errorHandler.getErrorMessage(err)
                     });
                   } else {
+                    var type = 14;
+                    var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(req.invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+                    var dueDateAllowance = Math.ceil((new Date(req.invoice.dateDue).getTime() - new Date(req.invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+
+                    if (dueDays <= dueDateAllowance)
+                      type = 15;
+                    if (dueDays - dueDateAllowance > 30)
+                      type = 13;
+                    else if (dueDays - dueDateAllowance > 14)
+                      type = 12;
                     // Send Notificatin to notification page and slack
-                    require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, user, 19);
+                    require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, null, user, type);
 
                     // Send paid invoice email to user
-                    require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, 2);
+                    require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, type);
 
                     res.send(invoice);
                   }

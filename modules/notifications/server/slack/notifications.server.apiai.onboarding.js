@@ -8,7 +8,7 @@ module.exports = function (response, user, channel, web, config) {
   var User = mongoose.model('User');
 
   var context = {
-    "name": "onboarding"
+    'name': 'onboarding'
   };
 
   var newrequest = apiai.textRequest('onboarding', { 'contexts': [context], 'sessionId': user.id });
@@ -16,29 +16,29 @@ module.exports = function (response, user, channel, web, config) {
     console.log(response);
 
     var attachment = {
-      "text": "To get started, please connect Stripe to accept online :credit_card: payments!",
-      "fallback": "You are unable to connect stripe",
-      "callback_id": "onboarding",
-      "color": "#e2a5f8",
-      "attachment_type": "default",
-      "token": "VOOjorjRck77mNR33HD1Eux4",
-      "actions": [
+      'text': 'To get started, please connect Stripe to accept online :credit_card: payments!',
+      'fallback': 'You are unable to connect stripe',
+      'callback_id': 'onboarding',
+      'color': '#e2a5f8',
+      'attachment_type': 'default',
+      'token': 'VOOjorjRck77mNR33HD1Eux4',
+      'actions': [
         {
-          "name": "info",
-          "text": "Learn more",
-          "type": "button",
-          "style": "primary",
-          "value": "Learn more"
+          'name': 'info',
+          'text': 'Learn more',
+          'type': 'button',
+          'style': 'primary',
+          'value': 'Learn more'
         },
         {
-          "name": "stripe",
-          "text": "Connect with Stripe",
-          "style": "primary",
-          "type": "button",
-          "value": "Connect with Stripe"
+          'name': 'stripe',
+          'text': 'Connect with Stripe',
+          'style': 'primary',
+          'type': 'button',
+          'value': 'Connect with Stripe'
         }
       ],
-      "response_url": config.baseUrl + "/api/notifications/receiveslackmsg"
+      'response_url': config.baseUrl + '/api/notifications/receiveslackmsg'
     };
 
     var data = {

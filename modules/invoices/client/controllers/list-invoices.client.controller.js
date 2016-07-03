@@ -17,10 +17,10 @@
     vm.invoices = invoices;
 
     for (var i = 0; i < vm.invoices.length; i ++) {
-      var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
-      var dueDateAllowance = Math.floor((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(vm.invoices[i].dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+      var dueDateAllowance = Math.ceil((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
       if (vm.invoices[i].status !== 'paid') {
-        if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+        if (dueDays <= dueDateAllowance)
           vm.invoices[i].status = "due";
         else
           vm.invoices[i].status = "overdue";
@@ -46,10 +46,10 @@
         vm.editRow = -1;
         invoice = res;
         vm.tempInvoice = null;
-        var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
-        var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+        var dueDateAllowance = Math.ceil((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
         if (invoice.status !== 'paid') {
-          if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+          if (dueDays <= dueDateAllowance)
             invoice.status = "due";
           else
             invoice.status = "overdue";

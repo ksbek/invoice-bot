@@ -1287,15 +1287,18 @@
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
-    vm.invoice.dateIssued = new Date(vm.invoice.dateIssued);
-    vm.invoice.dateDue = new Date(vm.invoice.dateDue);
-    var today = new Date();
-    var timeDiff = today.getTime() - vm.invoice.dateIssued.getTime();
-    vm.dueDateAllowance = Math.floor((vm.invoice.dateDue.getTime() - vm.invoice.dateIssued.getTime()) / (1000 * 3600 * 24));
-    vm.invoice.dueDays = Math.floor(timeDiff / (1000 * 3600 * 24));
+    var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(vm.invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+    var dueDateAllowance = Math.ceil((new Date(vm.invoice.dateDue).getTime() - new Date(vm.invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+    if (vm.invoice.status !== 'paid') {
+      if (dueDays <= dueDateAllowance)
+        vm.invoice.status = "due";
+      else
+        vm.invoice.status = "overdue";
+    }
 
+    vm.invoice.dueDays = dueDays;
     if (vm.invoice.status === 'paid' && vm.invoice.datePaid) {
-      timeDiff = Math.floor(Math.abs(today.getTime() - new Date(vm.invoice.datePaid).getTime()) / (1000 * 3600 * 24));
+      var timeDiff = Math.floor(Math.abs(new Date().setHours(0, 0, 0, 0) - new Date(vm.invoice.datePaid).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
       if (timeDiff >= 1)
         vm.invoice.paidDate = timeDiff + "d ago";
       else
@@ -1435,10 +1438,12 @@
     vm.invoices = invoices.data;
 
     for (var i = 0; i < vm.invoices.length; i ++) {
-      var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
-      var dueDateAllowance = Math.floor((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(vm.invoices[i].dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+      console.log(dueDays);
+      var dueDateAllowance = Math.ceil((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      console.log(dueDateAllowance);
       if (vm.invoices[i].status !== 'paid') {
-        if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+        if (dueDays <= dueDateAllowance)
           vm.invoices[i].status = "due";
         else
           vm.invoices[i].status = "overdue";
@@ -1465,10 +1470,12 @@
 
       function successCallback(res) {
         vm.editRow = -1;
-        var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
-        var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        invoice = res;
+        vm.tempInvoice = null;
+        var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+        var dueDateAllowance = Math.ceil((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
         if (invoice.status !== 'paid') {
-          if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+          if (dueDays <= dueDateAllowance)
             invoice.status = "due";
           else
             invoice.status = "overdue";
@@ -1516,10 +1523,10 @@
     vm.invoices = invoices;
 
     for (var i = 0; i < vm.invoices.length; i ++) {
-      var dueDays = Math.floor((new Date().getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
-      var dueDateAllowance = Math.floor((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
+      var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(vm.invoices[i].dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+      var dueDateAllowance = Math.ceil((new Date(vm.invoices[i].dateDue).getTime() - new Date(vm.invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
       if (vm.invoices[i].status !== 'paid') {
-        if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+        if (dueDays <= dueDateAllowance)
           vm.invoices[i].status = "due";
         else
           vm.invoices[i].status = "overdue";
@@ -1545,10 +1552,10 @@
         vm.editRow = -1;
         invoice = res;
         vm.tempInvoice = null;
-        var dueDays = Math.floor((new Date().getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
-        var dueDateAllowance = Math.floor((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+        var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+        var dueDateAllowance = Math.ceil((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
         if (invoice.status !== 'paid') {
-          if (dueDays < dueDateAllowance || dueDateAllowance === 0)
+          if (dueDays <= dueDateAllowance)
             invoice.status = "due";
           else
             invoice.status = "overdue";
@@ -2571,6 +2578,9 @@ angular
     vm.dueDateAllowance = vm.user.dueDateAllowance.toString();
     vm.tax = vm.user.tax.toString();
 
+    var origDueDateAllowance = angular.copy(vm.user.dueDateAllowance);
+    var origTax = angular.copy(vm.user.tax);
+
     vm.currencySymbols = {
       'USD': '$', 'AUD': '$', 'EUR': '€', 'GBP': '£', 'CAD': '$', 'ALL': 'Lek', 'ARS': '$', 'AWG': 'ƒ', 'BSD': '$', 'BBD': '$', 'BYR': 'p.', 'BZD': 'BZ$', 'BMD': '$', 'BOB': '$b', 'BAM': 'KM', 'BWP': 'P', 'BGN': 'лв', 'BRL': 'R$', 'BND': '$', 'KHR': '៛', 'KYD': '$', 'CLP': '$', 'CNY': '¥', 'COP': '$', 'CRC': '₡', 'HRK': 'kn', 'CUP': '₱', 'CZK': 'Kč', 'DKK': 'kr', 'DOP': 'RD$', 'XCD': '$', 'EGP': '£', 'SVC': '$', 'FKP': '£', 'FJD': '$', 'GHS': '¢', 'GIP': '£', 'GTQ': 'Q', 'GGP': '£', 'GYD': '$', 'HNL': 'L', 'HKD': '$', 'HUF': 'Ft', 'ISK': 'kr', 'IDR': 'Rp', 'IRR': '﷼  ﷼', 'IMP': '£', 'ILS': '₪', 'JMD': 'J$', 'JPY': '¥', 'JEP': '£', 'KZT': 'лв', 'KRW': '₩', 'KGS': 'лв', 'LAK': '₭', 'LBP': '£', 'LRD': '$', 'MKD': 'ден', 'MYR': 'RM', 'MUR': '₨', 'MXN': '$', 'MNT': '₮', 'MZN': 'MT', 'NAD': '$', 'NPR': '₨', 'ANG': 'ƒ', 'NZD': '$', 'NIO': 'C$', 'NGN': '₦', 'NOK': 'kr', 'OMR': '﷼', 'PKR': '₨', 'PAB': 'B/.', 'PYG': 'Gs', 'PEN': 'S/.', 'PHP': '₱', 'PLN': 'zł', 'QAR': '﷼  ﷼', 'RON': 'lei', 'RUB': 'руб', 'SHP': '£', 'SAR': '﷼ ﷼', 'RSD': 'Дин.', 'SCR': '₨', 'SGD': '$', 'SBD': '$', 'SOS': 'S', 'ZAR': 'R', 'LKR': '₨', 'SEK': 'kr', 'CHF': 'CHF', 'SRD': '$', 'SYP': '£', 'TWD': 'NT$', 'THB': '฿', 'TTD': 'TT$', 'TVD': '$', 'UAH': '₴', 'UYU': '$U', 'UZS': 'лв', 'VEF': 'Bs', 'VND': '₫', 'YER': '﷼', 'ZWD': 'Z$'
     };
@@ -2580,8 +2590,12 @@ angular
     // Update a user profile
     function update() {
       vm.success = vm.error = null;
-      var user = new Users(vm.user);
+      if (origDueDateAllowance !== vm.user.dueDateAllowance)
+        vm.user.changedDueDateAllowance = true;
+      if (origTax !== vm.user.tax)
+        vm.user.changedTax = true;
 
+      var user = new Users(vm.user);
       user.$update(function (response) {
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 

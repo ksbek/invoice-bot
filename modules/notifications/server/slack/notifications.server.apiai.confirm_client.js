@@ -12,40 +12,40 @@ module.exports = function (response, user, channel, web, config) {
   // Check if the confirm parameters have client name
   if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
     var attachment = {
-      "fallback": "Required plain-text summary of the attachment.",
-      "color": "#f1d4fc",
-      "author_name": "Client: " + response.result.parameters.name,
-      "title": "Contact: " + response.result.parameters.contactname,
-      "fields": [
+      'fallback': 'Required plain-text summary of the attachment.',
+      'color': '#f1d4fc',
+      'author_name': 'Client: ' + response.result.parameters.name,
+      'title': 'Contact: ' + response.result.parameters.contactname,
+      'fields': [
         {
-          "value": "Email address: " + response.result.parameters.email,
-          "short": false
+          'value': 'Email address: ' + response.result.parameters.email,
+          'short': false
         }
       ],
-      "callback_id": "confirm_client",
-      "attachment_type": "default",
-      "token": "VOOjorjRck77mNR33HD1Eux4",
-      "actions": [
+      'callback_id': 'confirm_client',
+      'attachment_type': 'default',
+      'token': 'VOOjorjRck77mNR33HD1Eux4',
+      'actions': [
         {
-          "name": "no",
-          "text": "No",
-          "type": "button",
-          "value": "no",
-          "style": "primary"
+          'name': 'no',
+          'text': 'No',
+          'type': 'button',
+          'value': 'no',
+          'style': 'primary'
         },
         {
-          "name": "yes",
-          "text": "Looks good",
-          "type": "button",
-          "value": "yes",
-          "style": "primary"
+          'name': 'yes',
+          'text': 'Looks good',
+          'type': 'button',
+          'value': 'yes',
+          'style': 'primary'
         }
       ],
-      "action_ts": new Date().getTime() / 1000,
-      "message_ts": new Date().getTime() / 1000,
-      "footer": "Nowdue AI",
-      "footer_icon": "https://www.nowdue.ai/modules/core/client/img/i-nowdue.png",
-      "ts": new Date().getTime() / 1000
+      'action_ts': new Date().getTime() / 1000,
+      'message_ts': new Date().getTime() / 1000,
+      'footer': 'Nowdue AI',
+      'footer_icon': 'https://www.nowdue.ai/modules/core/client/img/i-nowdue.png',
+      'ts': new Date().getTime() / 1000
     };
 
     var data = {
