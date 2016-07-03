@@ -22,13 +22,13 @@ module.exports = function (config, invoice, client, user, type, callback) {
     case 1:
       notification.title = 'A successful request to issue an invoice to a client';
       notification.description = 'Created ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a>' + ' for ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a>' + ' Amount $' + invoice.amountDue.amount;
-      slackDescription = '@' + user.providerData.user + 'created ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> for ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' Amount ' + config.currencies[user.currency] + invoice.amountDue.amount;
+      slackDescription = '@' + user.providerData.user + ' created ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> for ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' Amount ' + config.currencies[user.currency] + invoice.amountDue.amount;
       sendSlackChannel = true;
       break;
     case 2:
       notification.title = 'A successful request to log a new client';
       notification.description = 'Created ' + '<a href=\'' + config.baseUrl + '/clients/' + client.id + '\'>' + client.companyName + '</a>' + ' for ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + client.companyName + '</a>' + ' to clients';
-      slackDescription = '@' + user.providerData.user + 'added ' + '<' + config.baseUrl + '/clients/' + client.id + '|' + client.companyName + '> to clients';
+      slackDescription = '@' + user.providerData.user + ' added ' + '<' + config.baseUrl + '/clients/' + client.id + '|' + client.companyName + '> to clients';
       sendSlackChannel = true;
       break;
     case 3:

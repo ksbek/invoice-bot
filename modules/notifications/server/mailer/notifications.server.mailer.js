@@ -19,9 +19,7 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     case 1:
       // Invoice Created
       email.addTo(invoice.client.email);
-      email.setCcs([user.email]);
       email.setSubject("Nowdue Invoice Transaction Email");
-
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
       email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
@@ -35,7 +33,6 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     case 10:
       email.addTo(invoice.client.email);
       email.setSubject("Invoice Overdue Email");
-
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
       email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
@@ -53,7 +50,6 @@ module.exports = function (config, invoice, user, mail_type, callback) {
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
   }
-
   sendgrid.send(email, function (err, json) {
     if (err) {
       if (callback) {
@@ -65,4 +61,29 @@ module.exports = function (config, invoice, user, mail_type, callback) {
       }
     }
   });
+  if (mail_type === 1) {
+    email = new sendgrid.Email();
+    email.html = '<h1>Hi There</h1>';
+    email.setFrom(config.sendgrid.from);
+    email.addFilter('templates', 'enable', 1);
+    email.addTo(user.email);
+    email.setSubject("Nowdue Invoice Transaction Email");
+    email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
+    email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
+    email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
+    email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
+    email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
+    console.log(email);
+    sendgrid.send(email, function (err, json) {
+      if (err) {
+        if (callback) {
+          callback(false);
+        }
+      } else {
+        if (callback) {
+          callback(true, invoice);
+        }
+      }
+    });
+  }
 };
