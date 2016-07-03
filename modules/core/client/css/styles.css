@@ -1465,12 +1465,12 @@ header .alignright h4 {
 	display: inline-block;
 	float: right;
 	margin: 4px 80px 0 0;
-	color: #ededed;
+	color: #3d3d66;
 	font-size: 13px;
 }
 
 .invoice-by a {
-	color: #ededed;
+	color: #3d3d66;
 	font-weight: 600;
 }
 

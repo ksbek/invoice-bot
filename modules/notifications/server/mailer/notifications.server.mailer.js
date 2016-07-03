@@ -22,7 +22,10 @@ module.exports = function (config, invoice, user, mail_type, callback) {
       email.setSubject("Nowdue Invoice Transaction Email");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
+      if (invoice.token)
+        email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
+      else
+        email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
@@ -35,8 +38,10 @@ module.exports = function (config, invoice, user, mail_type, callback) {
       email.setSubject("Invoice Overdue Email");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
-      email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
+      if (invoice.token)
+        email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
+      else
+        email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
     case 2:
