@@ -35,10 +35,11 @@ exports.update = function (req, res) {
         });
       } else {
         // Send Notificatin to notification page and slack
+        console.log(req.user.changedTax);
         if (req.user.changedTax)
-          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 3);
+          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 3);
         if (req.user.changedDueDateAllowance)
-          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 4);
+          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 4);
 
         req.login(user, function (err) {
           if (err) {

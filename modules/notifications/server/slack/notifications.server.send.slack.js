@@ -1,7 +1,7 @@
 'use strict';
 
 // Create the notifications configuration
-module.exports = function (config, invoice, client, user, type, callback) {
+module.exports = function (config, invoice, client, user, dueDays, type, callback) {
   var mongoose = require('mongoose'),
     Notification = mongoose.model('Notification'),
     WebClient = require('@slack/client').WebClient,
@@ -46,33 +46,33 @@ module.exports = function (config, invoice, client, user, type, callback) {
       sendSlackChannel = true;
       break;
     case 6:
-      notification.title = 'On 8th day - 7 days pasted since orinigal send date';
+      notification.title = 'On ' + dueDays + 'th day - ' + (dueDays - 1) + ' days pasted since orinigal send date';
       notification.description = '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a> was sent a friendly reminder that ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a> is overdue ' + config.currencies[user.currency] + invoice.amountDue.amount;
       slackDescription = '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' was sent a friendly reminder that ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> is overdue ' + config.currencies[user.currency] + invoice.amountDue.amount;
       sendSlack = true;
       break;
     case 7:
-      notification.title = 'Overdue - 14 days since orinigal send date';
-      notification.description = 'We let <a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a> know they are now 7 days overdue on ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a>';
-      slackDescription = 'We let <' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' know they are now 7 days overdue on ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>';
+      notification.title = 'Overdue - ' + dueDays + ' days since orinigal send date';
+      notification.description = 'We let <a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a> know they are now ' + dueDays + ' days overdue on ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a>';
+      slackDescription = 'We let <' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' know they are now ' + dueDays + ' days overdue on ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>';
       sendSlack = true;
       break;
     case 8:
       notification.title = 'Overdue - 21 days since orinigal send date';
-      notification.description = '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a> are now 14 days overdue on ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a>. We send them another reminder.';
-      slackDescription = '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' are now 14 days overdue on ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>. We send them another reminder.';
+      notification.description = '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a> are now ' + dueDays + ' days overdue on ' + '<a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a>. We send them another reminder.';
+      slackDescription = '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>' + ' are now ' + dueDays + ' days overdue on ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>. We send them another reminder.';
       sendSlack = true;
       break;
     case 9:
       notification.title = 'Overdue - 30 days since orinigal send date';
-      notification.description = 'We expressed concern for <a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a> to ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a>. We are now moving into 21 days past due.';
-      slackDescription = 'We expressed concern for <' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' to ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|INV' + invoice.client.companyName + '>. We are now moving into 21 days past due.';
+      notification.description = 'We expressed concern for <a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a> to ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a>. We are now moving into ' + dueDays + ' days past due.';
+      slackDescription = 'We expressed concern for <' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' to ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>. We are now moving into ' + dueDays + ' days past due.';
       sendSlack = true;
       break;
     case 10:
       notification.title = 'Overdue - 37 days since orinigal send date';
-      notification.description = 'We expressed concern for <a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a> to ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a>. Now 30 days past due.';
-      slackDescription = 'We expressed concern for <' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' to ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|INV' + invoice.client.companyName + '>. Now 30 days past due.';
+      notification.description = 'We expressed concern for <a href=\'' + config.baseUrl + '/invoices/' + invoice.id + '\'>INV' + invoice.invoice + '</a> to ' + '<a href=\'' + config.baseUrl + '/clients/' + invoice.client.id + '\'>' + invoice.client.companyName + '</a>. Now ' + dueDays + ' days past due.';
+      slackDescription = 'We expressed concern for <' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '>' + ' to ' + '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '>. Now ' + dueDays + ' days past due.';
       sendSlack = true;
       break;
     case 11:

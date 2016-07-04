@@ -123,7 +123,7 @@ exports.getInvoiceFromToken = function(req, res) {
   console.log(req.params.token);
   console.log(invoiceToken);
   console.log(userToken);
-  Invoice.findOne({ token: invoiceToken }).populate('user', 'providerData').populate('client', 'companyName').exec(function(err, invoice) {
+  Invoice.findOne({ token: invoiceToken }).populate('client', 'companyName').exec(function(err, invoice) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -136,7 +136,7 @@ exports.getInvoiceFromToken = function(req, res) {
           accountSetupToken: userToken
         }, function (err, user) {
           if (user)
-            require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, user, 11);
+            require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, user, 0, 11);
         });
         res.jsonp(invoice);
       }
@@ -205,10 +205,10 @@ exports.paynow = function(req, res) {
                     else if (dueDays - dueDateAllowance > 14)
                       type = 12;
                     // Send Notificatin to notification page and slack
-                    require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, null, user, type);
+                    require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, null, user, 0, type);
 
                     // Send paid invoice email to user
-                    require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, type);
+                    require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, 0, type);
 
                     res.send(invoice);
                   }

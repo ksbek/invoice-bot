@@ -5,7 +5,7 @@ function sendInvoiceReminder() {
   var path = require('path');
   var config = require(path.resolve('./config/config'));
   var mongoose = require('mongoose');
-  mongoose.connect(process.env.MONGOHQ_URL);
+  mongoose.connect('mongodb://localhost/mean-dev');
   require('../users/server/models/user.server.model.js');
   require('../clients/server/models/client.server.model.js');
   require('../invoices/server/models/invoice.server.model.js');
@@ -27,23 +27,28 @@ function sendInvoiceReminder() {
       var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(invoices[i].dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
       var dueDateAllowance = Math.ceil((new Date(invoices[i].dateDue).getTime() - new Date(invoices[i].dateIssued).getTime()) / (1000 * 3600 * 24));
       var type = 0;
-      if (dueDays - dueDateAllowance > 30)
+      console.log(invoices[i].invoice + "     " + dueDays);
+      console.log(invoices[i].invoice + "     " + dueDateAllowance);
+      console.log(invoices[i].invoice + "     " +(dueDays - dueDateAllowance));
+      if (dueDays > 37) 
         type = 10;
-      else if (dueDays - dueDateAllowance > 23)
+      else if (dueDays > 30)
         type = 9;
-      else if (dueDays - dueDateAllowance > 14)
+      else if (dueDays > 21)
         type = 8;
-      else if (dueDays - dueDateAllowance > 7)
-        type = 7;    
-      else if (dueDays - dueDateAllowance > 0)
+      else if (dueDays > 14)
+        type = 7;
+      else if (dueDays - dueDateAllowance === 1)
         type = 6;
+      else
+        processedCount ++;
       if (type != 0 && invoices[i].user) {
-        require(require('path').resolve('modules/notifications/server/mailer/notifications.server.mailer.js'))(config, invoices[i], invoices[i].user, type, function(result, invoice) {
+        require(require('path').resolve('modules/notifications/server/mailer/notifications.server.mailer.js'))(config, invoices[i], invoices[i].user, dueDays, type, function(result, invoice, dueDays, notify_type) {
           console.log(result);
           if (result) {
-            require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, invoice.user, type, function(reuslt) {
+            console.log(notify_type);
+            require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, invoice.user, dueDays, notify_type, function(reuslt) {
               processedCount ++;
-              console.log(processedCount);
               if (processedCount === totalCount) {
                 console.log('exit');
                 process.exit();
@@ -57,7 +62,11 @@ function sendInvoiceReminder() {
             }
           }
         });
-      }    
+      }
+      if (processedCount === totalCount) {
+        console.log('exit');
+        process.exit();
+      }
     }
   });
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 // Create the notifications configuration
-module.exports = function (config, invoice, user, mail_type, callback) {
+module.exports = function (config, invoice, user, dueDays, mail_type, callback) {
   var sendgrid = require("sendgrid")(config.sendgrid.apiKey);
   var email = new sendgrid.Email();
   var currencySymbols = {
@@ -11,7 +11,6 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     'GBP': '£',
     'CAD': '$'
   };
-  console.log(user);
   email.html = '<h1>Hi There</h1>';
   email.setFrom(config.sendgrid.from);
   email.addFilter('templates', 'enable', 1);
@@ -19,13 +18,15 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     case 1:
       // Invoice Created
       email.addTo(invoice.client.email);
-      email.setSubject("Nowdue Invoice Transaction Email");
+      email.setSubject("Invoice Nowdue");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
+      email.addSubstitution("-nowdue-", 'Nowdue');
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      if (invoice.token)
+      if (invoice.token) {
         email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
-      else
+      } else {
         email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
+      }
       email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
       break;
@@ -35,14 +36,18 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     case 9:
     case 10:
       email.addTo(invoice.client.email);
-      email.setSubject("Invoice Overdue Email");
+      email.setSubject("Invoice - Overdue " + dueDays + " days ago");
       email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
+      email.addSubstitution("-nowdue-", "- Overdue " + dueDays + " days ago");
       email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
-      if (invoice.token)
+      if (invoice.token) {
         email.addSubstitution("&lt;%= invoice.id %&gt;", 'token/' + user.accountSetupToken + invoice.token);
-      else
+      } else {
         email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
+      }
+      email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
       email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
+      console.log(email);
       break;
     case 2:
       // Invoice Paid
@@ -62,7 +67,7 @@ module.exports = function (config, invoice, user, mail_type, callback) {
       }
     } else {
       if (callback) {
-        callback(true, invoice);
+        callback(true, invoice, dueDays, mail_type);
       }
     }
   });
@@ -78,17 +83,9 @@ module.exports = function (config, invoice, user, mail_type, callback) {
     email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);
     email.addSubstitution("&lt;%= invoice.invoice %&gt;", invoice.invoice);
     email.addSubstitution("&lt;%= invoice.amountDue.amount %&gt;", currencySymbols[invoice.amountDue.currency] + invoice.amountDue.amount + " " + invoice.amountDue.currency);
-    console.log(email);
+
     sendgrid.send(email, function (err, json) {
-      if (err) {
-        if (callback) {
-          callback(false);
-        }
-      } else {
-        if (callback) {
-          callback(true, invoice);
-        }
-      }
+      console.log(err);
     });
   }
 };

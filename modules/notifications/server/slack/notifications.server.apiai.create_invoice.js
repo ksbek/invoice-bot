@@ -64,7 +64,7 @@ module.exports = function (response, user, channel, web, config) {
               invoice.user = user;
 
               // Send invoice created notification to notifications page
-              require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, user, 1);
+              require(require('path').resolve('modules/notifications/server/slack/notifications.server.send.slack.js'))(config, invoice, null, user, 0, 1);
             }
           });
         } else {

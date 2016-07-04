@@ -1184,7 +1184,10 @@
         controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
-          invoiceResolve: newInvoice
+          invoiceResolve: newInvoice,
+          isClient: [
+            function() { return false; }
+          ]
         },
         data: {
           roles: ['user', 'admin'],
@@ -1197,7 +1200,10 @@
         controller: 'InvoicesController',
         controllerAs: 'vm',
         resolve: {
-          invoiceResolve: getInvoice
+          invoiceResolve: getInvoice,
+          isClient: [
+            function() { return false; }
+          ]
         },
         data: {
           roles: ['user', 'admin'],
