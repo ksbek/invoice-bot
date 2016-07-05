@@ -57,6 +57,14 @@
           pageTitle: 'Privacy'
         }
       })
+      .state('root.faq', {
+        url: '/faq',
+        templateUrl: 'modules/core/client/views/faq.client.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'FAQ'
+        }
+      })
       .state('not-found', {
         url: '/not-found',
         views: {

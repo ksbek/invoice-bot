@@ -70,12 +70,56 @@
   margin: 0;
 }
 .invoice-settings span {
-  color: #7b858a;
+  color: #d3dee5;
 }
-.invoice-settings select {
-  background-color: white;
-  color: #7b858a;
+
+.invoice-settings input {
+  color: #d3dee5;
 }
+
+/*.invoice-settings input[type='number'] {
+  -moz-appearance:textfield;
+}
+
+.invoice-settings input::-webkit-outer-spin-button,
+.invoice-settings input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}*/
+
+.invoice-settings p select {
+  display: inline;
+  overflow: hidden;
+  vertical-align: middle;
+  background: #e9fbf7;
+  border-radius: 5px;
+  min-width: 56px;
+  padding: 0 0 0 20px;
+  margin: 0;
+  color: #b3d2cb;
+  height: 20px;
+  width: 50px;
+  float: right;
+  font-size: 10px;
+  border: 0;
+  /*text-align: center;*/
+  /*text-align-last:center;*/
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.invoice-settings p .selectCurrency {
+  padding-left: 18px;
+}
+
+.invoice-settings p select::-ms-expand { /* for IE 11 */
+  display: none;
+}
+
+.invoice-settings .tax-value{
+  padding-left: 50px;
+}
+
 .pricing-settings h3 {
   display: inline-block;
 }

@@ -217,8 +217,11 @@ module.exports = function (token, config, isFirst, new_user) {
                   break;
 
                 case 'Lookup Client Name':
-                case 'Lookup Client Email':
                   require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.lookup_client.js'))(response, user, dm.id, web, config);
+                  break;
+
+                case 'Lookup Client Email':
+                  require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.lookup_client_email.js'))(response, user, dm.id, web, config);
                   break;
 
                 case 'Lookup Earnings':

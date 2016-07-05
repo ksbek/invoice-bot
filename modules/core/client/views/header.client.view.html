@@ -54,7 +54,7 @@
   </div><!-- END of .container -->
 
   <!-- privacy header -->
-  <div class="container" ng-if="!vm.authentication.user && vm.state.current.name == 'root.privacy'">
+  <div class="container" ng-if="!vm.authentication.user && (vm.state.current.name == 'root.privacy' || vm.state.current.name == 'root.faq')">
     <div class="logining-links-wr">
       <a href="#" ui-sref="home">Back to home</a>
     </div>

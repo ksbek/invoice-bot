@@ -2,31 +2,31 @@
 <div class="container">
 	<h4 class="color-dark">Invoice</h4>
 	<span class="invoice-data-item color-yellow">{{vm.invoice.invoice}}</span>
-	<div ng-if="vm.invoice.status == 'due'">
-		<div class="alignright text-right" ng-if="vm.invoice.dueDays < 1">
+	<div class="alignright text-right" ng-if="vm.invoice.status == 'due'">
+		<div ng-if="vm.invoice.dueDays < 1">
 			<span class="invoice-data-item color-purple">Nowdue</span>
 			<h4 class="color-dark">Today</h4>
 		</div>
-		<div class="alignright text-right" ng-if="vm.invoice.dueDays == 1">
+		<div ng-if="vm.invoice.dueDays == 1">
 			<span class="invoice-data-item color-purple">Nowdue</span>
 			<h4 class="color-dark">Yesterday</h4>
 		</div>
-		<div class="alignright text-right" ng-if="vm.invoice.dueDays > 1">
+		<div ng-if="vm.invoice.dueDays > 1">
 			<span class="invoice-data-item color-purple">Nowdue</span>
 			<h4 class="color-dark">{{vm.invoice.dueDays}}d ago</h4>
 		</div>
 	</div>
-	<div ng-if="vm.invoice.status == 'overdue'">
-		<div class="alignright text-right" ng-if="vm.invoice.dueDays > 0 && vm.invoice.dueDays < 31">
+	<div class="alignright text-right" ng-if="vm.invoice.status == 'overdue'">
+		<div ng-if="vm.invoice.dueDays > 0 && vm.invoice.dueDays < 31">
 			<span class="invoice-data-item color-red">Overdue</span>
 			<h4 class="color-dark">{{vm.invoice.dueDays}}d ago</h4>
 		</div>
-		<div class="alignright text-right" ng-if="vm.invoice.dueDays >= 31">
+		<div ng-if="vm.invoice.dueDays >= 31">
 			<span class="invoice-data-item color-red">Overdue</span>
 			<h4 class="color-dark">{{vm.invoice.dueDays / 7 | number:0}}wk ago</h4>
 		</div>
 	</div>
-	<div class="alignright text-right" ng-if="vm.invoice.status == 'paid'">
+	<div ng-if="vm.invoice.status == 'paid'">
 		<span class="invoice-data-item color-green">Paid</span>
 		<h4 class="color-dark">{{vm.invoice.paidDate}}</h4>
 	</div>
