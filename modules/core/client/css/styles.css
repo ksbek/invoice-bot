@@ -1443,6 +1443,13 @@ header .alignright h4 {
 	line-height: 16px;
 }
 
+.p-p-wr p span.command {
+	color: #c25;
+	border: 1px solid #e8e8e8;
+	padding: 1px 3px;
+	background: #f9f9f9;
+}
+
 .p-p-wr h1 {
 	padding: 0 0 45px;
 	text-align: center;
