@@ -176,6 +176,10 @@ var UserSchema = new Schema({
     isRunning: {
       type: Boolean
     }
+  },
+  teamManager: {
+    type: Schema.ObjectId,
+    ref: 'User'
   }
 });
 

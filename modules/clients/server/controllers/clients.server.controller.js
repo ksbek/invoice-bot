@@ -90,7 +90,7 @@ exports.list = function(req, res) {
     else
       searchQuery = { user: req.user };
   }
-  Client.find(searchQuery).sort('-created').populate('user', 'providerData.user').exec(function(err, clients) {
+  Client.find(searchQuery).sort('-created').populate('user', 'providerData').exec(function(err, clients) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -139,7 +139,7 @@ exports.clientByID = function(req, res, next, id) {
     });
   }
 
-  Client.findById(id).populate('user', 'companyName').exec(function (err, client) {
+  Client.findById(id).populate('user', 'providerData').exec(function (err, client) {
     if (err) {
       return next(err);
     } else if (!client) {

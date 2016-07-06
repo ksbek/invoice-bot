@@ -51,7 +51,7 @@ exports.isAllowed = function (req, res, next) {
   }
 
   // If an Invoice is being processed and the current user's team created it then allow any manipulation
-  if (req.invoice && req.user && req.invoice.user && req.invoice.user.provider === 'slack' && req.user.provider === 'slack' && req.invoice.user.providerData.team_id === req.user.providerData.team_id) {
+  if (req.invoice && req.user && req.invoice.user && req.invoice.user.providerData.team_id === req.user.providerData.team_id) {
     return next();
   }
 

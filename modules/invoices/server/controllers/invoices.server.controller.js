@@ -91,7 +91,7 @@ exports.list = function(req, res) {
     else
       searchQuery = { user: req.user };
   }
-  Invoice.find(searchQuery).sort('-created').populate('user', 'providerData.user').populate('client', 'companyName').exec(function(err, invoices) {
+  Invoice.find(searchQuery).sort('-created').populate('user', 'providerData').populate('client', 'companyName').exec(function(err, invoices) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -255,7 +255,7 @@ exports.invoiceByID = function(req, res, next, id) {
     });
   }
 
-  Invoice.findById(id).populate('user', 'companyName').populate('client', 'companyName').exec(function (err, invoice) {
+  Invoice.findById(id).populate('user', 'providerData').populate('client', 'companyName').exec(function (err, invoice) {
     if (err) {
       return next(err);
     } else if (!invoice) {

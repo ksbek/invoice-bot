@@ -44,6 +44,9 @@ exports.isAllowed = function (req, res, next) {
     return next();
   }
 
+  if (req.notification && req.user && req.notification.user && req.notification.user.providerData.team_id === req.user.providerData.team_id) {
+    return next();
+  }
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
     if (err) {

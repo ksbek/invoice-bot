@@ -92,7 +92,7 @@ exports.list = function(req, res) {
     else
       searchQuery = { user: req.user };
   }
-  Notification.find(searchQuery).sort('-created').populate('user', 'companyName').exec(function(err, notifications) {
+  Notification.find(searchQuery).sort('-created').populate('user', 'providerData').exec(function(err, notifications) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

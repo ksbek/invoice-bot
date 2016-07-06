@@ -45,7 +45,7 @@ exports.isAllowed = function (req, res, next) {
   }
 
   // If an Client is being processed and the current user's team created it then allow any manipulation
-  if (req.client && req.user && req.client.user && req.client.user.provider === 'slack' && req.user.provider === 'slack' && req.client.user.providerData.team_id === req.user.providerData.team_id) {
+  if (req.client && req.user && req.client.user && req.client.user.providerData.team_id === req.user.providerData.team_id) {
     return next();
   }
   // Check for user roles
