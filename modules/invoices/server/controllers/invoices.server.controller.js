@@ -18,7 +18,7 @@ var path = require('path'),
 exports.create = function(req, res) {
   var invoice = new Invoice(req.body);
   invoice.user = req.user;
-
+  invoice.team_id = req.user.providerData.team_id;
   invoice.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -85,9 +85,13 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
   var searchQuery = { };
-  if (req.user.roles.indexOf('user') > -1)
-    searchQuery = { user: req.user };
-  Invoice.find(searchQuery).sort('-created').populate('user', 'companyName').populate('client', 'companyName').exec(function(err, invoices) {
+  if (req.user.roles.indexOf('user') > -1) {
+    if (req.user.provider === 'slack')
+      searchQuery = { team_id: req.user.providerData.team_id };
+    else
+      searchQuery = { user: req.user };
+  }
+  Invoice.find(searchQuery).sort('-created').populate('user', 'providerData.user').populate('client', 'companyName').exec(function(err, invoices) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

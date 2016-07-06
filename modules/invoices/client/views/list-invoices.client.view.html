@@ -1,7 +1,7 @@
 <table class="table-wr">
   <tr>
     <th> </th>
-    <th ng-if="vm.authentication.user.roles.indexOf('admin') > -1">USER</th>
+    <th>USER</th>
     <th>CLIENT</th>
     <th>INVOICE</th>
     <th>DATE ISSUED</th>
@@ -12,7 +12,7 @@
   </tr>
   <tr data-ng-repeat="invoice in vm.invoices | orderBy:'dateIssued':true">
     <td><a href="#" ng-click="vm.edit(invoice, $index)" class="dots-btn"><div class="dot"></div><div class="dot"></div><div class="dot"></div></a></td>
-    <td ng-if="vm.authentication.user.roles.indexOf('admin') > -1">{{invoice.user.companyName}}</td>
+    <td>{{invoice.user.providerData.user}}</td>
     <td>
       <a data-ui-sref="clients.edit({ clientId: invoice.client._id })" data-ng-bind="invoice.client.companyName || invoice.client.name"></a></td>
     <td><a data-ui-sref="invoices.edit({ invoiceId: invoice._id })" data-ng-bind="invoice.invoice"></a></td>

@@ -12,7 +12,7 @@ module.exports = function (response, user, channel, web, config) {
   var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
   // Check if user have client
-  Client.findClientByName(response.result.parameters.clientname, user.id, function(client) {
+  Client.findClientByName(response.result.parameters.clientname, user, function(client) {
     if (client) {
       console.log(client);
       Invoice.aggregate([

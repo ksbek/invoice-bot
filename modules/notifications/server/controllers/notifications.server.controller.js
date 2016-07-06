@@ -19,7 +19,7 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
   var notification = new Notification(req.body);
   notification.user = req.user;
-
+  notification.team_id = req.user.providerData.team_id;
   notification.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -85,7 +85,14 @@ exports.delete = function(req, res) {
  * List of notifications
  */
 exports.list = function(req, res) {
-  Notification.find({ user: req.user }).sort('-created').populate('user', 'companyName').exec(function(err, notifications) {
+  var searchQuery = { };
+  if (req.user.roles.indexOf('user') > -1) {
+    if (req.user.provider === 'slack')
+      searchQuery = { team_id: req.user.providerData.team_id };
+    else
+      searchQuery = { user: req.user };
+  }
+  Notification.find(searchQuery).sort('-created').populate('user', 'companyName').exec(function(err, notifications) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

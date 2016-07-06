@@ -1,7 +1,7 @@
 <table class="table-wr">
   <tr>
     <th></th>
-    <th ng-if="vm.authentication.user.roles.indexOf('admin') > -1">USER</th>
+    <th>USER</th>
     <th>CLIENT</th>
     <th>CONTACT</th>
     <th>EMAIL</th>
@@ -12,7 +12,7 @@
   </tr>
   <tr data-ng-repeat="client in vm.clients | orderBy:'created':true">
     <td><a href="#" ng-click="vm.edit(client, $index)" class="dots-btn"><div class="dot"></div><div class="dot"></div><div class="dot"></div></a></td>
-    <td ng-if="vm.authentication.user.roles.indexOf('admin') > -1">{{client.user.companyName}}</td>
+    <td>{{client.user.providerData.user}}</td>
     <td ng-if="vm.editRow == $index"><input type="text" ng-model="client.companyName"></td>
     <td ng-if="vm.editRow == $index"><input type="text" ng-model="client.name"></td>
     <td ng-if="vm.editRow == $index"><input type="email" ng-model="client.email"></td>

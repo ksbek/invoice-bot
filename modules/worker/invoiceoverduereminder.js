@@ -5,7 +5,7 @@ function sendInvoiceReminder() {
   var path = require('path');
   var config = require(path.resolve('./config/config'));
   var mongoose = require('mongoose');
-  mongoose.connect('mongodb://localhost/mean-dev');
+  mongoose.connect(process.env.MONGOHQ_URL);
   require('../users/server/models/user.server.model.js');
   require('../clients/server/models/client.server.model.js');
   require('../invoices/server/models/invoice.server.model.js');

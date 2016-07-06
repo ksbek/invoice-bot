@@ -11,7 +11,7 @@ module.exports = function (response, user, channel, web, config) {
 
   if (response.result.parameters.name !== '' && response.result.parameters.email !== '') {
     // Create Client
-    Client.createClientFromSlackBot(user.id, response.result.parameters, function(client) {
+    Client.createClientFromSlackBot(user, response.result.parameters, function(client) {
       console.log(client);
       if (client) {
         var response_speech = response.result.fulfillment.speech.replace('PAGE LINK', '<' + config.baseUrl + '/clients/' + client._id + '/edit' + '|' + client.companyName + '>');

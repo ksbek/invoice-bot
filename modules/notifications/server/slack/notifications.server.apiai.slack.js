@@ -42,6 +42,7 @@ module.exports = function (token, config, isFirst, new_user) {
 
     if (isFirst === 1) {
       if (new_user) {
+        console.log(new_user);
         var dm = rtm.dataStore.getDMByName(new_user.providerData.user);
         require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.onboarding.js'))('', new_user, dm.id, web, config);
         isFirst = 0;
@@ -78,7 +79,7 @@ module.exports = function (token, config, isFirst, new_user) {
                   if (response.result.parameters.name !== '') {
                     // rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
-                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                    Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
                       console.log(client);
                       if (client) {
@@ -112,7 +113,7 @@ module.exports = function (token, config, isFirst, new_user) {
                   if (response.result.parameters.name !== '') {
                     // rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
-                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                    Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
                       if (client) {
                         context = {
@@ -145,7 +146,7 @@ module.exports = function (token, config, isFirst, new_user) {
                   if (response.result.parameters.name !== '') {
                     // rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                     // Check if user have client
-                    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+                    Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
                       if (client) {
                         context = {

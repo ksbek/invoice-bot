@@ -44,6 +44,9 @@ var NotificationSchema = new Schema({
   updated: {
     type: Date
   },
+  team_id: {
+    type: String
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

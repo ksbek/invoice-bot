@@ -61,6 +61,9 @@ var ClientSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  team_id: {
+    type: String
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -74,10 +77,10 @@ var ClientSchema = new Schema({
 /**
  * Return client_id By name
  */
-ClientSchema.statics.findClientByName = function (name, user_id, callback) {
+ClientSchema.statics.findClientByName = function (name, user, callback) {
   this.findOne({
     $or: [{ "name": { $regex: new RegExp(["^", name, "$"].join(""), "i") } }, { "companyName": { $regex: new RegExp(["^", name, "$"].join(""), "i") } }],
-    user: user_id
+    team_id: user.providerData.team_id
   }, function (err, client) {
     if (!err) {
       if (!client) {
@@ -94,13 +97,14 @@ ClientSchema.statics.findClientByName = function (name, user_id, callback) {
 /**
  * Create Client from Slack
  */
-ClientSchema.statics.createClientFromSlackBot = function (user_id, params, callback) {
+ClientSchema.statics.createClientFromSlackBot = function (user, params, callback) {
   var _this = this;
   _this.create({
-    user: user_id,
+    user: user.id,
     companyName: params.name,
     name: params.contactname,
-    email: params.email
+    email: params.email,
+    team_id: user.providerData.team_id
   }, function (err, client) {
     if (!err) {
       if (!client) {

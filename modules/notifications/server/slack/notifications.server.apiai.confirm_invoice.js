@@ -12,7 +12,7 @@ module.exports = function (response, user, channel, web, config) {
   if (response.result.parameters.name !== '') {
 
     // Check if user have client
-    Client.findClientByName(response.result.parameters.name, user.id, function(client) {
+    Client.findClientByName(response.result.parameters.name, user, function(client) {
       if (client) {
         var attachment = {
           'fallback': 'Required plain-text summary of the attachment.',

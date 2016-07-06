@@ -16,7 +16,7 @@ var path = require('path'),
 exports.create = function(req, res) {
   var client = new Client(req.body);
   client.user = req.user;
-
+  client.team_id = req.user.providerData.team_id;
   client.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -84,9 +84,13 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
   var arrClients = [];
   var searchQuery = { };
-  if (req.user.roles.indexOf('user') > -1)
-    searchQuery = { user: req.user._id };
-  Client.find(searchQuery).sort('-created').populate('user', 'companyName').exec(function(err, clients) {
+  if (req.user.roles.indexOf('user') > -1) {
+    if (req.user.provider === 'slack')
+      searchQuery = { team_id: req.user.providerData.team_id };
+    else
+      searchQuery = { user: req.user };
+  }
+  Client.find(searchQuery).sort('-created').populate('user', 'providerData.user').exec(function(err, clients) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

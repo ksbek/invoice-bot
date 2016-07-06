@@ -11,7 +11,7 @@ module.exports = function (response, user, channel, web, config) {
   if (response.result.parameters.any !== '') {
 
     // Check if user have client
-    Client.findClientByName(response.result.parameters.any, user.id, function(client) {
+    Client.findClientByName(response.result.parameters.any, user, function(client) {
       if (client) {
         Invoice.find({ client: client.id }, function (err, invoices) {
           if (err) {

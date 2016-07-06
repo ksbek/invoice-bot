@@ -65,6 +65,9 @@ var InvoiceSchema = new Schema({
   token: {
     type: String
   },
+  team_id: {
+    type: String
+  },
   client: {
     type: Schema.ObjectId,
     ref: 'Client'
@@ -128,7 +131,8 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, par
         invoice: number,
         dueDateAllowance: user.dueDateAllowance,
         tax: user.tax,
-        token: token
+        token: token,
+        team_id: user.providerData.team_id
       }, function (err, invoice) {
         if (!err) {
           if (!invoice) {
