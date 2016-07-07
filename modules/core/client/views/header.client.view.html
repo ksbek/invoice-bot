@@ -4,7 +4,7 @@
   <div class="container" ng-if="vm.authentication.user">
     <div class="settings-nav-wr">
       <ul ng-if="vm.authentication.user.roles.indexOf('admin') == -1">
-        <li ng-if="!vm.authentication.user.integrations.stripe">
+        <li ng-if="!vm.authentication.user.integrations.stripe && vm.authentication.user.roles.indexOf('teammanager') > -1">
           <a href="#" class="stripe-connect" ng-click="vm.callOauthProvider('/api/auth/stripe')"><span>Connect with Stripe</span></a>
         </li>
         <li ng-click="vm.dropdownStyle={display: 'block', top: '100%', opacity: '1'};vm.dropdownOpen = !vm.dropdownOpen">

@@ -1,0 +1,15 @@
+<table class="table-wr">
+  <tr>
+    <th>USER</th>
+    <th>CREATED</th>
+    <th>Status</th>
+  </tr>
+  <tr data-ng-repeat="user in vm.users | orderBy: 'created'">
+    <td>{{user.providerData.user}}</td>
+    <td>
+      <span data-ng-bind="user.created | date:'dd.MM.yy'"></span>
+    </td>
+    <td ng-if="user.roles.indexOf('teammanager') > -1">Manager</td>
+    <td ng-if="user.roles.indexOf('teammanager') == -1">User</td>
+  </tr>
+</table>

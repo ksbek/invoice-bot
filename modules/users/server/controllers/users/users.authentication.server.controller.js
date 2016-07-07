@@ -193,31 +193,9 @@ exports.oauthCallback = function (strategy) {
       }
 
       var bottoken = user.providerData.tokenSecret.bot.bot_access_token;
+      var WebClient = require('@slack/client').WebClient;
+      var web = new WebClient(bottoken);
       // if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
-      if (!user.runningStatus.isRunning) {
-        user.runningStatus.isRunning = true;
-        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
-      } else {
-        var WebClient = require('@slack/client').WebClient;
-        var web = new WebClient(bottoken);
-        web.im.list(function(err, response) {
-          if (err) {
-            console.log(err);
-          } else {
-            if (response.ok === true) {
-              console.log(response);
-              var dm = response.ims.filter(function(im) {
-                return im.user === user.providerData.user_id;
-              });
-              if (dm.length > 0) {
-                console.log(dm[0]);
-                require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding.js"))('', user, dm[0].id, web, config);
-              }
-            }
-          }
-        });
-      }
-
 
       async.waterfall([
         // Generate random token
@@ -231,12 +209,60 @@ exports.oauthCallback = function (strategy) {
         function (token, done) {
           user.accountSetupToken = token;
           user.accountSetupTokenExpires = Date.now() + 3600000; // 1 hour
-
           user.save(function (err) {
             done(err, token, user);
           });
         },
         function (token, user, done) {
+          /*
+          if (user.status === 0) {
+            User.findOne({ _id: user.teamManager }, function (err, teamManager) {
+              if (teamManager) {
+                // require(require('path').resolve("modules/notifications/server/slack/notifications.server.mailer.js"))(config, user, teamManager, 0, 3);
+                web.im.list(function(err, response) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    if (response.ok === true) {
+                      console.log(response);
+                      var dm = response.ims.filter(function(im) {
+                        return im.user === teamManager.providerData.user_id;
+                      });
+                      if (dm.length > 0) {
+                        console.log(dm[0]);
+                        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_user.js"))('', user, dm[0].id, web, config);
+                      }
+                    }
+                  }
+                });
+              }
+            });
+            // return res.redirect('/authentication/pending?token=' + token);
+            // require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
+          } else */
+          if (user.status === 1 && !user.runningStatus.isRunning) {
+            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
+          } else {
+            web.im.list(function(err, response) {
+              if (err) {
+                console.log(err);
+              } else {
+                if (response.ok === true) {
+                  console.log(response);
+                  var dm = response.ims.filter(function(im) {
+                    return im.user === user.providerData.user_id;
+                  });
+                  if (dm.length > 0) {
+                    console.log(dm[0]);
+                    if (user.status === 1)
+                      require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_manager.js"))('', user, dm[0].id, web, config);
+                    else
+                      require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_user.js"))('', user, dm[0].id, web, config);
+                  }
+                }
+              }
+            });
+          }
           return res.redirect('/authentication/account-setup?token=' + token);
         }
       ], function (err) {
@@ -299,11 +325,25 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
               providerData: providerUserProfile.providerData
             });
 
-            User.findUserBySlackId('', providerUserProfile.providerData.team_id, function (existing_user) {
-              if (existing_user) {
-                // user.runningStatus = {};
-                // user.runningStatus.isRunning = true;
-                // user.runningStatus.token = user.providerData.tokenSecret.bot.bot_access_token;
+            User.findOne({ provider: 'slack', 'providerData.team_id': user.providerData.team_id, roles: ['user', 'teammanager'] }, function (err, existing_user) {
+              if (!existing_user) {
+                user.roles = ['user', 'teammanager'];
+                user.status = 1;
+              } else {
+                user.teamManager = existing_user.id;
+                user.status = 0;
+                user.stripe = existing_user.stripe;
+                user.integrations = existing_user.integrations;
+                user.companyName = existing_user.companyName;
+                user.businessNumber = existing_user.businessNumber;
+                user.clientsName = existing_user.clientsName;
+                user.phoneNumber = existing_user.phoneNumber;
+                user.currency = existing_user.currency;
+                user.tax = existing_user.tax;
+                user.includeTaxesOnInvoice = existing_user.includeTaxesOnInvoice;
+                user.dueDateAllowance = existing_user.dueDateAllowance;
+                user.address = existing_user.address;
+                user.website = existing_user.website;
               }
 
               user.runningStatus = {};

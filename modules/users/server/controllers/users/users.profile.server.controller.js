@@ -41,6 +41,29 @@ exports.update = function (req, res) {
         if (req.user.changedDueDateAllowance)
           require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 4);
 
+        User.find({ 'providerData.team_id': req.user.providerData.team_id }).exec(function (err, users) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          }
+          for (var i = 0; i < users.length; i ++) {
+            users[i].integrations = req.user.integrations;
+            users[i].companyName = req.user.companyName;
+            users[i].businessNumber = req.user.businessNumber;
+            users[i].clientsName = req.user.clientsName;
+            users[i].phoneNumber = req.user.phoneNumber;
+            users[i].currency = req.user.currency;
+            users[i].tax = req.user.tax;
+            users[i].includeTaxesOnInvoice = req.user.includeTaxesOnInvoice;
+            users[i].dueDateAllowance = req.user.dueDateAllowance;
+            users[i].address = req.user.address;
+            users[i].website = req.user.website;
+            users[i].save(function(err) {
+              console.log(err);
+            });
+          }
+        });
         req.login(user, function (err) {
           if (err) {
             res.status(400).send(err);
@@ -100,6 +123,22 @@ exports.changeProfilePicture = function (req, res) {
     });
   }
 };
+
+/**
+ * Get Team Members
+ */
+exports.getTeamMembers = function(req, res) {
+  User.find({ 'providerData.team_id': req.user.providerData.team_id }).sort('-created').populate('user').exec(function (err, users) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+
+    res.json(users);
+  });
+};
+
 
 /**
  * Send User

@@ -607,7 +607,36 @@
           ignoreState: true,
           pageTitle: 'Forbidden'
         }
+      })
+      .state('confirmuser', {
+        url: '/confirmuser/:token',
+        templateUrl: 'modules/core/client/views/confirmuser.client.view.html',
+        controller: 'ConfirmUserController',
+        controllerAs: 'vm',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Confirm User'
+        }
       });
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('core')
+    .controller('ConfirmUserController', ConfirmUserController);
+
+  ConfirmUserController.$inject = ['$scope', '$state', '$http', '$location', '$window'];
+
+  function ConfirmUserController($scope, $state, $http, $location, $window) {
+    var vm = this;
+    // OAuth provider request
+    function confirm(isConfirm) {
+      // Effectively call OAuth authentication route:
+      // $window.location.href = url;
+    }
   }
 }());
 
@@ -1907,6 +1936,26 @@ angular
 (function () {
   'use strict';
 
+  angular
+    .module('users')
+    .run(menuConfig);
+
+  menuConfig.$inject = ['Menus'];
+
+  function menuConfig(Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', {
+      title: 'Users',
+      state: 'users',
+      roles: ['user', 'admin'],
+      position: 4
+    });
+  }
+}());
+
+(function () {
+  'use strict';
+
   // Setting up route
   angular
     .module('users.routes')
@@ -1917,6 +1966,26 @@ angular
   function routeConfig($stateProvider) {
     // Users state routing
     $stateProvider
+      .state('users', {
+        url: '/users',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/users/client/views/list-users.client.view.html',
+            controller: 'UsersController',
+            controllerAs: 'vm'
+          }
+        },
+        data: {
+          roles: ['user'],
+          pageTitle: 'Users'
+        },
+        resolve: {
+          getUsers: getUsers
+        }
+      })
       .state('settings', {
         abstract: true,
         url: '/settings',
@@ -2045,6 +2114,19 @@ angular
           pageTitle: 'Account Setup'
         }
       })
+      .state('authentication.pending', {
+        url: '/pending',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/pending.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
+        data: {
+          pageTitle: 'Pending'
+        }
+      })
       .state('authentication.signin', {
         url: '/signin?err',
         views: {
@@ -2120,6 +2202,12 @@ angular
           }
         }
       });
+
+    getUsers.$inject = ['$http'];
+
+    function getUsers($http) {
+      return $http.post('/api/users/teammembers');
+    }
   }
 }());
 
@@ -2828,6 +2916,21 @@ angular
 
     vm.state = $state;
     vm.user = Authentication.user;
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular
+    .module('users')
+    .controller('UsersController', UsersController);
+
+  UsersController.$inject = ['$scope', 'getUsers'];
+
+  function UsersController($scope, getUsers) {
+    var vm = this;
+    vm.users = getUsers.data;
   }
 }());
 

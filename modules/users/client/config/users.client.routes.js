@@ -11,6 +11,26 @@
   function routeConfig($stateProvider) {
     // Users state routing
     $stateProvider
+      .state('users', {
+        url: '/users',
+        views: {
+          'header': {
+            templateUrl: 'modules/core/client/views/header.client.view.html'
+          },
+          'container@': {
+            templateUrl: 'modules/users/client/views/list-users.client.view.html',
+            controller: 'UsersController',
+            controllerAs: 'vm'
+          }
+        },
+        data: {
+          roles: ['user'],
+          pageTitle: 'Users'
+        },
+        resolve: {
+          getUsers: getUsers
+        }
+      })
       .state('settings', {
         abstract: true,
         url: '/settings',
@@ -139,6 +159,19 @@
           pageTitle: 'Account Setup'
         }
       })
+      .state('authentication.pending', {
+        url: '/pending',
+        views: {
+          'container@': {
+            templateUrl: 'modules/users/client/views/authentication/pending.client.view.html',
+            controller: 'AuthenticationController',
+            controllerAs: 'vm'
+          }
+        },
+        data: {
+          pageTitle: 'Pending'
+        }
+      })
       .state('authentication.signin', {
         url: '/signin?err',
         views: {
@@ -214,5 +247,11 @@
           }
         }
       });
+
+    getUsers.$inject = ['$http'];
+
+    function getUsers($http) {
+      return $http.post('/api/users/teammembers');
+    }
   }
 }());

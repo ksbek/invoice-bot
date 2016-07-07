@@ -152,7 +152,7 @@ exports.getInvoiceFromToken = function(req, res) {
  * Pay Invoice
  */
 exports.paynow = function(req, res) {
-  User.findById(req.invoice.user.id, function (err, user) {
+  User.findById(req.invoice.user.teamManager, function (err, user) {
     if (user) {
       if (user.stripe) {
         var stripe = require('stripe')(user.stripe.access_token);

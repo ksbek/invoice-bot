@@ -109,6 +109,16 @@
           ignoreState: true,
           pageTitle: 'Forbidden'
         }
+      })
+      .state('confirmuser', {
+        url: '/confirmuser/:token',
+        templateUrl: 'modules/core/client/views/confirmuser.client.view.html',
+        controller: 'ConfirmUserController',
+        controllerAs: 'vm',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Confirm User'
+        }
       });
   }
 }());
