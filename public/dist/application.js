@@ -1936,26 +1936,6 @@ angular
 (function () {
   'use strict';
 
-  angular
-    .module('users')
-    .run(menuConfig);
-
-  menuConfig.$inject = ['Menus'];
-
-  function menuConfig(Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', {
-      title: 'Users',
-      state: 'users',
-      roles: ['user', 'admin'],
-      position: 4
-    });
-  }
-}());
-
-(function () {
-  'use strict';
-
   // Setting up route
   angular
     .module('users.routes')
@@ -1966,26 +1946,6 @@ angular
   function routeConfig($stateProvider) {
     // Users state routing
     $stateProvider
-      .state('users', {
-        url: '/users',
-        views: {
-          'header': {
-            templateUrl: 'modules/core/client/views/header.client.view.html'
-          },
-          'container@': {
-            templateUrl: 'modules/users/client/views/list-users.client.view.html',
-            controller: 'UsersController',
-            controllerAs: 'vm'
-          }
-        },
-        data: {
-          roles: ['user'],
-          pageTitle: 'Users'
-        },
-        resolve: {
-          getUsers: getUsers
-        }
-      })
       .state('settings', {
         abstract: true,
         url: '/settings',
@@ -2075,6 +2035,18 @@ angular
         controllerAs: 'vm',
         data: {
           pageTitle: 'Settings picture'
+        }
+      })
+      .state('settings.team', {
+        url: '/team',
+        templateUrl: 'modules/users/client/views/settings/team.client.view.html',
+        controller: 'TeamController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Users'
+        },
+        resolve: {
+          getUsers: getUsers
         }
       })
       .state('authentication', {
@@ -2924,11 +2896,11 @@ angular
 
   angular
     .module('users')
-    .controller('UsersController', UsersController);
+    .controller('TeamController', TeamController);
 
-  UsersController.$inject = ['$scope', 'getUsers'];
+  TeamController.$inject = ['$scope', 'getUsers'];
 
-  function UsersController($scope, getUsers) {
+  function TeamController($scope, getUsers) {
     var vm = this;
     vm.users = getUsers.data;
   }

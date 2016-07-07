@@ -826,6 +826,10 @@ body .check-wr input {
 	padding: 0 0 0;
 }
 
+.tabs-wr .table-wr {
+	margin: 0;
+}
+
 .tabs-nav-wr {
 	padding: 14px 0 14px 51px;
 	border-bottom: 1px solid #E9FBF7;

@@ -11,26 +11,6 @@
   function routeConfig($stateProvider) {
     // Users state routing
     $stateProvider
-      .state('users', {
-        url: '/users',
-        views: {
-          'header': {
-            templateUrl: 'modules/core/client/views/header.client.view.html'
-          },
-          'container@': {
-            templateUrl: 'modules/users/client/views/list-users.client.view.html',
-            controller: 'UsersController',
-            controllerAs: 'vm'
-          }
-        },
-        data: {
-          roles: ['user'],
-          pageTitle: 'Users'
-        },
-        resolve: {
-          getUsers: getUsers
-        }
-      })
       .state('settings', {
         abstract: true,
         url: '/settings',
@@ -120,6 +100,18 @@
         controllerAs: 'vm',
         data: {
           pageTitle: 'Settings picture'
+        }
+      })
+      .state('settings.team', {
+        url: '/team',
+        templateUrl: 'modules/users/client/views/settings/team.client.view.html',
+        controller: 'TeamController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Users'
+        },
+        resolve: {
+          getUsers: getUsers
         }
       })
       .state('authentication', {
