@@ -7,7 +7,7 @@
           <input type="text"  id="companyName" name="companyName" ng-model="vm.user.companyName" placeholder="Company name" required ng-disabled="vm.editStatus != 'companyName'" focus-me="vm.editStatus == 'companyName'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'companyName'" ng-click="vm.editField('companyName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'companyName' && vm.user.roles.indexOf('teammanager') > -1" ng-click="vm.editField('companyName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'companyName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)" class="btn-edit-input btn-1">Save</a>
           <a href="javascript:void(0);" ng-if="vm.editStatus == 'companyName'" ng-click="vm.exitEditField('companyName')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
@@ -16,6 +16,7 @@
         </div>
       </div>
     </div>
+    <!--
     <div class="form-row">
       <div class="row form-group" show-errors>
         <div class="col-xs-9">
@@ -31,13 +32,14 @@
         </div>
       </div>
     </div>
+    -->
     <div class="form-row">
       <div class="row form-group" show-errors>
         <div class="col-xs-9">
           <input type="text" id="clientsName" name="clientsName" ng-model="vm.user.clientsName"  placeholder="Clients name" ng-disabled="vm.editStatus != 'clientsName'" focus-me="vm.editStatus == 'clientsName'">
         </div>
         <div class="col-xs-3 text-center">
-          <a href="#" ng-if="vm.editStatus != 'clientsName'" ng-click="vm.editField('clientsName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
+          <a href="#" ng-if="vm.editStatus != 'clientsName' && vm.user.roles.indexOf('teammanager') > -1" ng-click="vm.editField('clientsName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
           <a href="#" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.updateUserProfile(vm.userForm.$valid)" class="btn-edit-input btn-1">Save</a>
           <a href="javascript:void(0);" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.exitEditField('clientsName')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>

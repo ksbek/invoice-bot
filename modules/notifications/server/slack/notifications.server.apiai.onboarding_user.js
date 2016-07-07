@@ -10,7 +10,7 @@ module.exports = function (response, user, channel, web, config) {
   var context = {
     'name': 'onboarding'
   };
-
+  /*
   var newrequest = apiai.textRequest('onboarding', { 'contexts': [context], 'sessionId': user.id });
   newrequest.on('response', function(response) {
     console.log(response);
@@ -36,11 +36,11 @@ module.exports = function (response, user, channel, web, config) {
     var data = {
       attachments: [attachment]
     };
-
-    web.chat.postMessage(channel, response.result.fulfillment.speech.replace('@funuser', '@' + user.providerData.user), data, function(err, response) {
-      console.log(response);
-    });
+  */
+  var text = "Whoa!!! @" + user.providerData.user + ", it's the future! ​*Jimmy*​ here, from ​*Nowdue*​. Super excited to finally meet you. I'm not one for boasting, however, straight up... you should know that I'm really good at creating invoices, following payments and tracking revenue. \n\n `1`  To add a new client contact to Nowdue just use the ​*add client*​ command. `add client` \n `2` To create and send an invoice, give the ​*create invoice*​ command a whirl :dizzy: `create invoice`";
+  web.chat.postMessage(channel, text);
     // rtm.sendMessage(response.result.fulfillment.speech.replace('User_Name', new_user.companyName), dm.id);
+  /*
   });
 
   newrequest.on('error', function(error) {
@@ -48,4 +48,5 @@ module.exports = function (response, user, channel, web, config) {
   });
 
   newrequest.end();
+  */
 };

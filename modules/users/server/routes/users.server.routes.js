@@ -11,6 +11,8 @@ module.exports = function (app) {
   app.route('/api/users/password').post(users.changePassword);
   app.route('/api/users/picture').post(users.changeProfilePicture);
   app.route('/api/users/teammembers').post(users.getTeamMembers);
+  app.route('/api/users/delete').post(users.deleteUser);
+  app.route('/api/users/setmanager').post(users.setManager);
 
   // Finish by binding the user middleware
   app.param('userId', users.userByID);

@@ -44,7 +44,7 @@
         </div>
         <div class="col-xs-3 text-left">
           <label class="check-wr color-blue">
-            <input type="checkbox"ng-model="vm.user.integrations.stripe" ng-change="vm.update()">
+            <input type="checkbox"ng-model="vm.user.integrations.stripe" ng-change="vm.update()" ng-disabled="vm.user.roles.indexOf('teammanager') == -1">
             <span>
               <span class="ch-disabled-text">Connect</span>
               <span class="ch-checked-text">Active</span>
@@ -96,7 +96,7 @@
         </div>
         <div class="col-xs-3 text-left">
           <label class="check-wr color-blue">
-            <input type="checkbox"ng-model="vm.user.integrations.slack" ng-change="vm.update()">
+            <input type="checkbox"ng-model="vm.user.integrations.slack" ng-change="vm.update()" ng-disabled="vm.user.roles.indexOf('teammanager') == -1">
             <span>
               <span class="ch-disabled-text">Connect</span>
               <span class="ch-checked-text">Active</span>

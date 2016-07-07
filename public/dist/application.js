@@ -2898,11 +2898,36 @@ angular
     .module('users')
     .controller('TeamController', TeamController);
 
-  TeamController.$inject = ['$scope', 'getUsers'];
+  TeamController.$inject = ['$scope', 'getUsers', '$window', '$http', 'Authentication'];
 
-  function TeamController($scope, getUsers) {
+  function TeamController($scope, getUsers, $window, $http, Authentication) {
     var vm = this;
     vm.users = getUsers.data;
+    vm.remove = remove;
+    vm.setManager = setManager;
+    vm.authentication = Authentication;
+    function remove(user) {
+      if ($window.confirm('Are you sure you want to delete this user?')) {
+
+        $http.post('/api/users/delete', { user: user })
+        .success(function (response) {
+          vm.users.splice(vm.users.indexOf(user), 1);
+        }).error(function (response) {
+          console.log(response);
+        });
+      }
+    }
+
+    function setManager(user, index) {
+      if ($window.confirm('Are you sure you want to set this user to manager?')) {
+        $http.post('/api/users/setmanager', { user: user })
+        .success(function (response) {
+          vm.users[index] = response;
+        }).error(function (response) {
+          console.log(response);
+        });
+      }
+    }
   }
 }());
 
@@ -3121,6 +3146,9 @@ angular
     return $resource('api/users', {}, {
       update: {
         method: 'PUT'
+      },
+      delete: {
+        method: 'DELETE'
       }
     });
   }

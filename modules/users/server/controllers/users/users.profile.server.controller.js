@@ -50,15 +50,10 @@ exports.update = function (req, res) {
           for (var i = 0; i < users.length; i ++) {
             users[i].integrations = req.user.integrations;
             users[i].companyName = req.user.companyName;
-            users[i].businessNumber = req.user.businessNumber;
-            users[i].clientsName = req.user.clientsName;
-            users[i].phoneNumber = req.user.phoneNumber;
             users[i].currency = req.user.currency;
             users[i].tax = req.user.tax;
             users[i].includeTaxesOnInvoice = req.user.includeTaxesOnInvoice;
             users[i].dueDateAllowance = req.user.dueDateAllowance;
-            users[i].address = req.user.address;
-            users[i].website = req.user.website;
             users[i].save(function(err) {
               console.log(err);
             });
@@ -78,6 +73,41 @@ exports.update = function (req, res) {
       message: 'User is not signed in'
     });
   }
+};
+
+/**
+ * Delete a user
+ */
+exports.deleteUser = function (req, res) {
+  var user = new User(req.body.user);
+
+  user.remove(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+
+    res.json(user);
+  });
+};
+
+/**
+ * Update profile picture
+ */
+exports.setManager = function (req, res) {
+  var user = new User(req.body.user);
+  user.roles = ['user', 'teammanager'];
+  user.isNew = false;
+  user.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+
+    res.json(user);
+  });
 };
 
 /**
@@ -128,7 +158,7 @@ exports.changeProfilePicture = function (req, res) {
  * Get Team Members
  */
 exports.getTeamMembers = function(req, res) {
-  User.find({ 'providerData.team_id': req.user.providerData.team_id }).sort('-created').populate('user').exec(function (err, users) {
+  User.find({ 'providerData.team_id': req.user.providerData.team_id }).sort('created').populate('user').exec(function (err, users) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

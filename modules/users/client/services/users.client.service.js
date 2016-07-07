@@ -12,6 +12,9 @@
     return $resource('api/users', {}, {
       update: {
         method: 'PUT'
+      },
+      delete: {
+        method: 'DELETE'
       }
     });
   }

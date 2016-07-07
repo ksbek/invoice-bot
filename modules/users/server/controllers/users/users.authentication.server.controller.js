@@ -196,6 +196,65 @@ exports.oauthCallback = function (strategy) {
       var WebClient = require('@slack/client').WebClient;
       var web = new WebClient(bottoken);
       // if (!(user.runningStatus && user.runningStatus.token === token && user.runningStatus.isRunning)) {
+      if (user.status === 0) {
+        user.status = 2;
+        User.findOne({ _id: user.teamManager }, function (err, teamManager) {
+          if (teamManager) {
+            // require(require('path').resolve("modules/notifications/server/slack/notifications.server.mailer.js"))(config, user, teamManager, 0, 3);
+            web.im.list(function(err, response) {
+              if (err) {
+                console.log(err);
+              } else {
+                if (response.ok === true) {
+                  console.log(response);
+                  var dm = response.ims.filter(function(im) {
+                    return im.user === teamManager.providerData.user_id;
+                  });
+                  if (dm.length > 0) {
+                    console.log(dm[0]);
+                    web.chat.postMessage(dm[0].id, '@' + user.providerData.user + ' just joined our team');
+                  }
+                }
+              }
+            });
+            var newWeb = new WebClient(user.providerData.tokenSecret.access_token);
+            newWeb.im.open(user.providerData.tokenSecret.bot.bot_user_id, function(err, response) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(response);
+                if (response.ok === true) {
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_user.js"))('', user, response.channel.id, web, config);
+                }
+              }
+            });
+          }
+        });
+        // return res.redirect('/authentication/pending?token=' + token);
+        // require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
+      } else if (user.status === 1 && !user.runningStatus.isRunning) {
+        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
+      } else {
+        web.im.list(function(err, response) {
+          if (err) {
+            console.log(err);
+          } else {
+            if (response.ok === true) {
+              console.log(response);
+              var dm = response.ims.filter(function(im) {
+                return im.user === user.providerData.user_id;
+              });
+              if (dm.length > 0) {
+                console.log(dm[0]);
+                if (user.status === 1)
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_manager.js"))('', user, dm[0].id, web, config);
+                else
+                  require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_user.js"))('', user, dm[0].id, web, config);
+              }
+            }
+          }
+        });
+      }
 
       async.waterfall([
         // Generate random token
@@ -214,55 +273,6 @@ exports.oauthCallback = function (strategy) {
           });
         },
         function (token, user, done) {
-          /*
-          if (user.status === 0) {
-            User.findOne({ _id: user.teamManager }, function (err, teamManager) {
-              if (teamManager) {
-                // require(require('path').resolve("modules/notifications/server/slack/notifications.server.mailer.js"))(config, user, teamManager, 0, 3);
-                web.im.list(function(err, response) {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    if (response.ok === true) {
-                      console.log(response);
-                      var dm = response.ims.filter(function(im) {
-                        return im.user === teamManager.providerData.user_id;
-                      });
-                      if (dm.length > 0) {
-                        console.log(dm[0]);
-                        require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.confirm_user.js"))('', user, dm[0].id, web, config);
-                      }
-                    }
-                  }
-                });
-              }
-            });
-            // return res.redirect('/authentication/pending?token=' + token);
-            // require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
-          } else */
-          if (user.status === 1 && !user.runningStatus.isRunning) {
-            require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.slack.js"))(bottoken, config, 1, user);
-          } else {
-            web.im.list(function(err, response) {
-              if (err) {
-                console.log(err);
-              } else {
-                if (response.ok === true) {
-                  console.log(response);
-                  var dm = response.ims.filter(function(im) {
-                    return im.user === user.providerData.user_id;
-                  });
-                  if (dm.length > 0) {
-                    console.log(dm[0]);
-                    if (user.status === 1)
-                      require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_manager.js"))('', user, dm[0].id, web, config);
-                    else
-                      require(require('path').resolve("modules/notifications/server/slack/notifications.server.apiai.onboarding_user.js"))('', user, dm[0].id, web, config);
-                  }
-                }
-              }
-            });
-          }
           return res.redirect('/authentication/account-setup?token=' + token);
         }
       ], function (err) {
@@ -332,18 +342,12 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
               } else {
                 user.teamManager = existing_user.id;
                 user.status = 0;
-                user.stripe = existing_user.stripe;
                 user.integrations = existing_user.integrations;
                 user.companyName = existing_user.companyName;
-                user.businessNumber = existing_user.businessNumber;
-                user.clientsName = existing_user.clientsName;
-                user.phoneNumber = existing_user.phoneNumber;
                 user.currency = existing_user.currency;
                 user.tax = existing_user.tax;
                 user.includeTaxesOnInvoice = existing_user.includeTaxesOnInvoice;
                 user.dueDateAllowance = existing_user.dueDateAllowance;
-                user.address = existing_user.address;
-                user.website = existing_user.website;
               }
 
               user.runningStatus = {};
@@ -479,13 +483,19 @@ exports.stripeCallback = function (req, res) {
 
     if (user) {
       // Merge existing user
-      user = _.extend(user, req.body);
-      user.stripe = JSON.parse(body);
-      user.integrations.stripe = true;
-      user.save(function (err) {
-        require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 5);
-        return res.redirect('/');
+      User.find({ provider: 'slack', 'providerData.team_id': user.providerData.team_id, roles: ['user', 'teammanager'] }, function (err, managers) {
+        if (!managers) {
+          return res.redirect('/');
+        } else {
+          for (var i = 0; i < managers.length; i ++) {
+            managers[i].stripe = JSON.parse(body);
+            managers[i].integrations.stripe = true;
+            managers[i].save();
+          }
+          return res.redirect('/');
+        }
       });
+      require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 5);
     }
   });
 };

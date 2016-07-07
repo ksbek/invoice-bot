@@ -3,13 +3,19 @@
     <th>USER</th>
     <th>CREATED</th>
     <th>Status</th>
+    <th ng-if="vm.authentication.user.roles.indexOf('teammanager') > -1">Action</th>
   </tr>
-  <tr data-ng-repeat="user in vm.users | orderBy: 'created'">
+  <tr data-ng-repeat="user in vm.users">
     <td>{{user.providerData.user}}</td>
     <td>
       <span data-ng-bind="user.created | date:'dd.MM.yy'"></span>
     </td>
     <td ng-if="user.roles.indexOf('teammanager') > -1">Manager</td>
     <td ng-if="user.roles.indexOf('teammanager') == -1">User</td>
+    <td ng-if="vm.authentication.user.roles.indexOf('teammanager') > -1">
+      <a href="#" ng-if="user._id != vm.authentication.user.id" ng-click="vm.remove(user)" class="btn-1 btn-edit-input">Remove</a>
+      <br>
+      <a href="#" ng-if="user.roles.indexOf('teammanager') == -1 && user._id != vm.authentication.user.id" ng-click="vm.setManager(user, $index)" class="btn-1 btn-edit-input">Set as manager</a>
+    </td>
   </tr>
 </table>
