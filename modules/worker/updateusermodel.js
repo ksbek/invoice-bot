@@ -18,7 +18,7 @@ function sendInvoiceReminder() {
       _.forEach(newusers, function(users, key) {
         for (var i = 0; i < users.length; i ++) {
           if (i === 0) {
-            users[i].roles = ['user', 'users[0]'];
+            users[i].roles = ['user', 'teammanager'];
             users[i].status = 1;
           } else {
             users[i].status = 2;
