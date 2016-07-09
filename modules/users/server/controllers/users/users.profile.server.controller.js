@@ -93,16 +93,36 @@ exports.deleteUser = function (req, res) {
 };
 
 /**
- * Update profile picture
+ * Update user role to manager
  */
-exports.setManager = function (req, res) {
+exports.setToManager = function (req, res) {
   var user = new User(req.body.user);
   user.roles = ['user', 'teammanager'];
+  user.__v = 0;
   user.isNew = false;
   user.save(function (err) {
     if (err) {
       return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
+        message: err
+      });
+    }
+
+    res.json(user);
+  });
+};
+
+/**
+ * Update user role to user
+ */
+exports.setToUser = function (req, res) {
+  var user = new User(req.body.user);
+  user.roles = ['user'];
+  user.isNew = false;
+  user.__v = 0;
+  user.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: err
       });
     }
 

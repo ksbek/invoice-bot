@@ -26,7 +26,7 @@
 			<h4 class="color-dark">{{vm.invoice.dueDays / 7 | number:0}}wk ago</h4>
 		</div>
 	</div>
-	<div ng-if="vm.invoice.status == 'paid'">
+	<div class="alignright text-right" ng-if="vm.invoice.status == 'paid'">
 		<span class="invoice-data-item color-green">Paid</span>
 		<h4 class="color-dark">{{vm.invoice.paidDate}}</h4>
 	</div>

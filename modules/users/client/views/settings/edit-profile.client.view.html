@@ -36,7 +36,7 @@
     <div class="form-row">
       <div class="row form-group" show-errors>
         <div class="col-xs-9">
-          <input type="text" id="clientsName" name="clientsName" ng-model="vm.user.clientsName"  placeholder="Clients name" ng-disabled="vm.editStatus != 'clientsName'" focus-me="vm.editStatus == 'clientsName'">
+          <input type="text" id="clientsName" name="clientsName" ng-model="vm.user.clientsName"  placeholder="Full name" ng-disabled="vm.editStatus != 'clientsName'" focus-me="vm.editStatus == 'clientsName'">
         </div>
         <div class="col-xs-3 text-center">
           <a href="#" ng-if="vm.editStatus != 'clientsName' && vm.user.roles.indexOf('teammanager') > -1" ng-click="vm.editField('clientsName')" class="btn-edit-input" ng-disabled="!vm.userForm.$valid">Edit</a>
@@ -44,7 +44,7 @@
           <a href="javascript:void(0);" ng-if="vm.editStatus == 'clientsName'" ng-click="vm.exitEditField('clientsName')" class="btn-exit"><img src="/modules/core/client/img/i-close.png" alt="" width="15px"></a>
         </div>
         <div ng-messages="vm.userForm.clientsName.$error" role="alert">
-          <p class="help-block error-text" ng-message="required">Clients name is required.</p>
+          <p class="help-block error-text" ng-message="required">Full name is required.</p>
         </div>
       </div>
     </div>

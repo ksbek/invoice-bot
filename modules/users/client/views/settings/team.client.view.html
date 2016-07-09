@@ -16,6 +16,7 @@
       <a href="#" ng-if="user._id != vm.authentication.user.id" ng-click="vm.remove(user)" class="btn-1 btn-edit-input">Remove</a>
       <br>
       <a href="#" ng-if="user.roles.indexOf('teammanager') == -1 && user._id != vm.authentication.user.id" ng-click="vm.setManager(user, $index)" class="btn-1 btn-edit-input">Set as manager</a>
+      <a href="#" ng-if="user.roles.indexOf('teammanager') > -1 && user._id != vm.authentication.user.id" ng-click="vm.setUser(user, $index)" class="btn-1 btn-edit-input">Set as user</a>
     </td>
   </tr>
 </table>
