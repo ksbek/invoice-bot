@@ -17,7 +17,7 @@ module.exports = function (response, user, channel, web, config) {
       if (client) {
 
         // Check if the confirm parameters have amount
-        if (response.result.parameters.amount !== '') {
+        if (response.result.parameters.amount.amount !== '') {
 
           // Create invoice with confirm parameters
           Invoice.createInvoiceFromSlackBot(user, client.id, response.result.parameters, function(invoice) {

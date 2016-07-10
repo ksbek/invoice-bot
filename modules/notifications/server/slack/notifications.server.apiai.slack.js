@@ -70,7 +70,6 @@ module.exports = function (token, config, isFirst, new_user) {
 
           request.on('response', function(response) {
             console.log(response);
-
             if (response.result.metadata) {
               switch (response.result.metadata.intentName) {
                 case 'Invoice Lookup':

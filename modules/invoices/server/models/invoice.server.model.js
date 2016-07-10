@@ -125,7 +125,7 @@ InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, par
       _this.create({
         user: user.id,
         client: client_id,
-        amountDue: { amount: Math.round(params.amount * (1 + user.tax / 100) * 100) / 100, currency: user.currency },
+        amountDue: { amount: Math.round(params.amount.amount * (1 + user.tax / 100) * 100) / 100, currency: user.currency },
         dateDue: dueDate,
         description: params.description,
         invoice: number,

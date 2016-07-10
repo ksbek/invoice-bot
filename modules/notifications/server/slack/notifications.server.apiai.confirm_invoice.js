@@ -22,7 +22,7 @@ module.exports = function (response, user, channel, web, config) {
             'text',
             'pretext'
           ],
-          'text': 'Invoice amount: ' + config.currencies[user.currency] + (Math.round(response.result.parameters.amount * (1 + user.tax / 100) * 100) / 100).toFixed(2) + ' `' + config.currencies[user.currency] + response.result.parameters.amount + ' + ' + user.tax + '% Tax`',
+          'text': 'Invoice amount: ' + config.currencies[user.currency] + (Math.round(response.result.parameters.amount.amount * (1 + user.tax / 100) * 100) / 100).toFixed(2) + ' `' + config.currencies[user.currency] + response.result.parameters.amount.amount + ' + ' + user.tax + '% Tax`',
           'title': 'Description: ' + response.result.parameters.description,
           'fields': [
             {
