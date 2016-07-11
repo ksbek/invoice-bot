@@ -127,7 +127,7 @@ exports.getInvoiceFromToken = function(req, res) {
   console.log(req.params.token);
   console.log(invoiceToken);
   console.log(userToken);
-  Invoice.findOne({ token: invoiceToken }).populate('client', 'companyName').exec(function(err, invoice) {
+  Invoice.findOne({ token: invoiceToken }).populate('user', 'companyName').populate('client', 'companyName').exec(function(err, invoice) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

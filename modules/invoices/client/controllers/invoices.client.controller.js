@@ -11,7 +11,7 @@
   function InvoicesController ($scope, $state, $http, Authentication, invoice, ClientsService, $uibModal, $window, isClient) {
     var vm = this;
 
-    if ($state.current.name !== 'invoicesview') {
+    if ($state.current.name !== 'invoicesview' && $state.current.name !== 'invoicesviewbyclient') {
       vm.clients = ClientsService.query();
     }
 
