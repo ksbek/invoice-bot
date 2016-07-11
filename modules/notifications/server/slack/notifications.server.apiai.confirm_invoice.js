@@ -39,8 +39,7 @@ module.exports = function (response, user, channel, web, config) {
               'name': 'no',
               'text': 'No',
               'type': 'button',
-              'value': 'no',
-              'style': 'primary'
+              'value': 'no'
             },
             {
               'name': 'yes',

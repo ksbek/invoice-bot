@@ -27,7 +27,6 @@ module.exports = function (response, user, channel, web, config) {
           'name': 'info',
           'text': 'Learn more',
           'type': 'button',
-          'style': 'primary',
           'value': 'Learn more'
         },
         {

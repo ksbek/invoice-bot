@@ -77,7 +77,8 @@ module.exports = function (config, invoice, user, dueDays, mail_type, callback) 
     email.setFrom(config.sendgrid.from);
     email.addFilter('templates', 'enable', 1);
     email.addTo(user.email);
-    email.setSubject("Nowdue Invoice Transaction Email");
+    email.setSubject("Invoice Nowdue");
+    email.addSubstitution("-nowdue-", 'Nowdue');
     email.addFilter('templates', 'template_id', config.sendgrid.templates.invoiceCreated);
     email.addSubstitution("&lt;%= invoice.client.companyName %&gt;", invoice.client.companyName);
     email.addSubstitution("&lt;%= invoice.id %&gt;", invoice.id);

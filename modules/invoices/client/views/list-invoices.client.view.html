@@ -37,7 +37,7 @@
     </td>
     <td ng-if="vm.editRow == -1">
       <div class="select-wr" ng-class="{'color-purple': invoice.status == 'due', 'color-red': invoice.status == 'overdue', 'color-green': invoice.status == 'paid'}">
-        <select data-ng-model="invoice.status">
+        <select data-ng-model="invoice.status" ng-change="vm.saveInvoice(invoice)">
           <option value="due" class="color-purple">Nowdue</option>
           <option value="paid" class="color-green">Paid</option>
           <option value="overdue" class="color-red">Overdue</option>

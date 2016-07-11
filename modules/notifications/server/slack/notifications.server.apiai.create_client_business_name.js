@@ -28,7 +28,6 @@ module.exports = function (response, user, channel, web, config) {
               'name': 'no',
               'text': 'Add contact name',
               'type': 'button',
-              'style': 'primary',
               'value': 'no'
             },
             {
