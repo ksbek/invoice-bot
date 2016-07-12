@@ -30,13 +30,13 @@ function sendInvoiceReminder() {
       console.log(invoices[i].invoice + "     " + dueDays);
       console.log(invoices[i].invoice + "     " + dueDateAllowance);
       console.log(invoices[i].invoice + "     " +(dueDays - dueDateAllowance));
-      if (dueDays = 37) 
+      if (dueDays === 37) 
         type = 10;
-      else if (dueDays = 30)
+      else if (dueDays === 30)
         type = 9;
-      else if (dueDays = 21)
+      else if (dueDays === 21)
         type = 8;
-      else if (dueDays = 14)
+      else if (dueDays === 14)
         type = 7;
       else if (dueDays - dueDateAllowance === 1)
         type = 6;
