@@ -127,7 +127,7 @@ exports.getInvoiceFromToken = function(req, res) {
   console.log(req.params.token);
   console.log(invoiceToken);
   console.log(userToken);
-  Invoice.findOne({ token: invoiceToken }).populate('user', 'companyName').populate('client', 'companyName').exec(function(err, invoice) {
+  Invoice.findOne({ token: invoiceToken }).populate('user', 'companyName').populate('client', 'companyName email').exec(function(err, invoice) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -152,93 +152,103 @@ exports.getInvoiceFromToken = function(req, res) {
  * Pay Invoice
  */
 exports.paynow = function(req, res) {
-  User.findById(req.invoice.user.teamManager, function (err, user) {
-    if (user) {
-      if (user.stripe) {
-        var stripe = require('stripe')(user.stripe.access_token);
+  Invoice.findOne({ _id: req.invoice.id }).populate('user').populate('client').exec(function(err, invoice) {
+    if (err) {
+      return res.status(400).send({
+        message: err.message
+      });
+    } else {
+      var userID = invoice.user.id;
+      if (invoice.user.teamManager)
+        userID = invoice.user.teamManager;
+      User.findById(userID, function (err, user) {
+        if (user) {
+          if (user.stripe) {
+            var stripe = require('stripe')(user.stripe.access_token);
 
-        if (req.invoice.status === 'paid')
-          return res.status(400).send({
-            message: "This invoice is already paid"
-          });
+            if (invoice.status === 'paid')
+              return res.status(400).send({
+                message: "This invoice is already paid"
+              });
 
-        stripe.tokens.create({
-          card: req.body.params.card
-        }, function(err, token) {
-          // asynchronously called
-          if (err) {
-            return res.status(400).send({
-              message: err.message
-            });
-          } else {
-            var application_fee = Math.ceil(req.invoice.amountDue.amount * 100 * config.stripe.application_fee);
-            console.log(req.invoice);
-            console.log(req.invoice.amountDue.amount * 100);
-            console.log(application_fee);
-            stripe.customers.create({
-              email: req.invoice.client.email,
-              source: token.id
-            }).then(function(customer) {
-              stripe.charges.create({
-                amount: Math.ceil(req.invoice.amountDue.amount * 100),
-                currency: req.invoice.amountDue.currency,
-                customer: customer.id,
-                application_fee: application_fee,
-                receipt_email: req.invoice.client.email
-              }).then(function(charge) {
-                var invoice = req.invoice;
-                invoice.status = 'paid';
-                invoice.received = 1;
-                invoice.datePaid = new Date();
-                invoice = _.extend(invoice, req.body);
-
-                invoice.save(function(err) {
-                  if (err) {
-                    return res.status(400).send({
-                      message: errorHandler.getErrorMessage(err)
-                    });
-                  } else {
-                    var type = 14;
-                    var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(req.invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
-                    var dueDateAllowance = Math.ceil((new Date(req.invoice.dateDue).getTime() - new Date(req.invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
-
-                    if (dueDays <= dueDateAllowance)
-                      type = 15;
-                    if (dueDays - dueDateAllowance > 30)
-                      type = 13;
-                    else if (dueDays - dueDateAllowance > 14)
-                      type = 12;
-                    // Send Notificatin to notification page and slack
-                    require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, req.invoice, null, user, 0, type);
-
-                    // Send paid invoice email to user
-                    require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, req.invoice, user, 0, type);
-
-                    res.send(invoice);
-                  }
-                });
-              }).catch(function(err) {
-                // Deal with an error
+            stripe.tokens.create({
+              card: req.body.params.card
+            }, function(err, token) {
+              // asynchronously called
+              if (err) {
                 return res.status(400).send({
                   message: err.message
                 });
-              });
-            }).catch(function(err) {
-              // Deal with an error
-              return res.status(400).send({
-                message: err.message
-              });
+              } else {
+                var application_fee = Math.ceil(invoice.amountDue.amount * 100 * config.stripe.application_fee);
+                console.log(invoice);
+                console.log(invoice.amountDue.amount * 100);
+                console.log(application_fee);
+                stripe.customers.create({
+                  email: invoice.client.email,
+                  source: token.id
+                }).then(function(customer) {
+                  stripe.charges.create({
+                    amount: Math.ceil(invoice.amountDue.amount * 100),
+                    currency: invoice.amountDue.currency,
+                    customer: customer.id,
+                    application_fee: application_fee,
+                    receipt_email: invoice.client.email
+                  }).then(function(charge) {
+                    invoice.status = 'paid';
+                    invoice.received = 1;
+                    invoice.datePaid = new Date();
+                    invoice = _.extend(invoice, req.body);
+
+                    invoice.save(function(err) {
+                      if (err) {
+                        return res.status(400).send({
+                          message: errorHandler.getErrorMessage(err)
+                        });
+                      } else {
+                        var type = 14;
+                        var dueDays = Math.ceil((new Date().setHours(0, 0, 0, 0) - new Date(invoice.dateIssued).setHours(0, 0, 0, 0)) / (1000 * 3600 * 24));
+                        var dueDateAllowance = Math.ceil((new Date(invoice.dateDue).getTime() - new Date(invoice.dateIssued).getTime()) / (1000 * 3600 * 24));
+
+                        if (dueDays <= dueDateAllowance)
+                          type = 15;
+                        if (dueDays - dueDateAllowance > 30)
+                          type = 13;
+                        else if (dueDays - dueDateAllowance > 14)
+                          type = 12;
+                        // Send Notificatin to notification page and slack
+                        require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, invoice, null, user, 0, type);
+
+                        // Send paid invoice email to user
+                        require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 0, type);
+
+                        res.send(invoice);
+                      }
+                    });
+                  }).catch(function(err) {
+                    // Deal with an error
+                    return res.status(400).send({
+                      message: err.message
+                    });
+                  });
+                }).catch(function(err) {
+                  // Deal with an error
+                  return res.status(400).send({
+                    message: err.message
+                  });
+                });
+              }
+            });
+          } else {
+            return res.status(400).send({
+              message: 'Sorry, something went wrong'
             });
           }
-        });
-      } else {
-        return res.status(400).send({
-          message: 'Sorry, something went wrong'
-        });
-      }
-    } else {
-      return res.status(400).send({
-        message: err
+        } else {
+          return res.status(400).send({
+            message: err
+          });
+        }
       });
     }
   });
