@@ -205,6 +205,7 @@ module.exports = function (token, config, isFirst, new_user) {
                   break;
 
                 case 'Create Client Business Name':
+                case 'Create client With Business Name':
                   require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.create_client_business_name.js'))(response, user, dm.id, web, config);
                   break;
 
