@@ -66,7 +66,14 @@ module.exports = function (token, config, isFirst, new_user) {
       // rtm.sendTyping(dm.id);
       User.findUserBySlackId(message.user, '', function(user) {
         if (user) {
-          var request = apiai.textRequest(message.text, { 'sessionId': user.id });
+          // remove mailto from message.text
+          var email = message.text.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g);
+          console.log(email);
+          var res = message.text;
+          if (email && email.length > 0)
+            res = message.text.replace(/(<mailto:)(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])(|)(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])>/g, email[0]);
+
+          var request = apiai.textRequest(res, { 'sessionId': user.id });
 
           request.on('response', function(response) {
             console.log(response);
@@ -80,6 +87,7 @@ module.exports = function (token, config, isFirst, new_user) {
                     // Check if user have client
                     Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
+                      var text = response.result.parameters.name;
                       if (client) {
                         context = {
                           'name': 'invoice-name'
@@ -89,7 +97,8 @@ module.exports = function (token, config, isFirst, new_user) {
                           'name': 'invoice-name-not-found'
                         };
                       }
-                      var newrequest = apiai.textRequest(response.result.parameters.name, { 'contexts': [context], 'sessionId': user.id });
+                      console.log("asdf");
+                      var newrequest = apiai.textRequest(text, { 'contexts': [context], 'sessionId': user.id });
                       newrequest.on('response', function(response) {
                         // rtm.sendMessage('asDF', dm.id);
                         console.log(response);
@@ -112,6 +121,7 @@ module.exports = function (token, config, isFirst, new_user) {
                     // Check if user have client
                     Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
+                      var text = response.result.parameters.name + ' ' + response.result.parameters.amount.amount;
                       if (client) {
                         context = {
                           'name': 'invoice-name-amount'
@@ -120,8 +130,10 @@ module.exports = function (token, config, isFirst, new_user) {
                         context = {
                           'name': 'invoice-name-not-found'
                         };
+                        text = response.result.parameters.name;
                       }
-                      var newrequest = apiai.textRequest(response.result.parameters.name + ' ' + response.result.parameters.amount.amount, { 'contexts': [context], 'sessionId': user.id });
+                      console.log(context);
+                      var newrequest = apiai.textRequest(text, { 'contexts': [context], 'sessionId': user.id });
                       newrequest.on('response', function(response) {
                         // rtm.sendMessage('asDF', dm.id);
                         console.log(response);
@@ -144,6 +156,7 @@ module.exports = function (token, config, isFirst, new_user) {
                     // Check if user have client
                     Client.findClientByName(response.result.parameters.name, user, function(client) {
                       var context = {};
+                      var text = response.result.parameters.name + ' ' + response.result.parameters.amount.amount + ' ' + response.result.parameters.description;
                       if (client) {
                         context = {
                           'name': 'invoice-name-amount-description'
@@ -152,12 +165,15 @@ module.exports = function (token, config, isFirst, new_user) {
                         context = {
                           'name': 'invoice-name-not-found'
                         };
+                        text = response.result.parameters.name;
                       }
-                      var newrequest = apiai.textRequest(response.result.parameters.name + ' ' + response.result.parameters.amount.amount + ' ' + response.result.parameters.description, { 'contexts': [context], 'sessionId': user.id });
+                      var newrequest = apiai.textRequest(text, { 'contexts': [context], 'sessionId': user.id });
                       newrequest.on('response', function(response) {
                         // rtm.sendMessage('asDF', dm.id);
-                        console.log(response);
-                        rtm.sendMessage(response.result.fulfillment.speech, dm.id);
+                        if (response.result.metadata.intentName === 'Make Invoice with Name, Amount & Description Part 2')
+                          require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.confirm_invoice.js'))(response, user, dm.id, web, config);
+                        else
+                          rtm.sendMessage(response.result.fulfillment.speech, dm.id);
                       });
 
                       newrequest.on('error', function(error) {
@@ -174,7 +190,6 @@ module.exports = function (token, config, isFirst, new_user) {
                 case 'Make Invoice No Confirm Wrong Description Given':
                 case 'Make Invoice No Confirm Wrong Name Given':
                 case 'Make Invoice No Confirm Wrong Amount Given':
-                case 'Make Invoice with Name, Amount & Description Part 2':
                   require(require('path').resolve('modules/notifications/server/slack/notifications.server.apiai.confirm_invoice.js'))(response, user, dm.id, web, config);
                   break;
 

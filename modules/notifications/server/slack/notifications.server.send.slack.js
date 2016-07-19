@@ -112,6 +112,10 @@ module.exports = function (config, invoice, client, user, dueDays, type, callbac
       slackDescription = '<' + config.baseUrl + '/clients/' + invoice.client.id + '|' + invoice.client.companyName + '> are awesome. They paid yet another invoice on time. ' + '<' + config.baseUrl + '/invoices/' + invoice.id + '|INV' + invoice.invoice + '> ' + config.currencies[user.currency] + invoice.amountDue.amount;
       sendSlackChannel = true;
       break;
+    case 17:
+      notification.title = 'When currency has been set or changed';
+      notification.description = 'Default currency set to ' + user.currency;
+      break;
   }
   var web = new WebClient(user.providerData.tokenSecret.bot.bot_access_token);
   notification.save(function(err, notification) {

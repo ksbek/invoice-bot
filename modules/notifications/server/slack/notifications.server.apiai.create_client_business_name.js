@@ -27,6 +27,7 @@ module.exports = function (response, user, channel, web, config) {
             {
               'name': 'no',
               'text': 'Add contact name',
+              'style': 'primary',
               'type': 'button',
               'value': 'no'
             },
@@ -34,7 +35,6 @@ module.exports = function (response, user, channel, web, config) {
               'name': 'yes',
               'text': 'Same name',
               'type': 'button',
-              'style': 'primary',
               'value': 'yes'
             }
           ],
