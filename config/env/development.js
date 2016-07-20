@@ -36,14 +36,9 @@ module.exports = {
   },
   baseUrl: 'http://localhost:3000',
   stripe: {
-    apiKey: 'sk_test_4YXlxHuxjTMAas2CPaCU6vOq',
-    apiPubKey: 'pk_test_4YXlGUPl7CoGOJV8f6UoZon5',
-    clientID: 'ca_8VAoL00VWMBT1SQSzbgz7EoqlrifusII',
-    access_token: "sk_test_x4UELGyS3RG7cg3HL2sGChjX",
-    refresh_token: "rt_8VCTMOV8jOyOWcgDFQW1v6QFMhummjTwyjmhIpVbzXMZe5Sl",
-    token_type: "bearer",
-    stripe_publishable_key: "pk_test_kg1ox8xM4J9bLeyCyMAypMYL",
-    stripe_user_id: "acct_14PQfYC61nQir0i8",
+    apiKey: 'sk_test_AD18PvbzLr9tWAhzIX0hGUFR',
+    apiPubKey: 'pk_test_tkieDvYj5rJMBLsnlGPvzuzq',
+    clientID: 'ca_8r0p2QXVvB35H6BTefPEQp35MijMZPFm',
     application_fee: 0.01
   },
   sendgrid: {

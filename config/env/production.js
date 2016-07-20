@@ -39,17 +39,13 @@ module.exports = {
   },
   baseUrl: 'https://www.nowdue.ai',
   stripe: {
-    apiKey: 'sk_live_4YXldnXlwst5j1FWza4Di37q',
-    apiPubKey: 'pk_live_4YXlSIEysOA7ERb61H32Kl3C',
-    clientID: 'ca_8VAoM49zUOuy94tRB9Op87Gqy8t137Ih',
-    access_token: "sk_live_lPqnttFfvnLfpYjQdUCdzVZ5",
-    refresh_token: "rt_8VIAF4yOb1EhKSvUQhc7SyRBvmftjEk1dYyHm9URLOgvMz0X",
-    stripe_publishable_key: "pk_live_KMYP3Sjwv5mcL179p9QO6juk",
-    stripe_user_id: "acct_14PQfYC61nQir0i8",
-    application_fee: 0.01
+    apiKey: process.env.STRIPE_API_KEY,
+    apiPubKey: process.env.STRIPE_API_PUB_KEY,
+    clientID: process.env.STRIPE_CLIENT_ID,
+    application_fee: process.env.STRIPE_APP_FEE
   },
   sendgrid: {
-    apiKey: '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',
+    apiKey: process.env.SENDGRID_API_KEY,
     templates: {
       invoicePaid: '16f65b4c-b93f-44a0-aae9-6a3ddae3ced4',
       invoiceCreated: '4d01add6-571a-4772-801b-47dfaccb84e8'
