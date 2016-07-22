@@ -27,12 +27,12 @@ module.exports = function (response, user, channel, web, config) {
           'name': 'info',
           'text': 'Learn more',
           'type': 'button',
+          'style': 'primary',
           'value': 'Learn more'
         },
         {
           'name': 'stripe',
           'text': 'Connect with Stripe',
-          'style': 'primary',
           'type': 'button',
           'value': 'Connect with Stripe'
         }

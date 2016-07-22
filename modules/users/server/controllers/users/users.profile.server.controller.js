@@ -40,6 +40,8 @@ exports.update = function (req, res) {
           require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 3);
         if (req.user.changedDueDateAllowance)
           require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 4);
+        if (req.user.changedCurrency)
+          require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, null, null, user, 0, 17);
 
         User.find({ 'providerData.team_id': req.user.providerData.team_id }).exec(function (err, users) {
           if (err) {

@@ -10,7 +10,7 @@
   function routeConfig($stateProvider) {
     $stateProvider
       .state('notifications', {
-        url: '/',
+        url: '/dashboard',
         views: {
           'header': {
             templateUrl: 'modules/core/client/views/header.client.view.html'

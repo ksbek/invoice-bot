@@ -1728,7 +1728,7 @@
   function routeConfig($stateProvider) {
     $stateProvider
       .state('notifications', {
-        url: '/',
+        url: '/dashboard',
         views: {
           'header': {
             templateUrl: 'modules/core/client/views/header.client.view.html'
@@ -2348,7 +2348,7 @@ angular
         vm.authentication.user = response;
 
         // And redirect to the previous or home page
-        $state.go($state.previous.state.name || 'home', $state.previous.params);
+        $state.go($state.previous.state.name || 'notifications', $state.previous.params);
       }).error(function (response) {
         vm.error = response.message;
       });
@@ -2696,6 +2696,7 @@ angular
 
     var origDueDateAllowance = angular.copy(vm.user.dueDateAllowance);
     var origTax = angular.copy(vm.user.tax);
+    var origCurrency = angular.copy(vm.user.currency);
 
     vm.currencySymbols = {
       'USD': '$', 'AUD': '$', 'EUR': '€', 'GBP': '£', 'CAD': '$', 'ALL': 'Lek', 'ARS': '$', 'AWG': 'ƒ', 'BSD': '$', 'BBD': '$', 'BYR': 'p.', 'BZD': 'BZ$', 'BMD': '$', 'BOB': '$b', 'BAM': 'KM', 'BWP': 'P', 'BGN': 'лв', 'BRL': 'R$', 'BND': '$', 'KHR': '៛', 'KYD': '$', 'CLP': '$', 'CNY': '¥', 'COP': '$', 'CRC': '₡', 'HRK': 'kn', 'CUP': '₱', 'CZK': 'Kč', 'DKK': 'kr', 'DOP': 'RD$', 'XCD': '$', 'EGP': '£', 'SVC': '$', 'FKP': '£', 'FJD': '$', 'GHS': '¢', 'GIP': '£', 'GTQ': 'Q', 'GGP': '£', 'GYD': '$', 'HNL': 'L', 'HKD': '$', 'HUF': 'Ft', 'ISK': 'kr', 'IDR': 'Rp', 'IRR': '﷼  ﷼', 'IMP': '£', 'ILS': '₪', 'JMD': 'J$', 'JPY': '¥', 'JEP': '£', 'KZT': 'лв', 'KRW': '₩', 'KGS': 'лв', 'LAK': '₭', 'LBP': '£', 'LRD': '$', 'MKD': 'ден', 'MYR': 'RM', 'MUR': '₨', 'MXN': '$', 'MNT': '₮', 'MZN': 'MT', 'NAD': '$', 'NPR': '₨', 'ANG': 'ƒ', 'NZD': '$', 'NIO': 'C$', 'NGN': '₦', 'NOK': 'kr', 'OMR': '﷼', 'PKR': '₨', 'PAB': 'B/.', 'PYG': 'Gs', 'PEN': 'S/.', 'PHP': '₱', 'PLN': 'zł', 'QAR': '﷼  ﷼', 'RON': 'lei', 'RUB': 'руб', 'SHP': '£', 'SAR': '﷼ ﷼', 'RSD': 'Дин.', 'SCR': '₨', 'SGD': '$', 'SBD': '$', 'SOS': 'S', 'ZAR': 'R', 'LKR': '₨', 'SEK': 'kr', 'CHF': 'CHF', 'SRD': '$', 'SYP': '£', 'TWD': 'NT$', 'THB': '฿', 'TTD': 'TT$', 'TVD': '$', 'UAH': '₴', 'UYU': '$U', 'UZS': 'лв', 'VEF': 'Bs', 'VND': '₫', 'YER': '﷼', 'ZWD': 'Z$'
@@ -2710,6 +2711,8 @@ angular
         vm.user.changedDueDateAllowance = true;
       if (origTax !== vm.user.tax)
         vm.user.changedTax = true;
+      if (origCurrency !== vm.user.currency)
+        vm.user.changedCurrency = true;
 
       var user = new Users(vm.user);
       user.$update(function (response) {
@@ -2725,7 +2728,7 @@ angular
 
     function range(n) {
       var foo = [];
-      for (var i = 1; i <= n; i++) {
+      for (var i = 0; i <= n; i++) {
         foo.push(i);
       }
       return foo;
