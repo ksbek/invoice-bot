@@ -12,6 +12,8 @@ var path = require('path'),
   passport = require('passport'),
   request = require('request'),
   User = mongoose.model('User'),
+  Client = mongoose.model('Client'),
+  Invoice = mongoose.model('Invoice'),
   async = require('async'),
   crypto = require('crypto');
 
@@ -71,6 +73,17 @@ exports.signup = function (req, res) {
                 user.sendgrid_recipient_id = result.persisted_recipients;
                 user.save();
               }
+            }
+          });
+          Client.find({ team_id: req.user.providerData.team_id }).exec(function(err, clients) {
+            if (!err && clients.length === 0) {
+              Client.createDemo(user, function(client) {
+                if (client) {
+                  Invoice.createDemo(user, client.id, function(invoice) {
+                    console.log("Demo Client&Invoice created");
+                  });
+                }
+              });
             }
           });
 

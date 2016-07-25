@@ -112,6 +112,43 @@ InvoiceSchema.statics.findUniqueInvoiceNumber = function (number, callback) {
 };
 
 /**
+ * Create demo invoice
+ */
+InvoiceSchema.statics.createDemo = function(user, client_id, callback) {
+  var _this = this;
+  var possibleNumber = Math.floor(Math.random() * 100000) + 100000;
+  var dueDate = new Date(new Date().setTime(new Date().getTime() + (7 * 24 * 60 * 60 * 1000)));
+  // var dueDate = new Date;
+  crypto.randomBytes(20, function (err, buffer) {
+    var token = buffer.toString('hex');
+    _this.findUniqueInvoiceNumber(possibleNumber, function (number) {
+      _this.create({
+        user: user.id,
+        client: client_id,
+        amountDue: { amount: 1, currency: user.currency },
+        dateDue: dueDate,
+        description: "Demo Invoice",
+        invoice: number,
+        dueDateAllowance: 7,
+        tax: 0,
+        token: token,
+        team_id: user.providerData.team_id
+      }, function (err, invoice) {
+        if (!err) {
+          if (!invoice) {
+            callback(null);
+          } else {
+            callback(invoice);
+          }
+        } else {
+          callback(null);
+        }
+      });
+    });
+  });
+};
+
+/**
  * Create instance method
  */
 InvoiceSchema.statics.createInvoiceFromSlackBot = function (user, client_id, params, callback) {

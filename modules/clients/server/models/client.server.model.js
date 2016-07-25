@@ -95,6 +95,31 @@ ClientSchema.statics.findClientByName = function (name, user, callback) {
 };
 
 /**
+ * Create Demo Client
+ */
+ClientSchema.statics.createDemo = function (user, callback) {
+  var _this = this;
+  _this.create({
+    user: user.id,
+    companyName: "Demo Company",
+    name: "Demo",
+    email: "demo@nowdue.ai",
+    team_id: user.providerData.team_id
+  }, function (err, client) {
+    if (!err) {
+      if (!client) {
+        callback(null);
+      } else {
+        callback(client);
+      }
+    } else {
+      console.log(err);
+      callback(null);
+    }
+  });
+};
+
+/**
  * Create Client from Slack
  */
 ClientSchema.statics.createClientFromSlackBot = function (user, params, callback) {
