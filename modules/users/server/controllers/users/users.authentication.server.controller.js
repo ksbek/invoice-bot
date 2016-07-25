@@ -75,7 +75,7 @@ exports.signup = function (req, res) {
               }
             }
           });
-          Client.find({ team_id: req.user.providerData.team_id }).exec(function(err, clients) {
+          Client.find({ team_id: user.providerData.team_id }).exec(function(err, clients) {
             if (!err && clients.length === 0) {
               Client.createDemo(user, function(client) {
                 if (client) {
