@@ -107,20 +107,6 @@ exports.list = function(req, res) {
  * Create an request
  */
 exports.sendMessage = function (req, res) {
-  /*
-  var app = apiai('6375b46d78ac45c1a0813498b1789c46');
-
-  var request = app.textRequest(req.body.text);
-  request.on('response', function(response) {
-    res.json(response);
-  });
-
-  request.on('error', function(error) {
-    res.json(error);
-  });
-
-  request.end();
-  */
   var token = req.user.providerData.tokenSecret.access_token;
 
   var slack = new Slack(token);
@@ -149,24 +135,6 @@ exports.sendMessage = function (req, res) {
       }
     }
   });
-/*
-  if (req.user.providerData.tokenSecret.incoming_webhook) {
-    var webhookUri = req.user.providerData.tokenSecret.incoming_webhook.url;
-    var slack = new Slack();
-    slack.setWebhook(webhookUri);
-
-    slack.webhook({
-      channel: '@nowdueasd',
-      username: req.user.providerData.user,
-      as_user: true,
-      text: req.body.text
-    }, function(err, response) {
-      res.json(response);
-    });
-  } else {
-    res.json({ message: 'No webhook url' });
-  }
-  */
 };
 
 /**
