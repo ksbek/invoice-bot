@@ -47,6 +47,10 @@
             controller: 'HomeController',
             controllerAs: 'vm'
           }
+        },
+        data: {
+          pageTitle: 'Its time to get paid. Invoice like it is the future',
+          pageDescription: 'Instant invoicing for freelancers, startups and small teams. Nowdue is a conversational way to create, send and manage invoices super fast.'
         }
       })
       .state('root.privacy', {
@@ -54,7 +58,8 @@
         templateUrl: 'modules/core/client/views/privacy.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'Privacy'
+          pageTitle: 'Accounting terms you can understand',
+          pageDescription: 'Your privacy is our highest priority. We collect data to securely delivery a better user experience and to respond to any inquiries you make in regards to your Nowdue account.'
         }
       })
       .state('root.faq', {
@@ -62,7 +67,8 @@
         templateUrl: 'modules/core/client/views/faq.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'FAQ'
+          pageTitle: 'Send unlimited invoices from Slack',
+          pageDescription: 'Nowdue is a slack invoicing bot accessible through Slack\'s conversational messaging interface. It\'s free to sign up. No credit card required. Give it a go today.'
         }
       })
       .state('not-found', {

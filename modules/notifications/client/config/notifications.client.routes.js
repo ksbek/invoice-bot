@@ -23,7 +23,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'notifications'
+          pageTitle: 'Dashboard'
         }
       });
   }

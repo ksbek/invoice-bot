@@ -41,7 +41,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Clients Create'
+          pageTitle: 'Create Client'
         }
       })
       .state('clients.edit', {

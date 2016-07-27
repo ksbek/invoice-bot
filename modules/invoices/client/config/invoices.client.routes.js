@@ -58,7 +58,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Invoices Create'
+          pageTitle: 'Create Invoice'
         }
       })
       .state('invoices.edit', {

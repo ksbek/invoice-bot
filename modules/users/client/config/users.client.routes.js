@@ -72,7 +72,7 @@
         controller: 'PlansController',
         controllerAs: 'vm',
         data: {
-          pageTitle: 'Settings Pricing'
+          pageTitle: 'Settings pricing'
         }
       })
       .state('settings.password', {
@@ -174,7 +174,8 @@
           }
         },
         data: {
-          pageTitle: 'Signin'
+          pageTitle: 'Sign In and get your invoices paid',
+          pageDescription: 'Sign into Nowdue. Access your account by entering your email and password. If you have not yet signed up to Nowdue please visit the home page and select the Add to Slack button.'
         }
       })
       .state('password', {

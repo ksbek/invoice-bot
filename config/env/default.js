@@ -2,13 +2,13 @@
 
 module.exports = {
   app: {
-    title: 'Nowdue',
-    description: 'Nowdue',
-    keywords: 'nowdue, mongodb, express, angularjs, node.js, mongoose, passport',
+    title: 'Nowdue - Its time to get paid. Invoice like it is the future',
+    description: 'Instant invoicing for freelancers, startups and small teams. Nowdue is a conversational way to create, send and manage invoices super fast.',
+    keywords: 'nowdue, invoice, slack',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
   port: process.env.PORT || 3000,
-  host: process.env.HOST || '0.0.0.0',
+  host: process.env.HOST || 'localnowdue.com',
   templateEngine: 'swig',
   // Session Cookie settings
   sessionCookie: {

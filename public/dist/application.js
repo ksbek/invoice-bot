@@ -179,7 +179,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Clients Create'
+          pageTitle: 'Create Client'
         }
       })
       .state('clients.edit', {
@@ -545,6 +545,10 @@
             controller: 'HomeController',
             controllerAs: 'vm'
           }
+        },
+        data: {
+          pageTitle: 'Its time to get paid. Invoice like it is the future',
+          pageDescription: 'Instant invoicing for freelancers, startups and small teams. Nowdue is a conversational way to create, send and manage invoices super fast.'
         }
       })
       .state('root.privacy', {
@@ -552,7 +556,8 @@
         templateUrl: 'modules/core/client/views/privacy.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'Privacy'
+          pageTitle: 'Accounting terms you can understand',
+          pageDescription: 'Your privacy is our highest priority. We collect data to securely delivery a better user experience and to respond to any inquiries you make in regards to your Nowdue account.'
         }
       })
       .state('root.faq', {
@@ -560,7 +565,8 @@
         templateUrl: 'modules/core/client/views/faq.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'FAQ'
+          pageTitle: 'Send unlimited invoices from Slack',
+          pageDescription: 'Nowdue is a slack invoicing bot accessible through Slack\'s conversational messaging interface. It\'s free to sign up. No credit card required. Give it a go today.'
         }
       })
       .state('not-found', {
@@ -728,6 +734,47 @@
     function callOauthProvider(url) {
       // Effectively call OAuth authentication route:
       $window.location.href = url;
+    }
+  }
+}());
+
+(function () {
+  'use strict';
+
+  angular.module('core')
+    .directive('pageDescription', pageDescription);
+
+  pageDescription.$inject = ['$rootScope', '$timeout', '$interpolate', '$state'];
+
+  function pageDescription($rootScope, $timeout, $interpolate, $state) {
+    var directive = {
+      retrict: 'A',
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element) {
+      $rootScope.$on('$stateChangeSuccess', listener);
+
+      function listener(event, toState) {
+        var description = (getDescription($state.$current));
+        $timeout(function () {
+          element[0].setAttribute('content', description);
+        }, 0, false);
+      }
+
+      function getDescription(currentState) {
+        var applicationCoreDescription = 'Instant invoicing for freelancers, startups and small teams. Nowdue is a conversational way to create, send and manage invoices super fast.';
+        var workingState = currentState;
+        if (currentState.data && currentState.data.pageDescription) {
+          workingState = (typeof workingState.locals !== 'undefined') ? workingState.locals.globals : workingState;
+          var stateDescription = $interpolate(currentState.data.pageDescription)(workingState);
+          return stateDescription;
+        } else {
+          return applicationCoreDescription;
+        }
+      }
     }
   }
 }());
@@ -1228,7 +1275,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'Invoices Create'
+          pageTitle: 'Create Invoice'
         }
       })
       .state('invoices.edit', {
@@ -1741,7 +1788,7 @@
         },
         data: {
           roles: ['user', 'admin'],
-          pageTitle: 'notifications'
+          pageTitle: 'Dashboard'
         }
       });
   }
@@ -2007,7 +2054,7 @@ angular
         controller: 'PlansController',
         controllerAs: 'vm',
         data: {
-          pageTitle: 'Settings Pricing'
+          pageTitle: 'Settings pricing'
         }
       })
       .state('settings.password', {
@@ -2109,7 +2156,8 @@ angular
           }
         },
         data: {
-          pageTitle: 'Signin'
+          pageTitle: 'Sign In and get your invoices paid',
+          pageDescription: 'Sign into Nowdue. Access your account by entering your email and password. If you have not yet signed up to Nowdue please visit the home page and select the Add to Slack button.'
         }
       })
       .state('password', {

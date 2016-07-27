@@ -181,9 +181,6 @@ exports.paynow = function(req, res) {
                 });
               } else {
                 var application_fee = Math.ceil(invoice.amountDue.amount * 100 * config.stripe.application_fee);
-                console.log(invoice);
-                console.log(invoice.amountDue.amount * 100);
-                console.log(application_fee);
                 stripe.customers.create({
                   email: invoice.client.email,
                   source: token.id
@@ -220,7 +217,7 @@ exports.paynow = function(req, res) {
                         require(require('path').resolve("modules/notifications/server/slack/notifications.server.send.slack.js"))(config, invoice, null, user, 0, type);
 
                         // Send paid invoice email to user
-                        require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 0, type);
+                        require(require('path').resolve("modules/notifications/server/mailer/notifications.server.mailer.js"))(config, invoice, user, 0, 2);
 
                         res.send(invoice);
                       }
