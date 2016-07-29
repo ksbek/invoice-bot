@@ -1,1 +1,1 @@
-Nowdue(http://nowdue.herokuapp.com/)
+Nowdue - Chatbot system using MEAN stack & Slack & Api.ai
